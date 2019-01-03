@@ -3,6 +3,7 @@
 #include "InputManager.h"
 #include "UI.h"
 #include "Button.h"
+#include "TextField.h"
 
 namespace Window
 {
@@ -42,6 +43,9 @@ namespace Window
 			case sf::Event::MouseWheelScrolled:
 				InputManager::MouseScrolled(e.mouseWheel.delta);
 				break;
+			case sf::Event::TextEntered:
+				InputManager::TextEntered(e.text.unicode);
+				break;
 			}
 		}
 	}
@@ -60,6 +64,7 @@ namespace Window
 		if (!initComplete)
 		{
 			m_window.create(sf::VideoMode{ 800, 600 }, "Matthew Pawsey NEA Project");
+			m_window.setKeyRepeatEnabled(false);
 
 			m_state = Menu;
 
@@ -82,6 +87,7 @@ namespace Window
 			running = true;
 
 			UI::Button b{ sf::Vector2f{0.f, 0.f}, m_window.getDefaultView(), "Text" };
+			UI::TextField f{ sf::Vector2f{100.f, 100.f}, m_window.getDefaultView(), sf::Vector2f{500.f, 32.f} };
 
 			while (m_window.isOpen())
 			{
@@ -91,6 +97,7 @@ namespace Window
 
 
 				m_window.draw(b);
+				m_window.draw(f);
 
 				m_window.display();
 			}

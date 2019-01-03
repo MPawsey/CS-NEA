@@ -12,6 +12,8 @@ namespace InputManager
 	void MouseReleased(sf::Mouse::Button btn);
 	void MouseScrolled(int delta);
 
+	void TextEntered(sf::Uint32 character);
+
 	const Event<>& GetKeyPressedEvent(sf::Keyboard::Key key);
 	const Event<>& GetKeyReleasedEvent(sf::Keyboard::Key key);
 	const Event<sf::Keyboard::Key>& GetGenericKeyPressedEvent();
@@ -23,8 +25,13 @@ namespace InputManager
 	const Event<sf::Mouse::Button>& GetGenericMouseReleasedEvent();
 	const Event<int>& GetMouseScrolledEvent();
 
+	const Event<sf::String>& GetTextEnteredEvent();
+
 	bool IsKeyDown(sf::Keyboard::Key key);
 	bool IsMouseDown(sf::Mouse::Button btn);
 	bool IsMouseInView(const sf::View& view);
 	bool IsMouseInView(const sf::View& view, sf::Vector2f& mousePos);
+
+	unsigned int GetTextEnteredSize();
+
 }

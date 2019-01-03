@@ -35,6 +35,27 @@ namespace UI
 		}
 	}
 
+
+	const bool Clickable::IsActive()
+	{
+		return m_isActive;
+	}
+
+	void Clickable::SetActive(bool isActive)
+	{
+		if (m_isActive = isActive)
+		{
+			OnActivated();
+		}
+		else
+		{
+			OnDeactivated();
+		}
+	}
+
+	void Clickable::OnActivated() {}
+	void Clickable::OnDeactivated() {}
+
 	void Clickable::OnMouseReleased()
 	{
 		sf::Vector2f mousePos;
@@ -44,6 +65,16 @@ namespace UI
 		}
 
 		m_mousePressed = false;
+	}
+
+	const sf::View& Clickable::GetContainerView()
+	{
+		return m_containerView;
+	}
+
+	const sf::FloatRect& Clickable::GetClickBounds()
+	{
+		return m_clickBounds;
 	}
 
 }
