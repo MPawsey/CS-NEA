@@ -13,8 +13,8 @@ namespace UI
 	}
 
 
-	TextField::TextField(sf::Vector2f pos, const sf::View& view, sf::Vector2f size, FieldType type, sf::Vector2f padding, unsigned int charSize)
-		: m_type{ type }, m_padding { padding }, Clickable{ sf::FloatRect{ pos, size }, view }
+	TextField::TextField(sf::Vector2f pos, const sf::View& view, float width, FieldType type, sf::Vector2f padding, unsigned int charSize)
+		: m_type{ type }, m_padding{ padding }, Clickable{ sf::FloatRect{ pos - padding, sf::Vector2f{ width, GetFont().getLineSpacing(charSize) } + (padding * 2.f) }, view }
 	{
 		InputManager::GetMousePressedEvent(sf::Mouse::Left).AddCallback(&TextField::OnMouseLeftClick, *this);
 		InputManager::GetTextEnteredEvent().AddCallback(&TextField::OnTextEntered, *this);
@@ -25,9 +25,9 @@ namespace UI
 		m_text.setFillColor(sf::Color::White);
 		
 		m_textContainer.setPosition(pos - padding);
-		m_textContainer.setSize(size + (padding * 2.f));
+		m_textContainer.setSize(sf::Vector2f{ GetClickBounds().width, GetClickBounds().height });
 		m_textContainer.setFillColor(UNACTIVE_COLOUR);
-		m_textContainer.setOutlineColor(sf::Color::Red);
+		m_textContainer.setOutlineColor(sf::Color::White);
 		m_textContainer.setOutlineThickness(1.f);
 
 		OnDeactivated();

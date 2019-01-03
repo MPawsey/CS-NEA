@@ -5,17 +5,22 @@
 namespace UI
 {
 
-	sf::FloatRect Button::CreateLabel(sf::Vector2f pos, std::string text, unsigned int characterSize)
+	sf::FloatRect Button::CreateButton(sf::Vector2f pos, std::string text, sf::Vector2f padding, unsigned int characterSize)
 	{
 		m_label = new sf::Text{ text, GetFont(), characterSize};
 		m_label->setPosition(pos);
-		return m_label->getGlobalBounds();
+
+		return sf::FloatRect{ pos - padding, sf::Vector2f{ m_label->getGlobalBounds().width, GetFont().getLineSpacing(characterSize) } + (padding * 2.f) };
 	}
 
-	Button::Button(sf::Vector2f pos, const sf::View& view, std::string text, unsigned int characterSize)
-		: Clickable{CreateLabel(pos, text, characterSize), view}
+	Button::Button(sf::Vector2f pos, const sf::View& view, std::string text, sf::Vector2f padding, unsigned int characterSize)
+		: Clickable{ CreateButton(pos, text, padding, characterSize), view}
 	{
-
+		m_background.setPosition(pos - padding);
+		m_background.setSize(sf::Vector2f{ GetClickBounds().width, GetClickBounds().height });
+		m_background.setFillColor(BACK_COLOUR);
+		m_background.setOutlineColor(sf::Color::White);
+		m_background.setOutlineThickness(1.f);
 	}
 
 	Button::~Button()
@@ -25,6 +30,7 @@ namespace UI
 
 	void Button::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	{
+		target.draw(m_background, states);
 		target.draw(*m_label, states);
 	}
 

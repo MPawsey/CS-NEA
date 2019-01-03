@@ -27,7 +27,6 @@ namespace UI
 		sf::String m_rawText;
 
 		void OnMouseLeftClick();
-
 		void OnTextEntered(char input);
 
 		virtual void OnMouseClicked();
@@ -39,7 +38,7 @@ namespace UI
 		const static inline sf::Color UNACTIVE_COLOUR{ 50, 50, 50, 255 };
 		const static inline sf::Color ACTIVE_COLOUR{ 40, 46, 71, 255 };
 
-		TextField(sf::Vector2f pos, const sf::View& view, sf::Vector2f size, FieldType type, sf::Vector2f padding = sf::Vector2f{ 2.f, 2.f }, unsigned int charSize = 30u);
+		TextField(sf::Vector2f pos, const sf::View& view, float width, FieldType type, sf::Vector2f padding = sf::Vector2f{ 2.f, 2.f }, unsigned int charSize = 30u);
 
 
 

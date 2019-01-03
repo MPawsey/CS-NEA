@@ -86,8 +86,10 @@ namespace Window
 		{
 			running = true;
 
-			UI::Button b{ sf::Vector2f{0.f, 0.f}, m_window.getDefaultView(), "Text" };
-			UI::TextField f{ sf::Vector2f{100.f, 100.f}, m_window.getDefaultView(), sf::Vector2f{500.f, 36.f}, UI::TextField::Integer };
+			UI::Button b{ sf::Vector2f{500.f, 500.f}, m_window.getDefaultView(), "Text" };
+			UI::TextField f{ sf::Vector2f{100.f, 100.f}, m_window.getDefaultView(), 500.f, UI::TextField::Text };
+			b.SetActive(true);
+			b.GetMouseClickedEvent().AddCallback([]() { std::cout << "click" << std::endl; });
 			f.SetActive(true);
 
 			while (m_window.isOpen())
