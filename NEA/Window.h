@@ -10,6 +10,7 @@ namespace Window
 	void Init();
 	void Run();
 
+	const sf::RenderWindow& GetWindow();
 	const WindowStates GetWindowState();
 	const sf::Vector2u GetWindowSize();
 	

@@ -1,5 +1,6 @@
 #include "Window.h"
 #include "Logger.h"
+#include "InputManager.h"
 
 namespace Window
 {
@@ -23,6 +24,21 @@ namespace Window
 			case sf::Event::Closed:
 				m_window.close();
 				m_windowClosedEvent.Call();
+				break;
+			case sf::Event::KeyPressed:
+				InputManager::KeyPressed(e.key.code);
+				break;
+			case sf::Event::KeyReleased:
+				InputManager::KeyRelased(e.key.code);
+				break;
+			case sf::Event::MouseButtonPressed:
+				InputManager::MousePressed(e.mouseButton.button);
+				break;
+			case sf::Event::MouseButtonReleased:
+				InputManager::MouseReleased(e.mouseButton.button);
+				break;
+			case sf::Event::MouseWheelScrolled:
+				InputManager::MouseScrolled(e.mouseWheel.delta);
 				break;
 			}
 		}
@@ -77,6 +93,11 @@ namespace Window
 		{
 			m_logger.Error("Run attempted after program started running.");
 		}
+	}
+
+	const sf::RenderWindow& GetWindow()
+	{
+		return m_window;
 	}
 
 	const WindowStates GetWindowState()
