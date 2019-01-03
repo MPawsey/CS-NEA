@@ -21,8 +21,7 @@ namespace InputManager
 	std::vector<sf::Keyboard::Key> keysDown;
 	std::vector<sf::Mouse::Button> mouseDown;
 
-	sf::String textInput;
-	Event<sf::String> textEnteredEvent;
+	Event<char> textEnteredEvent;
 
 	// Public
 
@@ -30,13 +29,6 @@ namespace InputManager
 	{
 		if (std::find(keysDown.begin(), keysDown.end(), key) == keysDown.end())
 		{
-			if (key == sf::Keyboard::BackSpace)
-			{
-				// Calls update when text is removed
-				textInput.erase(textInput.getSize() - 1);
-				textEnteredEvent.Call(textInput);
-			}
-
 			keysDown.push_back(key);
 			if (keyPressedEvents[key])
 			{
@@ -92,8 +84,7 @@ namespace InputManager
 
 	void TextEntered(sf::Uint32 character)
 	{
-		textInput.insert(textInput.getSize(), character);
-		textEnteredEvent.Call(textInput);
+		textEnteredEvent.Call(sf::String{character}.toAnsiString()[0]);
 	}
 
 	const Event<>& GetKeyPressedEvent(sf::Keyboard::Key key)
@@ -174,7 +165,7 @@ namespace InputManager
 		return mouseScrolledEvents;
 	}
 
-	const Event<sf::String>& GetTextEnteredEvent()
+	const Event<char>& GetTextEnteredEvent()
 	{
 		return textEnteredEvent;
 	}
@@ -212,10 +203,5 @@ namespace InputManager
 			return true;
 		}
 		return false;
-	}
-
-	unsigned int GetTextEnteredSize()
-	{
-		return textInput.getSize();
 	}
 }

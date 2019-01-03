@@ -11,8 +11,6 @@ namespace UI
 	class Button : public Clickable, public sf::Drawable
 	{
 	private:
-		static inline Logger m_logger{ "Button" };
-
 		Event<> m_mouseClickedEvent;
 		sf::Text* m_label;
 

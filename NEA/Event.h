@@ -15,7 +15,8 @@ public:
 	template <typename C>
 	void AddCallback(void(C::* function)(T...), C& c) const
 	{
-		callbacks.push_back(std::bind(function, std::ref(c)));
+		// I hate this piece of code. Had to copy the function pointer, not reference it as reference is destroyed.
+		callbacks.push_back([&, function](T... t) { std::invoke(function, c, t...); });
 	}
 
 	void AddCallback(const std::function<void(T...)>& f) const

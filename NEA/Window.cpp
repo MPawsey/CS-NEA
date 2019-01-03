@@ -87,7 +87,8 @@ namespace Window
 			running = true;
 
 			UI::Button b{ sf::Vector2f{0.f, 0.f}, m_window.getDefaultView(), "Text" };
-			UI::TextField f{ sf::Vector2f{100.f, 100.f}, m_window.getDefaultView(), sf::Vector2f{500.f, 32.f} };
+			UI::TextField f{ sf::Vector2f{100.f, 100.f}, m_window.getDefaultView(), sf::Vector2f{500.f, 36.f}, UI::TextField::Integer };
+			f.SetActive(true);
 
 			while (m_window.isOpen())
 			{

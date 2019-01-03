@@ -3,12 +3,7 @@
 
 namespace UI
 {
-	enum class TextField::FieldType
-	{
-		Text,
-		Decimal,
-		Integer
-	};
+	
 
 
 	void TextField::draw(sf::RenderTarget& target, sf::RenderStates states) const
@@ -18,10 +13,11 @@ namespace UI
 	}
 
 
-	TextField::TextField(sf::Vector2f pos, const sf::View& view, sf::Vector2f size, sf::Vector2f padding, unsigned int charSize)
-		: Clickable{ sf::FloatRect{pos, size}, view }
+	TextField::TextField(sf::Vector2f pos, const sf::View& view, sf::Vector2f size, FieldType type, sf::Vector2f padding, unsigned int charSize)
+		: m_type{ type }, m_padding { padding }, Clickable{ sf::FloatRect{ pos, size }, view }
 	{
 		InputManager::GetMousePressedEvent(sf::Mouse::Left).AddCallback(&TextField::OnMouseLeftClick, *this);
+		InputManager::GetTextEnteredEvent().AddCallback(&TextField::OnTextEntered, *this);
 
 		m_text.setPosition(pos);
 		m_text.setFont(GetFont());
@@ -38,45 +34,75 @@ namespace UI
 
 	}
 
-	void TextField::OnTextEntered(sf::String input)
+	void TextField::OnTextEntered(char input)
 	{
 		if (m_hasFocus)
 		{
-			if (m_inputStartPos > InputManager::GetTextEnteredSize())
+			switch (m_type)
 			{
-				m_inputStartPos = InputManager::GetTextEnteredSize();
-			}
-			else
-			{
-				m_rawText = input.substring(m_inputStartPos);
-				m_text.setString(m_rawText);
-
-				unsigned int pos = 0;
-				while (m_text.getGlobalBounds().width > m_textContainer.getGlobalBounds().width && pos < m_rawText.getSize())
+			case Text:
+				if ((input >= 'a' && input < 'z') || (input >= 'A' && input <= 'Z') || input == ' ')
 				{
-					m_text.setString(m_rawText.substring(++pos));
+					m_rawText.insert(m_rawText.getSize() - 1, input);
+					break;
 				}
+			case Decimal:
+				if (input == '.' && m_rawText.find('.') == sf::String::InvalidPos)
+				{
+					m_rawText.insert(m_rawText.getSize() - 1, input);
+					break;
+				}
+			case Integer:
+				if (input >= '0' && input <= '9')
+				{
+					m_rawText.insert(m_rawText.getSize() - 1, input);
+					break;
+				}
+				
+				if (input == '\b' && m_rawText.getSize() > 1)
+				{
+					m_rawText.erase(m_rawText.getSize() - 2);
+				}
+				break;
+			}
+
+			m_text.setString(m_rawText);
+
+			unsigned int pos = 0;
+			while (m_text.getGlobalBounds().width > m_textContainer.getGlobalBounds().width - (m_padding.x * 2) && pos < m_rawText.getSize())
+			{
+				m_text.setString(m_rawText.substring(++pos));
 			}
 		}
 	}
 
 	void TextField::OnMouseClicked()
 	{
-		m_hasFocus = true;
-		m_textContainer.setFillColor(ACTIVE_COLOUR);
-		m_inputStartPos = InputManager::GetTextEnteredSize();
+		if (!m_hasFocus)
+		{
+			m_hasFocus = true;
+			m_textContainer.setFillColor(ACTIVE_COLOUR);
+
+			m_rawText.insert(m_rawText.getSize(), '_');
+			m_text.setString(m_rawText);
+		}
 	}
 
 	void TextField::OnDeactivated()
 	{
 		m_hasFocus = false;
 		m_textContainer.setFillColor(UNACTIVE_COLOUR);
+
+		if (m_rawText.getSize() > 0)
+			m_rawText.erase(m_rawText.getSize() - 1);
+		m_text.setString(m_rawText);
 	}
 
 
 	void TextField::OnMouseLeftClick()
 	{
-		if (!InputManager::IsMouseInView(GetContainerView()))
+		sf::Vector2f pos;
+		if (m_hasFocus && InputManager::IsMouseInView(GetContainerView(), pos) && !GetClickBounds().contains(pos))
 			OnDeactivated();
 	}
 }
