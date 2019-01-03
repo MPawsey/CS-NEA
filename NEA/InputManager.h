@@ -12,16 +12,16 @@ namespace InputManager
 	void MouseReleased(sf::Mouse::Button btn);
 	void MouseScrolled(int delta);
 
-	Event<>& GetKeyPressedEvent(sf::Keyboard::Key key);
-	Event<>& GetKeyReleasedEvent(sf::Keyboard::Key key);
-	Event<sf::Keyboard::Key>& GetGenericKeyPressedEvent();
-	Event<sf::Keyboard::Key>& GetGenericKeyReleasedEvent();
+	const Event<>& GetKeyPressedEvent(sf::Keyboard::Key key);
+	const Event<>& GetKeyReleasedEvent(sf::Keyboard::Key key);
+	const Event<sf::Keyboard::Key>& GetGenericKeyPressedEvent();
+	const Event<sf::Keyboard::Key>& GetGenericKeyReleasedEvent();
 
-	Event<>& GetMousePressedEvent(sf::Mouse::Button btn);
-	Event<>& GetMouseReleasedEvent(sf::Mouse::Button btn);
-	Event<sf::Mouse::Button>& GetGenericMousePressedEvent();
-	Event<sf::Mouse::Button>& GetGenericMouseReleasedEvent();
-	Event<int>& GetMouseScrolledEvent();
+	const Event<>& GetMousePressedEvent(sf::Mouse::Button btn);
+	const Event<>& GetMouseReleasedEvent(sf::Mouse::Button btn);
+	const Event<sf::Mouse::Button>& GetGenericMousePressedEvent();
+	const Event<sf::Mouse::Button>& GetGenericMouseReleasedEvent();
+	const Event<int>& GetMouseScrolledEvent();
 
 	bool IsKeyDown(sf::Keyboard::Key key);
 	bool IsMouseDown(sf::Mouse::Button btn);

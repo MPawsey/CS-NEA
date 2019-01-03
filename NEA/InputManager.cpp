@@ -80,7 +80,7 @@ namespace InputManager
 		mouseScrolledEvents.Call(delta);
 	}
 
-	Event<>& GetKeyPressedEvent(sf::Keyboard::Key key)
+	const Event<>& GetKeyPressedEvent(sf::Keyboard::Key key)
 	{
 		if (keyPressedEvents[key])
 		{
@@ -93,7 +93,7 @@ namespace InputManager
 		}
 	}
 
-	Event<>& GetKeyReleasedEvent(sf::Keyboard::Key key)
+	const Event<>& GetKeyReleasedEvent(sf::Keyboard::Key key)
 	{
 		if (keyReleasedEvents[key])
 		{
@@ -106,18 +106,18 @@ namespace InputManager
 		}
 	}
 
-	Event<sf::Keyboard::Key>& GetGenericKeyPressedEvent()
+	const Event<sf::Keyboard::Key>& GetGenericKeyPressedEvent()
 	{
 		return genericKeyPressedEvent;
 	}
 
-	Event<sf::Keyboard::Key>& GetGenericKeyReleasedEvent()
+	const Event<sf::Keyboard::Key>& GetGenericKeyReleasedEvent()
 	{
 		return genericKeyReleasedEvent;
 	}
 
 
-	Event<>& GetMousePressedEvent(sf::Mouse::Button btn)
+	const Event<>& GetMousePressedEvent(sf::Mouse::Button btn)
 	{
 		if (mousePressedEvents[btn])
 		{
@@ -130,7 +130,7 @@ namespace InputManager
 		}
 	}
 
-	Event<>& GetMouseReleasedEvent(sf::Mouse::Button btn)
+	const Event<>& GetMouseReleasedEvent(sf::Mouse::Button btn)
 	{
 		if (mouseReleasedEvents[btn])
 		{
@@ -143,17 +143,17 @@ namespace InputManager
 		}
 	}
 
-	Event<sf::Mouse::Button>& GetGenericMousePressedEvent()
+	const Event<sf::Mouse::Button>& GetGenericMousePressedEvent()
 	{
 		return genericMousePressedEvent;
 	}
 
-	Event<sf::Mouse::Button>& GetGenericMouseReleasedEvent()
+	const Event<sf::Mouse::Button>& GetGenericMouseReleasedEvent()
 	{
 		return genericMouseReleasedEvent;
 	}
 
-	Event<int>& GetMouseScrolledEvent()
+	const Event<int>& GetMouseScrolledEvent()
 	{
 		return mouseScrolledEvents;
 	}

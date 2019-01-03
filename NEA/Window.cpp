@@ -1,6 +1,8 @@
 #include "Window.h"
 #include "Logger.h"
 #include "InputManager.h"
+#include "UI.h"
+#include "Button.h"
 
 namespace Window
 {
@@ -61,6 +63,8 @@ namespace Window
 
 			m_state = Menu;
 
+			UI::Init();
+
 			initComplete = true;
 		}
 		else
@@ -77,6 +81,8 @@ namespace Window
 		{
 			running = true;
 
+			UI::Button b{ sf::Vector2f{0.f, 0.f}, m_window.getDefaultView(), "Text" };
+
 			while (m_window.isOpen())
 			{
 				PollWindowEvents();
@@ -84,7 +90,7 @@ namespace Window
 				m_window.clear();
 
 
-
+				m_window.draw(b);
 
 				m_window.display();
 			}

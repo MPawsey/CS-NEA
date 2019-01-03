@@ -30,6 +30,15 @@
     <ClCompile Include="InputManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Clickable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Button.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="sfml-window-d-2.dll">
@@ -82,6 +91,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="InputManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Clickable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Button.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

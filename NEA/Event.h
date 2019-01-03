@@ -8,17 +8,17 @@ template <class... T>
 class Event
 {
 private:
-	std::vector<std::function<void(T...)>> callbacks;
+	mutable std::vector<std::function<void(T...)>> callbacks;
 
 public:
 
 	template <typename C>
-	void AddCallback(void(C::* function)(T...), C& c)
+	void AddCallback(void(C::* function)(T...), C& c) const
 	{
 		callbacks.push_back(std::bind(function, std::ref(c)));
 	}
 
-	void AddCallback(const std::function<void(T...)>& f)
+	void AddCallback(const std::function<void(T...)>& f) const
 	{
 		callbacks.push_back(f);
 	}
