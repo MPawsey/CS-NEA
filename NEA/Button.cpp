@@ -10,7 +10,7 @@ namespace UI
 		m_label = new sf::Text{ text, GetFont(), characterSize};
 		m_label->setPosition(pos);
 
-		return sf::FloatRect{ pos - padding, sf::Vector2f{ m_label->getGlobalBounds().width, GetFont().getLineSpacing(characterSize) } + (padding * 2.f) };
+		return sf::FloatRect{ pos - padding, sf::Vector2f{ m_label->getLocalBounds().width, GetFont().getLineSpacing(characterSize) } + (padding * 2.f) };
 	}
 
 	Button::Button(sf::Vector2f pos, const sf::View& view, std::string text, sf::Vector2f padding, unsigned int characterSize)

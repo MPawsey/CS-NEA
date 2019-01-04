@@ -10,9 +10,9 @@ namespace Window
 	void Init();
 	void Run();
 
-	const sf::RenderWindow& GetWindow();
+	sf::RenderWindow& GetWindow();
 	const WindowStates GetWindowState();
 	const sf::Vector2u GetWindowSize();
 	
-	Event<>& GetWindowClosedEvent();
+	const Event<>& GetWindowClosedEvent();
 }

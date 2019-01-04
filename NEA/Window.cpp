@@ -1,9 +1,8 @@
 #include "Window.h"
 #include "Logger.h"
 #include "InputManager.h"
+#include "Menu.h"
 #include "UI.h"
-#include "Button.h"
-#include "TextField.h"
 
 namespace Window
 {
@@ -26,7 +25,6 @@ namespace Window
 			{
 			case sf::Event::Closed:
 				m_window.close();
-				m_windowClosedEvent.Call();
 				break;
 			case sf::Event::KeyPressed:
 				InputManager::KeyPressed(e.key.code);
@@ -69,6 +67,7 @@ namespace Window
 			m_state = Menu;
 
 			UI::Init();
+			Menu::Init();
 
 			initComplete = true;
 		}
@@ -86,24 +85,23 @@ namespace Window
 		{
 			running = true;
 
-			UI::Button b{ sf::Vector2f{500.f, 500.f}, m_window.getDefaultView(), "Text" };
-			UI::TextField f{ sf::Vector2f{100.f, 100.f}, m_window.getDefaultView(), 500.f, UI::TextField::Text };
-			b.SetActive(true);
-			b.GetMouseClickedEvent().AddCallback([]() { std::cout << "click" << std::endl; });
-			f.SetActive(true);
-
 			while (m_window.isOpen())
 			{
 				PollWindowEvents();
 
 				m_window.clear();
 
-
-				m_window.draw(b);
-				m_window.draw(f);
+				switch (m_state)
+				{
+				case Menu:
+					Menu::Update();
+					break;
+				}
 
 				m_window.display();
 			}
+
+			m_windowClosedEvent.Call();
 		}
 		else
 		{
@@ -111,7 +109,7 @@ namespace Window
 		}
 	}
 
-	const sf::RenderWindow& GetWindow()
+	sf::RenderWindow& GetWindow()
 	{
 		return m_window;
 	}
@@ -126,7 +124,7 @@ namespace Window
 		return m_window.getSize();
 	}
 
-	Event<>& GetWindowClosedEvent()
+	const Event<>& GetWindowClosedEvent()
 	{
 		return m_windowClosedEvent;
 	}
