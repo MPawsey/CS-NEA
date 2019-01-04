@@ -4,7 +4,13 @@
 
 namespace Menu
 {
-	enum class MenuState;
+	enum class MenuState
+	{
+		MainMenu,
+		StartConfig,
+		StartCar,
+		StartMap
+	};
 
 	void Init();
 	void Update();

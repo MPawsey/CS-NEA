@@ -105,4 +105,45 @@ namespace UI
 		if (m_hasFocus && InputManager::IsMouseInView(GetContainerView(), pos) && !GetClickBounds().contains(pos))
 			OnDeactivated();
 	}
+
+
+	const sf::FloatRect& TextField::GetBounds() const
+	{
+		return m_textContainer.getGlobalBounds();
+	}
+
+	const sf::String& TextField::GetRawText() const
+	{
+		return m_rawText;
+	}
+
+	void TextField::SetRawText(sf::String s)
+	{
+		m_rawText.clear();
+		
+		for (char input : s.toAnsiString())
+		{
+			switch (m_type)
+			{
+			case Text:
+				if ((input >= 'a' && input < 'z') || (input >= 'A' && input <= 'Z') || input == ' ')
+				{
+					m_rawText.insert(m_rawText.getSize(), input);
+					break;
+				}
+			case Decimal:
+				if (input == '.' && m_rawText.find('.') == sf::String::InvalidPos)
+				{
+					m_rawText.insert(m_rawText.getSize(), input);
+					break;
+				}
+			case Integer:
+				if (input >= '0' && input <= '9')
+				{
+					m_rawText.insert(m_rawText.getSize(), input);
+				}
+				break;
+			}
+		}
+	}
 }

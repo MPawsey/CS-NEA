@@ -40,7 +40,10 @@ namespace UI
 
 		TextField(sf::Vector2f pos, const sf::View& view, float width, FieldType type, sf::Vector2f padding = sf::Vector2f{ 2.f, 2.f }, unsigned int charSize = 30u);
 
+		const sf::FloatRect& GetBounds() const;
 
+		const sf::String& GetRawText() const;
+		void SetRawText(sf::String s);
 
 	};
 

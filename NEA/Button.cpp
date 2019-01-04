@@ -39,6 +39,11 @@ namespace UI
 		m_mouseClickedEvent.Call();
 	}
 
+	const sf::FloatRect& Button::GetBounds() const
+	{
+		return m_background.getGlobalBounds();
+	}
+
 	Event<>& Button::GetMouseClickedEvent()
 	{
 		return m_mouseClickedEvent;

@@ -36,7 +36,7 @@ namespace UI
 	}
 
 
-	const bool Clickable::IsActive()
+	const bool Clickable::IsActive() const
 	{
 		return m_isActive;
 	}
@@ -67,12 +67,12 @@ namespace UI
 		m_mousePressed = false;
 	}
 
-	const sf::View& Clickable::GetContainerView()
+	const sf::View& Clickable::GetContainerView() const
 	{
 		return m_containerView;
 	}
 
-	const sf::FloatRect& Clickable::GetClickBounds()
+	const sf::FloatRect& Clickable::GetClickBounds() const
 	{
 		return m_clickBounds;
 	}

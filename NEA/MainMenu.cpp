@@ -3,6 +3,8 @@
 #include "Window.h"
 #include "UI.h"
 
+#include "Menu.h"
+
 
 namespace Menu::MainMenu
 {
@@ -16,6 +18,7 @@ namespace Menu::MainMenu
 	void StartNewGeneration()
 	{
 		std::cout << "New Gen Clicked" << std::endl;
+		Menu::GoToState(Menu::MenuState::StartConfig);
 	}
 
 	void StartExistingGeneration()
@@ -64,6 +67,8 @@ namespace Menu::MainMenu
 
 	void Load()
 	{
+		Window::GetWindow().setView(m_mainMenuView);
+
 		m_startConfigBtn->SetActive(true);
 		m_startSavedBtn->SetActive(true);
 		m_mapEditorBtn->SetActive(true);

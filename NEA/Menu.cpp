@@ -1,25 +1,20 @@
 #include "Menu.h"
 
 #include "MainMenu.h"
+#include "SettingsMenu.h"
 #include "Event.h"
 
 namespace Menu
 {
 	MenuState m_menuState;
 
-	enum class MenuState
-	{
-		MainMenu,
-		StartConfig,
-		StartCar,
-		StartMap
-	};
-
-	void Init()
+		void Init()
 	{
 		m_menuState = MenuState::MainMenu;
 
 		MainMenu::Init();
+		SettingsMenu::Init();
+
 		MainMenu::Load();
 	}
 
@@ -29,6 +24,9 @@ namespace Menu
 		{
 		case MenuState::MainMenu:
 			MainMenu::Update();
+			break;
+		case MenuState::StartConfig:
+			SettingsMenu::Update();
 			break;
 		}
 	}
@@ -41,6 +39,9 @@ namespace Menu
 		case MenuState::MainMenu:
 			MainMenu::Unload();
 			break;
+		case MenuState::StartConfig:
+			SettingsMenu::Unload();
+			break;
 		}
 
 		// Load new state
@@ -48,6 +49,9 @@ namespace Menu
 		{
 		case MenuState::MainMenu:
 			MainMenu::Load();
+			break;
+		case MenuState::StartConfig:
+			SettingsMenu::Load();
 			break;
 		}
 	}

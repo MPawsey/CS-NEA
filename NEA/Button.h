@@ -30,6 +30,8 @@ namespace UI
 		Button(sf::Vector2f pos, const sf::View& view, std::string text, sf::Vector2f padding = sf::Vector2f{ 8.f, 2.f }, unsigned int characterSize = 30u);
 		~Button();
 
+		const sf::FloatRect& GetBounds() const;
+
 		Event<>& GetMouseClickedEvent();
 
 	};

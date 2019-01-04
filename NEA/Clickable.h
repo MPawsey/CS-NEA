@@ -30,10 +30,10 @@ namespace UI
 		Clickable(sf::FloatRect bounds, const sf::View& view);
 		Clickable(float x, float y, float width, float height, const sf::View& view);
 
-		const sf::View& GetContainerView();
-		const sf::FloatRect& GetClickBounds();
+		const sf::View& GetContainerView() const;
+		const sf::FloatRect& GetClickBounds() const;
 
-		const bool IsActive();
+		const bool IsActive() const;
 		void SetActive(bool isActive);
 
 	};
