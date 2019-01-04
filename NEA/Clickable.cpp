@@ -4,23 +4,37 @@
 
 namespace UI
 {
+	Clickable::Clickable()
+		: m_clickBounds{ sf::FloatRect{} }, m_containerView{ sf::View{} } 
+	{}
 
-	Clickable::Clickable(sf::FloatRect bounds, const sf::View& view)
+	Clickable::Clickable(sf::FloatRect bounds, const sf::View& view, bool initialise)
 		: m_clickBounds{ bounds }, m_containerView{ view }
 	{
-		Create();
+		if (initialise)
+			Initialise();
 	}
 
-	Clickable::Clickable(float x, float y, float width, float height, const sf::View& view)
+	Clickable::Clickable(float x, float y, float width, float height, const sf::View& view, bool initialise)
 		: m_clickBounds{ x, y, width, height }, m_containerView{ view }
 	{
-		Create();
+		if (initialise)
+			Initialise();
 	}
 
-	void Clickable::Create()
+	void Clickable::Initialise()
 	{
+		if (m_initialised)
+			return;
+		m_initialised = true;
+
 		InputManager::GetMousePressedEvent(sf::Mouse::Left).AddCallback(&Clickable::OnMousePressed, *this);
 		InputManager::GetMouseReleasedEvent(sf::Mouse::Left).AddCallback(&Clickable::OnMouseReleased, *this);
+	}
+
+	void Clickable::UpdateClickBounds(sf::FloatRect bounds)
+	{
+		m_clickBounds = bounds;
 	}
 
 	void Clickable::OnMousePressed()

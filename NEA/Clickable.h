@@ -1,6 +1,6 @@
 #pragma once
 
-
+#include "Logger.h"
 #include <sfml/Graphics.hpp>
 
 namespace UI
@@ -9,6 +9,8 @@ namespace UI
 	class Clickable
 	{
 	private:
+		static inline Logger logger{ "Clickable" };
+
 		bool m_mousePressed = false;
 		const sf::View& m_containerView;
 		sf::FloatRect m_clickBounds;
@@ -16,7 +18,8 @@ namespace UI
 		// Clickable isn't active by default
 		bool m_isActive = false;
 
-		void Create();
+		bool m_initialised = false;
+
 
 		void OnMousePressed();
 		void OnMouseReleased();
@@ -25,10 +28,17 @@ namespace UI
 		virtual void OnDeactivated();
 		virtual void OnMouseClicked() = 0;
 
+	protected:
+
+		void UpdateClickBounds(sf::FloatRect bounds);
+
 	public:
 
-		Clickable(sf::FloatRect bounds, const sf::View& view);
-		Clickable(float x, float y, float width, float height, const sf::View& view);
+		Clickable();
+		Clickable(sf::FloatRect bounds, const sf::View& view, bool initialise = false);
+		Clickable(float x, float y, float width, float height, const sf::View& view, bool initialise = false);
+
+		void Initialise();
 
 		const sf::View& GetContainerView() const;
 		const sf::FloatRect& GetClickBounds() const;

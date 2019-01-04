@@ -8,7 +8,7 @@ namespace Menu::SettingsMenu
 	sf::View m_settingsView;
 	
 	// WIDTH
-	sf::Text m_widthLabel;
+	/*sf::Text m_widthLabel;
 	UI::Button* m_plusWidthBtn;
 	UI::Button* m_minusWidthBtn;
 	UI::TextField* m_widthTF;
@@ -41,14 +41,14 @@ namespace Menu::SettingsMenu
 	sf::Text m_rotPowLabel;
 	UI::Button* m_plusRotPowBtn;
 	UI::Button* m_minusRotPowBtn;
-	UI::TextField* m_rotPowTF;
+	UI::TextField* m_rotPowTF;*/
 
 
 
 	void OnWindowClosedEvent()
 	{
 		// WIDTH
-		delete m_plusWidthBtn;
+		/*delete m_plusWidthBtn;
 		delete m_minusWidthBtn;
 		delete m_widthTF;
 
@@ -75,7 +75,7 @@ namespace Menu::SettingsMenu
 		// ROTATION POWER
 		delete m_plusRotPowBtn;
 		delete m_minusRotPowBtn;
-		delete m_rotPowTF;
+		delete m_rotPowTF;*/
 	}
 
 	// Public
@@ -95,7 +95,7 @@ namespace Menu::SettingsMenu
 
 
 		// WIDTH
-		m_widthLabel = sf::Text{ "Width", font };
+		/*m_widthLabel = sf::Text{ "Width", font };
 		m_widthLabel.setPosition(sf::Vector2f{ xStart1, yStart });
 		m_plusWidthBtn = new UI::Button{ sf::Vector2f{ xStart1, yStart + yLineSpace }, m_settingsView, "+", sf::Vector2f{ 5.f, 0.f } };
 		m_widthTF = new UI::TextField{ sf::Vector2f{ xStart1 + m_plusWidthBtn->GetBounds().width + xGap, yStart + yLineSpace }, m_settingsView, 100.f, UI::TextField::Decimal };
@@ -122,14 +122,14 @@ namespace Menu::SettingsMenu
 
 		// ROTATION POWER
 		m_rotPowLabel = sf::Text{ "Rotation Power", font };
-		m_rotPowLabel.setPosition(sf::Vector2f{ xStart2, yStart });
+		m_rotPowLabel.setPosition(sf::Vector2f{ xStart2, yStart });*/
 	}
 
 	void Update()
 	{
 		sf::RenderWindow& window = Window::GetWindow();
 
-		window.draw(m_widthLabel);
+		/*window.draw(m_widthLabel);
 		window.draw(*m_plusWidthBtn);
 		window.draw(*m_widthTF);
 		//window.draw(*m_minusWidthBtn);
@@ -157,14 +157,14 @@ namespace Menu::SettingsMenu
 		window.draw(m_rotPowLabel);
 		//window.draw(*m_plusRotPowBtn);
 		//window.draw(*m_minusRotPowBtn);
-		//window.draw(*m_rotPowTF);
+		//window.draw(*m_rotPowTF);*/
 	}
 
 	void Load()
 	{
 		Window::GetWindow().setView(m_settingsView);
 
-		m_plusWidthBtn->SetActive(true);
+		/*m_plusWidthBtn->SetActive(true);
 		m_widthTF->SetActive(true);
 		//m_minusWidthBtn->SetActive(true);
 
@@ -194,12 +194,12 @@ namespace Menu::SettingsMenu
 		//m_rayCountTF->SetRawText("5");
 		//m_popSizeTF->SetRawText("25");
 		//m_enginePowTF->SetRawText("5.0");
-		//m_rotPowTF->SetRawText("5.0");
+		//m_rotPowTF->SetRawText("5.0");*/
 	}
 
 	void Unload()
 	{
-		m_plusWidthBtn->SetActive(false);
+		/*m_plusWidthBtn->SetActive(false);
 		m_widthTF->SetActive(false);
 		//m_minusWidthBtn->SetActive(false);
 
@@ -222,6 +222,6 @@ namespace Menu::SettingsMenu
 
 		//m_plusRotPowBtn->SetActive(false);
 		//m_minusRotPowBtn->SetActive(false);
-		//m_rotPowTF->SetActive(false);
+		//m_rotPowTF->SetActive(false);*/
 	}
 }

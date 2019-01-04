@@ -12,17 +12,18 @@ namespace UI
 	public:
 		enum FieldType
 		{
+			None,
 			Text,
 			Decimal,
 			Integer
 		};
 
 	private:
-		const FieldType m_type;
+		const FieldType m_type = FieldType::None;
 
 		bool m_hasFocus = false;
 		sf::RectangleShape m_textContainer;
-		sf::Vector2f m_padding;
+		Padding m_padding;
 		sf::Text m_text;
 		sf::String m_rawText;
 
@@ -38,7 +39,9 @@ namespace UI
 		const static inline sf::Color UNACTIVE_COLOUR{ 50, 50, 50, 255 };
 		const static inline sf::Color ACTIVE_COLOUR{ 40, 46, 71, 255 };
 
-		TextField(sf::Vector2f pos, const sf::View& view, float width, FieldType type, sf::Vector2f padding = sf::Vector2f{ 2.f, 2.f }, unsigned int charSize = 30u);
+		TextField();
+		TextField(const TextField& textField);
+		TextField(sf::Vector2f pos, const sf::View& view, float width, FieldType type, Padding padding = { 2.f, 2.f, 2.f, 2.f }, unsigned int charSize = 30u);
 
 		const sf::FloatRect& GetBounds() const;
 

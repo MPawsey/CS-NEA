@@ -6,15 +6,23 @@ namespace UI
 	
 
 
-	void TextField::draw(sf::RenderTarget& target, sf::RenderStates states) const
+
+
+	TextField::TextField() {}
+
+	TextField::TextField(const TextField& textField)
+		: Clickable{textField.GetClickBounds(), textField.GetContainerView()}
 	{
-		target.draw(m_textContainer, states);
-		target.draw(m_text, states);
+		m_textContainer = sf::RectangleShape{textField.m_textContainer};
+		m_padding = textField.m_padding;
+		m_text = sf::Text{textField.m_text};
+		m_rawText = sf::String{textField.m_rawText};
 	}
 
-
-	TextField::TextField(sf::Vector2f pos, const sf::View& view, float width, FieldType type, sf::Vector2f padding, unsigned int charSize)
-		: m_type{ type }, m_padding{ padding }, Clickable{ sf::FloatRect{ pos - padding, sf::Vector2f{ width, GetFont().getLineSpacing(charSize) } + (padding * 2.f) }, view }
+	TextField::TextField(sf::Vector2f pos, const sf::View& view, float width, FieldType type, Padding padding, unsigned int charSize)
+		: m_padding{ padding }, m_type{ type }, Clickable{ sf::FloatRect{ pos - sf::Vector2f{padding.left, padding.top}, 
+																				sf::Vector2f{ width, GetFont().getLineSpacing(charSize) } + 
+																							  (sf::Vector2f{padding.right, padding.bottom} * 2.f) }, view }
 	{
 		InputManager::GetMousePressedEvent(sf::Mouse::Left).AddCallback(&TextField::OnMouseLeftClick, *this);
 		InputManager::GetTextEnteredEvent().AddCallback(&TextField::OnTextEntered, *this);
@@ -24,7 +32,7 @@ namespace UI
 		m_text.setCharacterSize(charSize);
 		m_text.setFillColor(sf::Color::White);
 		
-		m_textContainer.setPosition(pos - padding);
+		m_textContainer.setPosition(pos - sf::Vector2f{ padding.left, padding.top });
 		m_textContainer.setSize(sf::Vector2f{ GetClickBounds().width, GetClickBounds().height });
 		m_textContainer.setFillColor(UNACTIVE_COLOUR);
 		m_textContainer.setOutlineColor(sf::Color::White);
@@ -69,7 +77,7 @@ namespace UI
 			m_text.setString(m_rawText);
 
 			unsigned int pos = 0;
-			while (m_text.getGlobalBounds().width > m_textContainer.getGlobalBounds().width - (m_padding.x * 2) && pos < m_rawText.getSize())
+			while (m_text.getGlobalBounds().width > m_textContainer.getGlobalBounds().width - ((m_padding.left + m_padding.right) * 2) && pos < m_rawText.getSize())
 			{
 				m_text.setString(m_rawText.substring(++pos));
 			}
@@ -104,6 +112,12 @@ namespace UI
 		sf::Vector2f pos;
 		if (m_hasFocus && InputManager::IsMouseInView(GetContainerView(), pos) && !GetClickBounds().contains(pos))
 			OnDeactivated();
+	}
+
+	void TextField::draw(sf::RenderTarget& target, sf::RenderStates states) const
+	{
+		target.draw(m_textContainer, states);
+		target.draw(m_text, states);
 	}
 
 

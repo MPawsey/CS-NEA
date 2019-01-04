@@ -5,18 +5,31 @@
 namespace UI
 {
 
-	sf::FloatRect Button::CreateButton(sf::Vector2f pos, std::string text, sf::Vector2f padding, unsigned int characterSize)
+	sf::FloatRect Button::CreateButton(sf::Vector2f pos, std::string text, Padding padding, unsigned int characterSize)
 	{
 		m_label = new sf::Text{ text, GetFont(), characterSize};
 		m_label->setPosition(pos);
 
-		return sf::FloatRect{ pos - padding, sf::Vector2f{ m_label->getLocalBounds().width, GetFont().getLineSpacing(characterSize) } + (padding * 2.f) };
+		return sf::FloatRect{ pos - sf::Vector2f{padding.left, padding.top}, 
+									sf::Vector2f{ m_label->getLocalBounds().width, GetFont().getLineSpacing(characterSize) } + (sf::Vector2f{padding.right, padding.bottom} * 2.f) };
 	}
 
-	Button::Button(sf::Vector2f pos, const sf::View& view, std::string text, sf::Vector2f padding, unsigned int characterSize)
+	Button::Button(const Button& btn)
+		: Clickable{btn.GetBounds(), btn.GetContainerView(), true}
+	{
+		delete m_label;
+
+		m_mouseClickedEvent = btn.m_mouseClickedEvent;
+		m_padding = btn.m_padding;
+		m_background = sf::RectangleShape{btn.m_background};
+		m_label = new sf::Text{*btn.m_label};
+		m_textCentred = btn.m_textCentred;
+	}
+
+	Button::Button(sf::Vector2f pos, const sf::View& view, std::string text, Padding padding, unsigned int characterSize)
 		: Clickable{ CreateButton(pos, text, padding, characterSize), view}
 	{
-		m_background.setPosition(pos - padding);
+		m_background.setPosition(sf::Vector2f{pos.x - padding.left, pos.y - padding.top});
 		m_background.setSize(sf::Vector2f{ GetClickBounds().width, GetClickBounds().height });
 		m_background.setFillColor(BACK_COLOUR);
 		m_background.setOutlineColor(sf::Color::White);
@@ -26,6 +39,32 @@ namespace UI
 	Button::~Button()
 	{
 		delete m_label;
+	}
+
+
+	void Button::SetBackgroundSize(sf::Vector2f size)
+	{
+		m_background.setSize(size);
+
+		UpdateClickBounds(sf::FloatRect{m_background.getGlobalBounds()});
+	}
+	
+	void Button::SetCentreText(bool shouldCentre)
+	{
+		if (m_textCentred != shouldCentre)
+		{
+			if (m_textCentred = shouldCentre)
+			{
+				m_label->setOrigin(sf::Vector2f{m_label->getGlobalBounds().width, m_label->getGlobalBounds().height} / 2.f);
+				m_label->setPosition(sf::Vector2f{m_background.getGlobalBounds().left + m_padding.left, m_background.getGlobalBounds().top + m_padding.top} + 
+									 (sf::Vector2f{m_background.getGlobalBounds().width - m_padding.right, m_background.getGlobalBounds().height - m_padding.bottom} / 2.f));
+			}
+			else
+			{
+				m_label->setOrigin(sf::Vector2f{0.f, 0.f});
+				m_label->setPosition(sf::Vector2f{m_background.getGlobalBounds().left + m_padding.left, m_background.getGlobalBounds().top + m_padding.top});
+			}
+		}
 	}
 
 	void Button::draw(sf::RenderTarget& target, sf::RenderStates states) const
