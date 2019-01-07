@@ -19,11 +19,11 @@ namespace UI
 		};
 
 	private:
-		const FieldType m_type = FieldType::None;
 
+		FieldType m_type = FieldType::None;
 		bool m_hasFocus = false;
 		sf::RectangleShape m_textContainer;
-		Padding m_padding;
+		UI::Padding m_padding;
 		sf::Text m_text;
 		sf::String m_rawText;
 
@@ -41,7 +41,9 @@ namespace UI
 
 		TextField();
 		TextField(const TextField& textField);
-		TextField(sf::Vector2f pos, const sf::View& view, float width, FieldType type, Padding padding = { 2.f, 2.f, 2.f, 2.f }, unsigned int charSize = 30u);
+		TextField(sf::Vector2f pos, sf::View& view, float width, FieldType type, UI::Padding padding = { 2.f, 2.f, 2.f, 2.f }, unsigned int charSize = 30u);
+
+		TextField& operator=(const TextField& textField);
 
 		const sf::FloatRect& GetBounds() const;
 

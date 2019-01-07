@@ -1,82 +1,59 @@
 #include "SettingsMenu.h"
 #include "UI.h"
 #include "Window.h"
+#include <algorithm>
 
 namespace Menu::SettingsMenu
 {
 	// Private
 	sf::View m_settingsView;
+
+	std::string DoubleToString(double d)
+	{
+		std::string s = std::to_string(d);
+		return s.erase(s.find_last_not_of('0') + 1, std::string::npos).back() == '.' ? (s.pop_back(), s) : s;
+	}
 	
+	void OnTextEntered(sf::Text& text, double boundLower, double boundHigher)
+	{
+
+	}
+
 	// WIDTH
-	/*sf::Text m_widthLabel;
-	UI::Button* m_plusWidthBtn;
-	UI::Button* m_minusWidthBtn;
-	UI::TextField* m_widthTF;
+	sf::Text m_widthLabel;
+	UI::Button m_plusWidthBtn;
+	UI::Button m_minusWidthBtn;
+	UI::TextField m_widthTF;
 
 	// HEIGHT
 	sf::Text m_heightLabel;
-	UI::Button* m_plusHeightBtn;
-	UI::Button* m_minusHeightBtn;
-	UI::TextField* m_heightTF;
+	UI::Button m_plusHeightBtn;
+	UI::Button m_minusHeightBtn;
+	UI::TextField m_heightTF;
 
 	// RAY COUNT
 	sf::Text m_rayCountLabel;
-	UI::Button* m_plusRayCountBtn;
-	UI::Button* m_minusRayCountBtn;
-	UI::TextField* m_rayCountTF;
+	UI::Button m_plusRayCountBtn;
+	UI::Button m_minusRayCountBtn;
+	UI::TextField m_rayCountTF;
 
 	// POPULATION SIZE
 	sf::Text m_popSizeLabel;
-	UI::Button* m_plusPopSizeBtn;
-	UI::Button* m_minusPopSizeBtn;
-	UI::TextField* m_popSizeTF;
+	UI::Button m_plusPopSizeBtn;
+	UI::Button m_minusPopSizeBtn;
+	UI::TextField m_popSizeTF;
 
 	// ENGINE POWER
 	sf::Text m_enginePowLabel;
-	UI::Button* m_plusEnginePowBtn;
-	UI::Button* m_minusEnginePowBtn;
-	UI::TextField* m_enginePowTF;
+	UI::Button m_plusEnginePowBtn;
+	UI::Button m_minusEnginePowBtn;
+	UI::TextField m_enginePowTF;
 
 	// ROTATION POWER
 	sf::Text m_rotPowLabel;
-	UI::Button* m_plusRotPowBtn;
-	UI::Button* m_minusRotPowBtn;
-	UI::TextField* m_rotPowTF;*/
-
-
-
-	void OnWindowClosedEvent()
-	{
-		// WIDTH
-		/*delete m_plusWidthBtn;
-		delete m_minusWidthBtn;
-		delete m_widthTF;
-
-		// HEIGHT
-		delete m_plusHeightBtn;
-		delete m_minusHeightBtn;
-		delete m_heightTF;
-
-		// RAY COUNT
-		delete m_plusRayCountBtn;
-		delete m_minusRayCountBtn;
-		delete m_rayCountTF;
-
-		// POPULATION SIZE
-		delete m_plusPopSizeBtn;
-		delete m_minusPopSizeBtn;
-		delete m_popSizeTF;
-
-		// ENGINE POWER
-		delete m_plusEnginePowBtn;
-		delete m_minusEnginePowBtn;
-		delete m_enginePowTF;
-
-		// ROTATION POWER
-		delete m_plusRotPowBtn;
-		delete m_minusRotPowBtn;
-		delete m_rotPowTF;*/
-	}
+	UI::Button m_plusRotPowBtn;
+	UI::Button m_minusRotPowBtn;
+	UI::TextField m_rotPowTF;
 
 	// Public
 
@@ -86,53 +63,68 @@ namespace Menu::SettingsMenu
 		m_settingsView = window.getDefaultView();
 		const sf::Font& font = UI::GetFont();
 
-		float xStart1 = 50.f;
-		float xStart2 = 350.f;
-		float yStart = 100.f;
+		float xPos1 = 50.f;
+		float xPos2 = 450.f;
+		float yPos = 50.f;
 		float yLineSpace = font.getLineSpacing(30) + 5.f;
-		float yGap = 150.f - yLineSpace;
-		float xGap = 5.f;
-
+		float yGap = 175.f;
+		float xGap = 10.f;
+		float textFieldWidth = 100.f;
+		float buttonWidth = 35.f;
 
 		// WIDTH
-		/*m_widthLabel = sf::Text{ "Width", font };
-		m_widthLabel.setPosition(sf::Vector2f{ xStart1, yStart });
-		m_plusWidthBtn = new UI::Button{ sf::Vector2f{ xStart1, yStart + yLineSpace }, m_settingsView, "+", sf::Vector2f{ 5.f, 0.f } };
-		m_widthTF = new UI::TextField{ sf::Vector2f{ xStart1 + m_plusWidthBtn->GetBounds().width + xGap, yStart + yLineSpace }, m_settingsView, 100.f, UI::TextField::Decimal };
+		m_widthLabel = sf::Text{ "Car width", font };
+		m_widthLabel.setPosition(xPos1, yPos);
+		m_plusWidthBtn = UI::Button{ sf::Vector2f{ xPos1, yPos + yLineSpace }, m_settingsView, "+" };
+		m_plusWidthBtn.SetBackgroundSize(sf::Vector2f{ buttonWidth, buttonWidth });
+		m_plusWidthBtn.SetCentreText(true);
+		m_plusWidthBtn.GetMouseClickedEvent().AddCallback([&]() { m_widthTF.SetRawText(DoubleToString(std::stod(m_widthTF.GetRawText().toAnsiString()) + 0.5)); });
+		m_widthTF = UI::TextField{ sf::Vector2f{ xPos1 + buttonWidth + xGap, yPos + yLineSpace }, m_settingsView, textFieldWidth, UI::TextField::Decimal };
+		m_minusWidthBtn = UI::Button{ sf::Vector2f{ xPos1 + buttonWidth + xGap + textFieldWidth + xGap, yPos + yLineSpace }, m_settingsView, "-" };
+		m_minusWidthBtn.SetBackgroundSize(sf::Vector2f{ buttonWidth, buttonWidth });
+		m_minusWidthBtn.SetCentreText(true);
+		m_minusWidthBtn.GetMouseClickedEvent().AddCallback([&]() { m_widthTF.SetRawText(DoubleToString(std::stod(m_widthTF.GetRawText().toAnsiString()) - 0.5)); });
+
 
 		// HEIGHT
-		m_heightLabel = sf::Text{ "Height", font };
-		m_heightLabel.setPosition(sf::Vector2f{ xStart2, yStart });
+		m_heightLabel = sf::Text{ "Car height", font };
+		m_heightLabel.setPosition(xPos2, yPos);
 
-		yStart += yGap;
+
+		yPos += yGap;
 
 		// RAY COUNT
-		m_rayCountLabel = sf::Text{ "Ray Count", font };
-		m_rayCountLabel.setPosition(sf::Vector2f{ xStart1, yStart });
+		m_rayCountLabel = sf::Text{ "Ray count", font };
+		m_rayCountLabel.setPosition(xPos1, yPos);
+
 
 		// POPULATION SIZE
-		m_popSizeLabel = sf::Text{ "Population Size", font };
-		m_popSizeLabel.setPosition(sf::Vector2f{ xStart2, yStart });
+		m_popSizeLabel = sf::Text{ "Population size", font };
+		m_popSizeLabel.setPosition(xPos2, yPos);
 
-		yStart += yGap;
+
+		yPos += yGap;
 
 		// ENGINE POWER
-		m_enginePowLabel = sf::Text{ "Engine Power", font };
-		m_enginePowLabel.setPosition(sf::Vector2f{ xStart1, yStart });
+		m_enginePowLabel = sf::Text{ "Engine power", font };
+		m_enginePowLabel.setPosition(xPos1, yPos);
+
 
 		// ROTATION POWER
-		m_rotPowLabel = sf::Text{ "Rotation Power", font };
-		m_rotPowLabel.setPosition(sf::Vector2f{ xStart2, yStart });*/
+		m_rotPowLabel = sf::Text{ "Rotation power", font };
+		m_rotPowLabel.setPosition(xPos2, yPos);
+
 	}
 
 	void Update()
 	{
 		sf::RenderWindow& window = Window::GetWindow();
 
-		/*window.draw(m_widthLabel);
-		window.draw(*m_plusWidthBtn);
-		window.draw(*m_widthTF);
-		//window.draw(*m_minusWidthBtn);
+
+		window.draw(m_widthLabel);
+		window.draw(m_plusWidthBtn);
+		window.draw(m_widthTF);
+		window.draw(m_minusWidthBtn);
 
 		window.draw(m_heightLabel);
 		//window.draw(*m_plusHeightBtn);
@@ -164,9 +156,9 @@ namespace Menu::SettingsMenu
 	{
 		Window::GetWindow().setView(m_settingsView);
 
-		/*m_plusWidthBtn->SetActive(true);
-		m_widthTF->SetActive(true);
-		//m_minusWidthBtn->SetActive(true);
+		m_plusWidthBtn.SetActive(true);
+		m_widthTF.SetActive(true);
+		m_minusWidthBtn.SetActive(true);
 
 
 		//m_plusHeightBtn->SetActive(true);
@@ -189,7 +181,7 @@ namespace Menu::SettingsMenu
 		//m_minusRotPowBtn->SetActive(true);
 		//m_rotPowTF->SetActive(true);
 
-		//m_widthTF->SetRawText("25.0");
+		m_widthTF.SetRawText("25.0");
 		//m_heightTF->SetRawText("50.0");
 		//m_rayCountTF->SetRawText("5");
 		//m_popSizeTF->SetRawText("25");
@@ -199,9 +191,9 @@ namespace Menu::SettingsMenu
 
 	void Unload()
 	{
-		/*m_plusWidthBtn->SetActive(false);
-		m_widthTF->SetActive(false);
-		//m_minusWidthBtn->SetActive(false);
+		m_plusWidthBtn.SetActive(false);
+		m_widthTF.SetActive(false);
+		m_minusWidthBtn.SetActive(false);
 
 
 		//m_plusHeightBtn->SetActive(false);

@@ -1,10 +1,10 @@
 #pragma once
 
+#include "UI.h"
 #include "Clickable.h"
 #include "Event.h"
 #include <string>
 #include "Logger.h"
-#include "UI.h"
 
 namespace UI
 {
@@ -16,7 +16,7 @@ namespace UI
 
 		Event<> m_mouseClickedEvent;
 		sf::RectangleShape m_background;
-		Padding m_padding;
+		UI::Padding m_padding;
 		sf::Text* m_label;
 		bool m_textCentred = false;
 
@@ -32,8 +32,10 @@ namespace UI
 
 		Button() {}
 		Button(const Button& btn);
-		Button(sf::Vector2f pos, const sf::View& view, std::string text, Padding padding = { 0.f, 0.f, 0.f, 0.f }, unsigned int characterSize = 30u);
+		Button(sf::Vector2f pos, sf::View& view, std::string text, UI::Padding padding = { 0.f, 0.f, 0.f, 0.f }, unsigned int characterSize = 30u);
 		~Button();
+
+		Button& operator=(const Button& btn);
 
 		void SetBackgroundSize(sf::Vector2f size);
 		void SetCentreText(bool shouldCentre);

@@ -1,8 +1,6 @@
 #include "MainMenu.h"
-#include "Button.h"
 #include "Window.h"
 #include "UI.h"
-
 #include "Menu.h"
 
 
@@ -11,9 +9,9 @@ namespace Menu::MainMenu
 	// Private
 	sf::View m_mainMenuView;
 
-	/*UI::Button* m_startConfigBtn;
-	UI::Button* m_startSavedBtn;
-	UI::Button* m_mapEditorBtn;*/
+	UI::Button m_startConfigBtn;
+	UI::Button m_startSavedBtn;
+	UI::Button m_mapEditorBtn;
 
 	void StartNewGeneration()
 	{
@@ -31,13 +29,6 @@ namespace Menu::MainMenu
 		std::cout << "Map Editor Clicked" << std::endl;
 	}
 
-	void OnWindowClosedEvent()
-	{
-		/*delete m_startConfigBtn;
-		delete m_startSavedBtn;
-		delete m_mapEditorBtn;*/
-	}
-
 	// Public
 
 	void Init()
@@ -45,40 +36,50 @@ namespace Menu::MainMenu
 		sf::RenderWindow& window = Window::GetWindow();
 		m_mainMenuView = window.getDefaultView();
 
-		Window::GetWindowClosedEvent().AddCallback(OnWindowClosedEvent);
+		float xPos = 50.f;
+		float yPos = 50.f;
+		float yGap = UI::GetFont().getLineSpacing(30) + 20.f;
 		
-		/*m_startConfigBtn = new UI::Button{ sf::Vector2f{50.f, 1.f * UI::GetFont().getLineSpacing(30)}, m_mainMenuView, "Start with new generation" };
-		m_startSavedBtn = new UI::Button{ sf::Vector2f{50.f, 3.f * UI::GetFont().getLineSpacing(30)}, m_mainMenuView, "Start with existing generation" };
-		m_mapEditorBtn = new UI::Button{ sf::Vector2f{50.f, 5.f * UI::GetFont().getLineSpacing(30)}, m_mainMenuView, "Launch map editor" };
+		m_startConfigBtn = UI::Button{ sf::Vector2f{xPos, yPos}, m_mainMenuView, "Start with new generation", { 5.f, 7.f, 2.f, 2.f } };
+		m_startConfigBtn.SetBackgroundSize(sf::Vector2f{ 500.f, m_startConfigBtn.GetClickBounds().height });
+		m_startConfigBtn.GetMouseClickedEvent().AddCallback(StartNewGeneration);
 
-		m_startConfigBtn->GetMouseClickedEvent().AddCallback(StartNewGeneration);
-		m_startSavedBtn->GetMouseClickedEvent().AddCallback(StartExistingGeneration);
-		m_mapEditorBtn->GetMouseClickedEvent().AddCallback(LaunchMapEditor);*/
+		yPos += yGap;
+
+		m_startSavedBtn = UI::Button{ sf::Vector2f{xPos, yPos}, m_mainMenuView, "Start with existing generation", { 5.f, 7.f, 2.f, 2.f } };
+		m_startSavedBtn.SetBackgroundSize(sf::Vector2f{ 500.f, m_startSavedBtn.GetClickBounds().height });
+		m_startSavedBtn.GetMouseClickedEvent().AddCallback(StartExistingGeneration);
+
+		yPos += yGap;
+
+		m_mapEditorBtn = UI::Button{ sf::Vector2f{xPos, yPos}, m_mainMenuView, "Launch map editor", { 5.f, 7.f, 2.f, 2.f } };
+		m_mapEditorBtn.SetBackgroundSize(sf::Vector2f{ 500.f, m_mapEditorBtn.GetClickBounds().height });
+		m_mapEditorBtn.GetMouseClickedEvent().AddCallback(LaunchMapEditor);
 	}
 
 	void Update()
 	{
 		sf::RenderWindow& window = Window::GetWindow();
 
-		/*window.draw(*m_startConfigBtn);
-		window.draw(*m_startSavedBtn);
-		window.draw(*m_mapEditorBtn);*/
+		window.draw(m_startConfigBtn);
+		window.draw(m_startSavedBtn);
+		window.draw(m_mapEditorBtn);
 	}
 
 	void Load()
 	{
 		Window::GetWindow().setView(m_mainMenuView);
 
-		/*m_startConfigBtn->SetActive(true);
-		m_startSavedBtn->SetActive(true);
-		m_mapEditorBtn->SetActive(true);*/
+		m_startConfigBtn.SetActive(true);
+		m_startSavedBtn.SetActive(true);
+		m_mapEditorBtn.SetActive(true);
 	}
 
 	void Unload()
 	{
-		/*m_startConfigBtn->SetActive(false);
-		m_startSavedBtn->SetActive(false);
-		m_mapEditorBtn->SetActive(false);*/
+		m_startConfigBtn.SetActive(false);
+		m_startSavedBtn.SetActive(false);
+		m_mapEditorBtn.SetActive(false);
 	}
 
 

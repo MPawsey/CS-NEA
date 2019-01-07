@@ -1,10 +1,6 @@
 #pragma once
 
 #include <sfml/Graphics/Font.hpp>
-#include "Clickable.h"
-#include "Button.h"
-#include "TextField.h"
-
 
 namespace UI
 {
@@ -18,3 +14,9 @@ namespace UI
 	const sf::Font& GetFont();
 
 }
+
+
+// Ensures the header files are included after the above has been defined
+#include "Clickable.h"
+#include "Button.h"
+#include "TextField.h"
