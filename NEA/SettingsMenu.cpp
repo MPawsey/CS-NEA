@@ -14,12 +14,14 @@ namespace Menu::SettingsMenu
 		return s.erase(s.find_last_not_of('0') + 1, std::string::npos).back() == '.' ? (s.pop_back(), s) : s;
 	}
 	
-	void OnTextEntered(sf::Text& text, double boundLower, double boundHigher)
+	void ClampTextFieldValue(UI::TextField& text, double boundLower, double boundUpper)
 	{
-
+		text.SetRawText(DoubleToString(std::clamp(std::stod(text.GetRawText().toAnsiString()), boundLower, boundUpper)));
 	}
 
 	// WIDTH
+	constexpr double m_widthMinVal = 15.0;
+	constexpr double m_widthMaxVal = 25.0;
 	sf::Text m_widthLabel;
 	UI::Button m_plusWidthBtn;
 	UI::Button m_minusWidthBtn;
@@ -78,12 +80,13 @@ namespace Menu::SettingsMenu
 		m_plusWidthBtn = UI::Button{ sf::Vector2f{ xPos1, yPos + yLineSpace }, m_settingsView, "+" };
 		m_plusWidthBtn.SetBackgroundSize(sf::Vector2f{ buttonWidth, buttonWidth });
 		m_plusWidthBtn.SetCentreText(true);
-		m_plusWidthBtn.GetMouseClickedEvent().AddCallback([&]() { m_widthTF.SetRawText(DoubleToString(std::stod(m_widthTF.GetRawText().toAnsiString()) + 0.5)); });
+		m_plusWidthBtn.GetMouseClickedEvent().AddCallback([&]() { m_widthTF.SetRawText(DoubleToString(std::clamp(std::stod(m_widthTF.GetRawText().toAnsiString()) + 0.5, m_widthMinVal, m_widthMaxVal))); });
 		m_widthTF = UI::TextField{ sf::Vector2f{ xPos1 + buttonWidth + xGap, yPos + yLineSpace }, m_settingsView, textFieldWidth, UI::TextField::Decimal };
+		m_widthTF.GetLostFocusEvent().AddCallback([&]() { ClampTextFieldValue(m_widthTF, m_widthMinVal, m_widthMaxVal); });
 		m_minusWidthBtn = UI::Button{ sf::Vector2f{ xPos1 + buttonWidth + xGap + textFieldWidth + xGap, yPos + yLineSpace }, m_settingsView, "-" };
 		m_minusWidthBtn.SetBackgroundSize(sf::Vector2f{ buttonWidth, buttonWidth });
 		m_minusWidthBtn.SetCentreText(true);
-		m_minusWidthBtn.GetMouseClickedEvent().AddCallback([&]() { m_widthTF.SetRawText(DoubleToString(std::stod(m_widthTF.GetRawText().toAnsiString()) - 0.5)); });
+		m_minusWidthBtn.GetMouseClickedEvent().AddCallback([&]() { m_widthTF.SetRawText(DoubleToString(std::clamp(std::stod(m_widthTF.GetRawText().toAnsiString()) - 0.5, m_widthMinVal, m_widthMaxVal))); });
 
 
 		// HEIGHT
@@ -181,12 +184,12 @@ namespace Menu::SettingsMenu
 		//m_minusRotPowBtn->SetActive(true);
 		//m_rotPowTF->SetActive(true);
 
-		m_widthTF.SetRawText("25.0");
-		//m_heightTF->SetRawText("50.0");
+		m_widthTF.SetRawText("25");
+		//m_heightTF->SetRawText("50");
 		//m_rayCountTF->SetRawText("5");
 		//m_popSizeTF->SetRawText("25");
-		//m_enginePowTF->SetRawText("5.0");
-		//m_rotPowTF->SetRawText("5.0");*/
+		//m_enginePowTF->SetRawText("5");
+		//m_rotPowTF->SetRawText("5");*/
 	}
 
 	void Unload()

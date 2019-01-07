@@ -26,6 +26,7 @@ namespace UI
 		UI::Padding m_padding;
 		sf::Text m_text;
 		sf::String m_rawText;
+		Event<> m_lostFocusEvent;
 
 		void OnMouseLeftClick();
 		void OnTextEntered(char input);
@@ -45,6 +46,7 @@ namespace UI
 
 		TextField& operator=(const TextField& textField);
 
+		const Event<>& GetLostFocusEvent();
 		const sf::FloatRect& GetBounds() const;
 
 		const sf::String& GetRawText() const;

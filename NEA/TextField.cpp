@@ -86,7 +86,9 @@ namespace UI
 				{
 					m_rawText.erase(m_rawText.getSize() - 2);
 				}
-				break;
+
+				// If program gets here, invalid text entered so no more has to be done.
+				return;
 			}
 
 			m_text.setString(m_rawText);
@@ -113,10 +115,12 @@ namespace UI
 
 	void TextField::OnDeactivated()
 	{
+		m_lostFocusEvent.Call();
+
 		m_hasFocus = false;
 		m_textContainer.setFillColor(UNACTIVE_COLOUR);
 
-		if (m_rawText.getSize() > 0)
+		if (m_rawText.getSize() > 0 && m_rawText.toAnsiString().back() == '_')
 			m_rawText.erase(m_rawText.getSize() - 1);
 		m_text.setString(m_rawText);
 	}
@@ -135,6 +139,11 @@ namespace UI
 		target.draw(m_text, states);
 	}
 
+
+	const Event<>& TextField::GetLostFocusEvent()
+	{
+		return m_lostFocusEvent;
+	}
 
 	const sf::FloatRect& TextField::GetBounds() const
 	{
@@ -174,13 +183,18 @@ namespace UI
 				break;
 			}
 		}
-
+		
+		if (m_hasFocus)
+			m_rawText.insert(m_rawText.getSize(), '_');
+			
 		m_text.setString(m_rawText);
+
 
 		unsigned int pos = 0;
 		while (m_text.getGlobalBounds().width > m_textContainer.getGlobalBounds().width - ((m_padding.left + m_padding.right) * 2) && pos < m_rawText.getSize())
 		{
 			m_text.setString(m_rawText.substring(++pos));
 		}
+
 	}
 }
