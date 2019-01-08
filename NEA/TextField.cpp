@@ -11,7 +11,7 @@ namespace UI
 	TextField::TextField() {}
 
 	TextField::TextField(const TextField& textField)
-		: Clickable{textField.GetClickBounds(), textField.GetContainerView()}
+		: Clickable{textField.GetClickBounds(), textField.GetContainerView(), true}
 	{
 		m_textContainer = sf::RectangleShape{textField.m_textContainer};
 		m_padding = textField.m_padding;

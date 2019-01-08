@@ -21,6 +21,7 @@ namespace InputManager
 	std::vector<sf::Keyboard::Key> keysDown;
 	std::vector<sf::Mouse::Button> mouseDown;
 
+	Event<> mouseMovedEvent;
 	Event<char> textEnteredEvent;
 
 	// Public
@@ -80,6 +81,11 @@ namespace InputManager
 	void MouseScrolled(int delta)
 	{
 		mouseScrolledEvents.Call(delta);
+	}
+
+	void MouseMoved()
+	{
+		mouseMovedEvent.Call();
 	}
 
 	void TextEntered(sf::Uint32 character)
@@ -165,6 +171,11 @@ namespace InputManager
 		return mouseScrolledEvents;
 	}
 
+	const Event<>& GetMouseMovedEvent()
+	{
+		return mouseMovedEvent;
+	}
+
 	const Event<char>& GetTextEnteredEvent()
 	{
 		return textEnteredEvent;
@@ -203,5 +214,12 @@ namespace InputManager
 			return true;
 		}
 		return false;
+	}
+
+	sf::Vector2f GetMousePosInView(const sf::View& view)
+	{
+		const sf::RenderWindow& window = Window::GetWindow();
+
+		return window.mapPixelToCoords(sf::Mouse::getPosition(window));
 	}
 }

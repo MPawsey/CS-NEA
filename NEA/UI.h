@@ -20,3 +20,4 @@ namespace UI
 #include "Clickable.h"
 #include "Button.h"
 #include "TextField.h"
+#include "Slider.h"

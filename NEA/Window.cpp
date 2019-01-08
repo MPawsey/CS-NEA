@@ -41,6 +41,9 @@ namespace Window
 			case sf::Event::MouseWheelScrolled:
 				InputManager::MouseScrolled(e.mouseWheel.delta);
 				break;
+			case sf::Event::MouseMoved:
+				InputManager::MouseMoved();
+				break;
 			case sf::Event::TextEntered:
 				InputManager::TextEntered(e.text.unicode);
 				break;

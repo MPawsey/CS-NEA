@@ -2,18 +2,20 @@
 
 #include "MainMenu.h"
 #include "SettingsMenu.h"
+#include "MapSelectMenu.h"
 #include "Event.h"
 
 namespace Menu
 {
 	MenuState m_menuState;
 
-		void Init()
+	void Init()
 	{
 		m_menuState = MenuState::MainMenu;
 
 		MainMenu::Init();
 		SettingsMenu::Init();
+		MapSelectMenu::Init();
 
 		MainMenu::Load();
 	}
@@ -27,6 +29,9 @@ namespace Menu
 			break;
 		case MenuState::StartConfig:
 			SettingsMenu::Update();
+			break;
+		case MenuState::StartMap:
+			MapSelectMenu::Update();
 			break;
 		}
 	}
@@ -42,6 +47,9 @@ namespace Menu
 		case MenuState::StartConfig:
 			SettingsMenu::Unload();
 			break;
+		case MenuState::StartMap:
+			MapSelectMenu::Unload();
+			break;
 		}
 
 		// Load new state
@@ -52,6 +60,9 @@ namespace Menu
 			break;
 		case MenuState::StartConfig:
 			SettingsMenu::Load();
+			break;
+		case MenuState::StartMap:
+			MapSelectMenu::Load();
 			break;
 		}
 	}

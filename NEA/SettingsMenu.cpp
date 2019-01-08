@@ -2,27 +2,12 @@
 #include "UI.h"
 #include "Window.h"
 #include <algorithm>
+#include "Menu.h"
 
 namespace Menu::SettingsMenu
 {
 	// Private
 	sf::View m_settingsView;
-
-	std::string DoubleToString(double d)
-	{
-		std::string s = std::to_string(d);
-		return s.erase(s.find_last_not_of('0') + 1, std::string::npos).back() == '.' ? (s.pop_back(), s) : s;
-	}
-	
-	void ClampTextFieldDoubleValue(UI::TextField& text, double boundLower, double boundUpper)
-	{
-		text.SetRawText(DoubleToString(std::clamp(std::stod(text.GetRawText().toAnsiString()), boundLower, boundUpper)));
-	}
-
-	void ClampTextFieldIntegerValue(UI::TextField& text, int boundLower, int boundUpper)
-	{
-		text.SetRawText(DoubleToString(std::clamp(std::stoi(text.GetRawText().toAnsiString()), boundLower, boundUpper)));
-	}
 
 	// WIDTH
 	constexpr double m_widthMinVal = 15.0;
@@ -72,6 +57,24 @@ namespace Menu::SettingsMenu
 	UI::Button m_rotPowMinusBtn;
 	UI::TextField m_rotPowTF;
 
+	UI::Button m_backBtn, m_nextBtn;
+
+	std::string DoubleToString(double d)
+	{
+		std::string s = std::to_string(d);
+		return s.erase(s.find_last_not_of('0') + 1, std::string::npos).back() == '.' ? (s.pop_back(), s) : s;
+	}
+
+	void ClampTextFieldDoubleValue(UI::TextField& text, double boundLower, double boundUpper)
+	{
+		text.SetRawText(DoubleToString(std::clamp(std::stod(text.GetRawText().toAnsiString()), boundLower, boundUpper)));
+	}
+
+	void ClampTextFieldIntegerValue(UI::TextField& text, int boundLower, int boundUpper)
+	{
+		text.SetRawText(DoubleToString(std::clamp(std::stoi(text.GetRawText().toAnsiString()), boundLower, boundUpper)));
+	}
+
 	// Public
 
 	void Init()
@@ -81,7 +84,7 @@ namespace Menu::SettingsMenu
 		const sf::Font& font = UI::GetFont();
 
 		float xPos1 = 50.f;
-		float xPos2 = 450.f;
+		float xPos2 = 500.f;
 		float yPos = 50.f;
 		float yLineSpace = font.getLineSpacing(30) + 5.f;
 		float yGap = 125.f;
@@ -103,7 +106,6 @@ namespace Menu::SettingsMenu
 		m_widthMinusBtn.SetCentreText(true);
 		m_widthMinusBtn.GetMouseClickedEvent().AddCallback([&]() { m_widthTF.SetRawText(DoubleToString(std::clamp(std::stod(m_widthTF.GetRawText().toAnsiString()) - 0.5, m_widthMinVal, m_widthMaxVal))); });
 
-
 		// HEIGHT
 		m_heightLabel = sf::Text{ "Car height", font };
 		m_heightLabel.setPosition(xPos2, yPos);
@@ -117,8 +119,6 @@ namespace Menu::SettingsMenu
 		m_heightMinusBtn.SetBackgroundSize(sf::Vector2f{ buttonWidth, buttonWidth });
 		m_heightMinusBtn.SetCentreText(true);
 		m_heightMinusBtn.GetMouseClickedEvent().AddCallback([&]() { m_heightTF.SetRawText(DoubleToString(std::clamp(std::stod(m_heightTF.GetRawText().toAnsiString()) - 0.5, m_heightMinVal, m_heightMaxVal))); });
-
-
 
 		yPos += yGap;
 
@@ -152,8 +152,6 @@ namespace Menu::SettingsMenu
 		m_popSizeMinusBtn.SetCentreText(true);
 		m_popSizeMinusBtn.GetMouseClickedEvent().AddCallback([&]() { m_popSizeTF.SetRawText(DoubleToString(std::clamp(std::stoi(m_popSizeTF.GetRawText().toAnsiString()) - 1, m_popSizeMinVal, m_popSizeMaxVal))); });
 
-
-
 		yPos += yGap;
 
 		// ENGINE POWER
@@ -170,8 +168,6 @@ namespace Menu::SettingsMenu
 		m_enginePowMinusBtn.SetCentreText(true);
 		m_enginePowMinusBtn.GetMouseClickedEvent().AddCallback([&]() { m_enginePowTF.SetRawText(DoubleToString(std::clamp(std::stod(m_enginePowTF.GetRawText().toAnsiString()) - 0.5, m_enginePowMinVal, m_enginePowMaxVal))); });
 
-
-
 		// ROTATION POWER
 		m_rotPowLabel = sf::Text{ "Rotation power", font };
 		m_rotPowLabel.setPosition(xPos2, yPos);
@@ -186,6 +182,13 @@ namespace Menu::SettingsMenu
 		m_rotPowMinusBtn.SetCentreText(true);
 		m_rotPowMinusBtn.GetMouseClickedEvent().AddCallback([&]() { m_rotPowTF.SetRawText(DoubleToString(std::clamp(std::stod(m_rotPowTF.GetRawText().toAnsiString()) - 0.5, m_rotPowMinVal, m_rotPowMaxVal))); });
 
+		m_backBtn = UI::Button{ sf::Vector2f{ xPos1, window.getSize().y - yLineSpace }, m_settingsView, "Back", { 5.f, 5.f, 0.f, 0.f } };
+		m_backBtn.SetCentreText(true);
+		m_backBtn.GetMouseClickedEvent().AddCallback([&]() { GoToState(MenuState::MainMenu); });
+
+		m_nextBtn = UI::Button{ sf::Vector2f{ 675.f, window.getSize().y - yLineSpace }, m_settingsView, "Next", { 5.f, 5.f, 0.f, 0.f } };
+		m_nextBtn.SetCentreText(true);
+		m_nextBtn.GetMouseClickedEvent().AddCallback([&]() { GoToState(MenuState::StartMap); });
 
 	}
 
@@ -223,6 +226,9 @@ namespace Menu::SettingsMenu
 		window.draw(m_rotPowPlusBtn);
 		window.draw(m_rotPowTF);
 		window.draw(m_rotPowMinusBtn);
+
+		window.draw(m_backBtn);
+		window.draw(m_nextBtn);
 	}
 
 	void Load()
@@ -253,6 +259,8 @@ namespace Menu::SettingsMenu
 		m_rotPowTF.SetActive(true);
 		m_rotPowMinusBtn.SetActive(true);
 
+		m_backBtn.SetActive(true);
+		m_nextBtn.SetActive(true);
 
 		m_widthTF.SetRawText("15");
 		m_heightTF.SetRawText("25");
@@ -287,5 +295,8 @@ namespace Menu::SettingsMenu
 		m_rotPowPlusBtn.SetActive(false);
 		m_rotPowTF.SetActive(false);
 		m_rotPowMinusBtn.SetActive(false);
+
+		m_backBtn.SetActive(false);
+		m_nextBtn.SetActive(false);
 	}
 }
