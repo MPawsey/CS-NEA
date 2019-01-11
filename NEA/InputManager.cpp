@@ -200,7 +200,7 @@ namespace InputManager
 
 	bool IsMouseInView(const sf::View& view, sf::Vector2f& viewPos)
 	{
-		const sf::RenderWindow& window = Window::GetWindow();
+		sf::RenderWindow& window = Window::GetWindow();
 
 		sf::Vector2i mousePos = sf::Mouse::getPosition(window);
 		sf::Vector2f pos = (sf::Vector2f)mousePos;
@@ -210,6 +210,7 @@ namespace InputManager
 		
 		if (view.getViewport().contains(pos))
 		{
+			window.setView(view);
 			viewPos = window.mapPixelToCoords(mousePos);
 			return true;
 		}
@@ -218,8 +219,8 @@ namespace InputManager
 
 	sf::Vector2f GetMousePosInView(const sf::View& view)
 	{
-		const sf::RenderWindow& window = Window::GetWindow();
-
+		sf::RenderWindow& window = Window::GetWindow();
+		window.setView(view);
 		return window.mapPixelToCoords(sf::Mouse::getPosition(window));
 	}
 }

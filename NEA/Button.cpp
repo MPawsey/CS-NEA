@@ -17,13 +17,15 @@ namespace UI
 	Button::Button(const Button& btn)
 		: Clickable{btn.GetBounds(), btn.GetContainerView(), true}
 	{
-		delete m_label;
-
 		m_mouseClickedEvent = btn.m_mouseClickedEvent;
 		m_padding = btn.m_padding;
 		m_background = sf::RectangleShape{ btn.m_background };
 		m_label = new sf::Text{ *btn.m_label };
 		m_textCentred = btn.m_textCentred;
+
+		UpdateClickBounds(m_background.getGlobalBounds());
+		UpdateView(btn.GetContainerView());
+		InitialiseClickable();
 	}
 
 	Button::Button(sf::Vector2f pos, sf::View& view, std::string text, Padding padding, unsigned int characterSize)
@@ -43,7 +45,8 @@ namespace UI
 
 	Button& Button::operator=(const Button& btn)
 	{
-		delete m_label;
+		if (m_label)
+			delete m_label;
 
 		m_mouseClickedEvent = btn.m_mouseClickedEvent;
 		m_padding = btn.m_padding;
@@ -53,7 +56,6 @@ namespace UI
 
 		UpdateClickBounds(m_background.getGlobalBounds());
 		UpdateView(btn.GetContainerView());
-
 		InitialiseClickable();
 
 		return *this;

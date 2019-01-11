@@ -18,6 +18,22 @@ private:
 	mutable std::vector<unsigned int> m_removedPositions;
 
 public:
+	
+	Event() = default;
+
+	Event(const Event<T...>& e)
+	{
+		m_callbacks = std::vector<std::function<void(T...)>>{e.m_callbacks};
+		m_removedPositions = std::vector<unsigned int>{ e.m_removedPositions };
+	}
+
+	Event& operator=(const Event<T...>& e)
+	{
+		m_callbacks = std::vector<std::function<void(T...)>>{ e.m_callbacks };
+		m_removedPositions = std::vector<unsigned int>{ e.m_removedPositions };
+
+		return *this;
+	}
 
 	// Returns the ID of the event
 	template <typename C>

@@ -13,6 +13,7 @@ namespace UI
 		m_sliderLine = sf::RectangleShape{slider.m_sliderLine};
 		m_sliderGrab = sf::CircleShape{slider.m_sliderGrab};
 		m_clickBounds = sf::FloatRect{ slider.m_clickBounds };
+		m_containerView = slider.m_containerView;
 
 		InputManager::GetMousePressedEvent(sf::Mouse::Left).AddCallback(&Slider::OnMouseLeftPressed, *this);
 		InputManager::GetMouseReleasedEvent(sf::Mouse::Left).AddCallback(&Slider::OnMouseLeftReleased, *this);
@@ -24,6 +25,7 @@ namespace UI
 	{
 		m_sliderLine.setPosition(posTop);
 		m_sliderLine.setFillColor(sf::Color{ 50, 50, 50 });
+		m_containerView = view;
 
 		m_sliderGrab.setOrigin(sliderWidth * 2.f, sliderWidth * 2.f);
 		m_sliderGrab.setPosition(sf::Vector2f{posTop.x + (sliderWidth / 2.f), posTop.y});
@@ -40,6 +42,7 @@ namespace UI
 		m_sliderLine = sf::RectangleShape{ slider.m_sliderLine };
 		m_sliderGrab = sf::CircleShape{ slider.m_sliderGrab };
 		m_clickBounds = sf::FloatRect{ slider.m_clickBounds };
+		m_containerView = slider.m_containerView;
 
 		InputManager::GetMousePressedEvent(sf::Mouse::Left).AddCallback(&Slider::OnMouseLeftPressed, *this);
 		InputManager::GetMouseReleasedEvent(sf::Mouse::Left).AddCallback(&Slider::OnMouseLeftReleased, *this);
@@ -51,7 +54,7 @@ namespace UI
 	void Slider::CalcSliderVal(sf::Vector2f mousePos)
 	{
 		m_sliderGrab.setPosition(m_sliderGrab.getPosition().x, std::clamp(mousePos.y, m_sliderLine.getPosition().y, m_sliderLine.getPosition().y + m_sliderLine.getGlobalBounds().height));
-		m_sliderVal = (m_sliderGrab.getPosition().x - m_sliderLine.getPosition().x) / m_sliderLine.getGlobalBounds().height;
+		m_sliderVal = (m_sliderGrab.getPosition().y - m_sliderLine.getPosition().y) / m_sliderLine.getGlobalBounds().height;
 	}
 
 	void Slider::OnMouseLeftPressed()
@@ -90,7 +93,7 @@ namespace UI
 		return m_sliderVal;
 	}
 
-	const Event<float> Slider::GetSliderUpdateEvent()
+	const Event<float>& Slider::GetSliderUpdateEvent()
 	{
 		return m_sliderUpdateEvent;
 	}

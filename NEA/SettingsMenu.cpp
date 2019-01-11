@@ -67,11 +67,15 @@ namespace Menu::SettingsMenu
 
 	void ClampTextFieldDoubleValue(UI::TextField& text, double boundLower, double boundUpper)
 	{
+		if (text.GetRawText().getSize() == 1)
+			text.SetRawText("0");
 		text.SetRawText(DoubleToString(std::clamp(std::stod(text.GetRawText().toAnsiString()), boundLower, boundUpper)));
 	}
 
 	void ClampTextFieldIntegerValue(UI::TextField& text, int boundLower, int boundUpper)
 	{
+		if (text.GetRawText().getSize() == 1)
+			text.SetRawText("0");
 		text.SetRawText(DoubleToString(std::clamp(std::stoi(text.GetRawText().toAnsiString()), boundLower, boundUpper)));
 	}
 

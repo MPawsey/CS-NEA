@@ -36,7 +36,7 @@ namespace UI
 		Slider& operator=(const Slider& slider);
 
 		float GetSliderVal();
-		const Event<float> GetSliderUpdateEvent();
+		const Event<float>& GetSliderUpdateEvent();
 
 		void SetActive(bool isActive);
 	};
