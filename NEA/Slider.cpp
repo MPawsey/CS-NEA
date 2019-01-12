@@ -117,4 +117,11 @@ namespace UI
 		target.draw(m_sliderGrab, states);
 	}
 
+	void Slider::Move(float percentage)
+	{
+		m_sliderGrab.setPosition(m_sliderGrab.getPosition().x, std::clamp(m_sliderGrab.getPosition().y + (percentage * m_sliderLine.getGlobalBounds().height), m_sliderLine.getPosition().y, m_sliderLine.getPosition().y + m_sliderLine.getGlobalBounds().height));
+		m_sliderVal = (m_sliderGrab.getPosition().y - m_sliderLine.getPosition().y) / m_sliderLine.getGlobalBounds().height;
+		m_sliderUpdateEvent.Call(m_sliderVal);
+	}
+
 }

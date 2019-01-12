@@ -39,6 +39,7 @@ namespace UI
 		const Event<float>& GetSliderUpdateEvent();
 
 		void SetActive(bool isActive);
+		void Move(float percentage);
 	};
 
 

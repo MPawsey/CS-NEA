@@ -39,7 +39,7 @@ namespace Window
 				InputManager::MouseReleased(e.mouseButton.button);
 				break;
 			case sf::Event::MouseWheelScrolled:
-				InputManager::MouseScrolled(e.mouseWheel.delta);
+				InputManager::MouseScrolled(e.mouseWheelScroll.delta);
 				break;
 			case sf::Event::MouseMoved:
 				InputManager::MouseMoved();
