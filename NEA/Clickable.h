@@ -7,50 +7,55 @@
 namespace UI
 {
 
-	class Clickable
+	class Clickable : public sf::Transformable
 	{
 	private:
 		static inline Logger logger{ "Clickable" };
 
 		bool m_mousePressed = false;
-		sf::View& m_containerView;
-		sf::FloatRect m_clickBounds;
 
 		// EventID's
+		EventID m_mouseMovedID;
 		EventID m_mousePressedID;
 		EventID m_mouseReleasedID;
 
 		// Clickable isn't active by default
 		bool m_isActive = false;
 
-		bool m_initialised = false;
+		void InitialiseEvents();
 
-
+		void OnMouseMoved(sf::Vector2i mousePos);
 		void OnMousePressed();
 		void OnMouseReleased();
 
-		virtual void OnActivated();
-		virtual void OnDeactivated();
-		virtual void OnMouseClicked() = 0;
+
+		virtual void OnMouseHover() {}
+		virtual void OnMouseHoverPress() {}
+		virtual void OnMouseRelease() {} // Triggered if pressed but not clicked
+		virtual void OnMouseClick() = 0;
+
+		virtual void OnActivated() {}
+		virtual void OnDeactivated() {}
 
 	protected:
 
-		void UpdateView(sf::View& view);
-		void UpdateClickBounds(sf::FloatRect bounds);
-
-		void InitialiseClickable();
+		sf::View* m_containerView;
+		sf::FloatRect m_clickBounds;
 
 	public:
 
 		Clickable();
-		Clickable(sf::FloatRect bounds, sf::View& view, bool initialise = false);
-		Clickable(float x, float y, float width, float height, sf::View& view, bool initialise = false);
+		Clickable(const Clickable& clickable);
+		Clickable(sf::FloatRect bounds, sf::View* view);
+		Clickable(sf::FloatRect bounds, sf::View& view);
 		~Clickable();
 
-		sf::View& GetContainerView() const;
-		sf::FloatRect GetClickBounds() const;
+		Clickable& operator=(const Clickable& clickable);
 
 		const bool IsActive() const;
+		const sf::FloatRect GetClickBounds() const;
+		const sf::View& GetContainerView() const;
+
 		void SetActive(bool isActive);
 
 	};

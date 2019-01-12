@@ -23,7 +23,7 @@ namespace UI
 
 		void OnMouseLeftPressed();
 		void OnMouseLeftReleased();
-		void OnMouseMoved();
+		void OnMouseMoved(sf::Vector2i mousePos);
 
 		virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 

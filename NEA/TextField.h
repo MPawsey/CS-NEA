@@ -31,7 +31,7 @@ namespace UI
 		void OnMouseLeftClick();
 		void OnTextEntered(char input);
 
-		virtual void OnMouseClicked();
+		virtual void OnMouseClick();
 		virtual void OnDeactivated();
 
 		virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;

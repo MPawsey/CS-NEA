@@ -42,7 +42,7 @@ namespace Window
 				InputManager::MouseScrolled(e.mouseWheelScroll.delta);
 				break;
 			case sf::Event::MouseMoved:
-				InputManager::MouseMoved();
+				InputManager::MouseMoved(e.mouseMove.x, e.mouseMove.y);
 				break;
 			case sf::Event::TextEntered:
 				InputManager::TextEntered(e.text.unicode);

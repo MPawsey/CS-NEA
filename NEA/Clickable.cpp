@@ -7,47 +7,62 @@ namespace UI
 	sf::View nullView;
 
 	Clickable::Clickable()
-		: m_containerView{ nullView }
-	{}
-
-	Clickable::Clickable(sf::FloatRect bounds, sf::View& view, bool initialise)
-		: m_clickBounds{ bounds }, m_containerView{ view }
 	{
-		if (initialise)
-			InitialiseClickable();
+		InitialiseEvents();
 	}
 
-	Clickable::Clickable(float x, float y, float width, float height, sf::View& view, bool initialise)
-		: m_clickBounds{ x, y, width, height }, m_containerView{ view }
+	Clickable::Clickable(const Clickable& clickable)
+		: m_containerView{ clickable.m_containerView }, m_clickBounds{ clickable.m_clickBounds }
 	{
-		if (initialise)
-			InitialiseClickable();
+		InitialiseEvents();
+	}
+
+	Clickable::Clickable(sf::FloatRect bounds, sf::View* view)
+		: m_clickBounds{ bounds }, m_containerView{ view }
+	{
+		InitialiseEvents();
+	}
+
+	Clickable::Clickable(sf::FloatRect bounds, sf::View& view)
+		: m_clickBounds{ bounds }, m_containerView{ &view }
+	{
+		InitialiseEvents();
 	}
 
 	Clickable::~Clickable()
 	{
+		InputManager::GetMouseMovedEvent().RemoveCallback(m_mouseMovedID);
 		InputManager::GetMousePressedEvent(sf::Mouse::Left).RemoveCallback(m_mousePressedID);
 		InputManager::GetMouseReleasedEvent(sf::Mouse::Left).RemoveCallback(m_mouseReleasedID);
 	}
 
-	void Clickable::InitialiseClickable()
+	Clickable& Clickable::operator=(const Clickable& clickable)
 	{
-		if (m_initialised)
-			return;
-		m_initialised = true;
+		dynamic_cast<sf::Transformable&>(*this) = clickable;
 
+		m_containerView = clickable.m_containerView;
+		m_clickBounds = clickable.m_clickBounds;
+
+		return *this;
+	}
+
+	void Clickable::InitialiseEvents()
+	{
+		m_mouseMovedID = InputManager::GetMouseMovedEvent().AddCallback(&Clickable::OnMouseMoved, *this);
 		m_mousePressedID = InputManager::GetMousePressedEvent(sf::Mouse::Left).AddCallback(&Clickable::OnMousePressed, *this);
 		m_mouseReleasedID = InputManager::GetMouseReleasedEvent(sf::Mouse::Left).AddCallback(&Clickable::OnMouseReleased, *this);
 	}
 
-	void Clickable::UpdateView(sf::View& view)
+	void Clickable::OnMouseMoved(sf::Vector2i mousePos)
 	{
-		m_containerView = view;
-	}
+		if (!m_isActive)
+			return;
 
-	void Clickable::UpdateClickBounds(sf::FloatRect bounds)
-	{
-		m_clickBounds = bounds;
+		sf::Vector2f viewPos;
+		if (InputManager::IsPointInView(*m_containerView, mousePos, viewPos) && m_clickBounds.contains(getTransform().transformPoint(viewPos)))
+		{
+			OnMouseHover();
+		}
 	}
 
 	void Clickable::OnMousePressed()
@@ -56,19 +71,25 @@ namespace UI
 			return;
 
 		sf::Vector2f mousePos;
-		if (InputManager::IsMouseInView(m_containerView, mousePos) && m_clickBounds.contains(mousePos))
+		if (InputManager::IsMouseInView(*m_containerView, mousePos) &&  m_clickBounds.contains(getTransform().transformPoint(mousePos)))
 		{
 			m_mousePressed = true;
+			OnMouseHoverPress();
 		}
 	}
 
 	void Clickable::OnMouseReleased()
 	{
 		sf::Vector2f mousePos;
-		if (m_mousePressed && InputManager::IsMouseInView(m_containerView, mousePos) && m_clickBounds.contains(mousePos))
+		if (m_mousePressed && InputManager::IsMouseInView(*m_containerView, mousePos) && m_clickBounds.contains(getTransform().transformPoint(mousePos)))
 		{
-			OnMouseClicked();
+			OnMouseClick();
 		}
+		else
+		{
+			OnMouseRelease();
+		}
+
 
 		m_mousePressed = false;
 	}
@@ -91,15 +112,12 @@ namespace UI
 		}
 	}
 
-	void Clickable::OnActivated() {}
-	void Clickable::OnDeactivated() {}
-
-	sf::View& Clickable::GetContainerView() const
+	const sf::View& Clickable::GetContainerView() const
 	{
-		return m_containerView;
+		return *m_containerView;
 	}
 
-	sf::FloatRect Clickable::GetClickBounds() const
+	const sf::FloatRect Clickable::GetClickBounds() const
 	{
 		return m_clickBounds;
 	}

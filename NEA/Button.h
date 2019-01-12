@@ -17,13 +17,13 @@ namespace UI
 		Event<> m_mouseClickedEvent;
 		sf::RectangleShape m_background;
 		UI::Padding m_padding;
-		sf::Text* m_label;
+		sf::Text m_label;
 		bool m_textCentred = false;
 
-		sf::FloatRect CreateButton(sf::Vector2f pos, std::string text, Padding padding, unsigned int characterSize);
-
-
-		virtual void OnMouseClicked();
+		//virtual void OnMouseHover();
+		//virtual void OnMouseHoverPress();
+		//virtual void OnMouseRelease(); // Triggered if pressed but not clicked
+		virtual void OnMouseClick();
 
 		virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
@@ -33,7 +33,6 @@ namespace UI
 		Button() {}
 		Button(const Button& btn);
 		Button(sf::Vector2f pos, sf::View& view, std::string text, UI::Padding padding = { 0.f, 0.f, 0.f, 0.f }, unsigned int characterSize = 30u);
-		~Button();
 
 		Button& operator=(const Button& btn);
 

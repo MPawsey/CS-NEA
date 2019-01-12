@@ -77,13 +77,13 @@ namespace UI
 			m_hasFocus = false;
 	}
 
-	void Slider::OnMouseMoved()
+	void Slider::OnMouseMoved(sf::Vector2i mousePos)
 	{
 		if (!m_active) return;
 
 		if (m_hasFocus)
 		{
-			CalcSliderVal(InputManager::GetMousePosInView(m_containerView));
+			CalcSliderVal(InputManager::GetMousePosInView(m_containerView, mousePos));
 			m_sliderUpdateEvent.Call(m_sliderVal);
 		}
 	}

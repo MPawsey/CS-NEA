@@ -21,7 +21,7 @@ namespace InputManager
 	std::vector<sf::Keyboard::Key> keysDown;
 	std::vector<sf::Mouse::Button> mouseDown;
 
-	Event<> mouseMovedEvent;
+	Event<sf::Vector2i> mouseMovedEvent;
 	Event<char> textEnteredEvent;
 
 	// Public
@@ -83,9 +83,9 @@ namespace InputManager
 		mouseScrolledEvents.Call(delta);
 	}
 
-	void MouseMoved()
+	void MouseMoved(int x, int y)
 	{
-		mouseMovedEvent.Call();
+		mouseMovedEvent.Call(sf::Vector2i{x, y});
 	}
 
 	void TextEntered(sf::Uint32 character)
@@ -171,7 +171,7 @@ namespace InputManager
 		return mouseScrolledEvents;
 	}
 
-	const Event<>& GetMouseMovedEvent()
+	const Event<sf::Vector2i>& GetMouseMovedEvent()
 	{
 		return mouseMovedEvent;
 	}
@@ -198,10 +198,9 @@ namespace InputManager
 		return IsMouseInView(view, tmp);
 	}
 
-	bool IsMouseInView(const sf::View& view, sf::Vector2f& viewPos)
+	bool IsMouseInView(const sf::View& view, sf::Vector2f& viewMousePos)
 	{
-		sf::RenderWindow& window = Window::GetWindow();
-
+		const sf::RenderWindow& window = Window::GetWindow();
 		sf::Vector2i mousePos = sf::Mouse::getPosition(window);
 		sf::Vector2f pos = (sf::Vector2f)mousePos;
 		sf::Vector2u windowSize = Window::GetWindowSize();
@@ -210,8 +209,28 @@ namespace InputManager
 		
 		if (view.getViewport().contains(pos))
 		{
-			window.setView(view);
-			viewPos = window.mapPixelToCoords(mousePos);
+			viewMousePos = window.mapPixelToCoords(mousePos, view);
+			return true;
+		}
+		return false;
+	}
+
+	bool IsPointInView(const sf::View& view, sf::Vector2i point)
+	{
+		sf::Vector2f tmp;
+		return IsPointInView(view, point, tmp);
+	}
+
+	bool IsPointInView(const sf::View& view, sf::Vector2i point, sf::Vector2f& pointPos)
+	{
+		sf::Vector2f pos = (sf::Vector2f)point;
+		sf::Vector2u windowSize = Window::GetWindowSize();
+		pos.x /= windowSize.x;
+		pos.y /= windowSize.y;
+
+		if (view.getViewport().contains(pos))
+		{
+			pointPos = Window::GetWindow().mapPixelToCoords(point, view);
 			return true;
 		}
 		return false;
@@ -219,8 +238,11 @@ namespace InputManager
 
 	sf::Vector2f GetMousePosInView(const sf::View& view)
 	{
-		sf::RenderWindow& window = Window::GetWindow();
-		window.setView(view);
-		return window.mapPixelToCoords(sf::Mouse::getPosition(window));
+		return Window::GetWindow().mapPixelToCoords(sf::Mouse::getPosition(Window::GetWindow()), view);
+	}
+
+	sf::Vector2f GetMousePosInView(const sf::View& view, sf::Vector2i relativeMousePos)
+	{
+		return Window::GetWindow().mapPixelToCoords(relativeMousePos, view);
 	}
 }

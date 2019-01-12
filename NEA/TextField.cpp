@@ -11,12 +11,12 @@ namespace UI
 	TextField::TextField() {}
 
 	TextField::TextField(const TextField& textField)
-		: Clickable{textField.GetClickBounds(), textField.GetContainerView(), true}
+		: Clickable{textField.m_clickBounds, textField.m_containerView}
 	{
-		m_textContainer = sf::RectangleShape{textField.m_textContainer};
+		m_textContainer = textField.m_textContainer;
 		m_padding = textField.m_padding;
-		m_text = sf::Text{textField.m_text};
-		m_rawText = sf::String{textField.m_rawText};
+		m_text = textField.m_text;
+		m_rawText = textField.m_rawText;
 	}
 
 	TextField::TextField(sf::Vector2f pos, sf::View& view, float width, FieldType type, Padding padding, unsigned int charSize)
@@ -41,6 +41,8 @@ namespace UI
 
 	TextField& TextField::operator=(const TextField& textField)
 	{
+		dynamic_cast<Clickable&>(*this) = textField;
+
 		m_type = textField.m_type;
 		m_textContainer = sf::RectangleShape{ textField.m_textContainer };
 		m_padding = textField.m_padding;
@@ -49,10 +51,6 @@ namespace UI
 
 		InputManager::GetMousePressedEvent(sf::Mouse::Left).AddCallback(&TextField::OnMouseLeftClick, *this);
 		InputManager::GetTextEnteredEvent().AddCallback(&TextField::OnTextEntered, *this);
-
-		UpdateClickBounds(m_textContainer.getGlobalBounds());
-		UpdateView(textField.GetContainerView());
-		InitialiseClickable();
 
 		return *this;
 	}
@@ -102,7 +100,7 @@ namespace UI
 		}
 	}
 
-	void TextField::OnMouseClicked()
+	void TextField::OnMouseClick()
 	{
 		if (!m_hasFocus)
 		{
