@@ -91,8 +91,29 @@ namespace UI
 		target.draw(m_label, states);
 	}
 
+	void Button::OnMouseHover()
+	{
+		m_background.setFillColor(HOVER_COLOUR);
+	}
+
+	void Button::OnMouseUnhover()
+	{
+		m_background.setFillColor(BACK_COLOUR);
+	}
+
+	void Button::OnMouseHoverPress()
+	{
+		m_background.setFillColor(PRESSED_COLOUR);
+	}
+
+	void Button::OnMouseRelease() // Triggered if pressed but not clicked
+	{
+		m_background.setFillColor(BACK_COLOUR);
+	}
+
 	void Button::OnMouseClick()
 	{
+		m_background.setFillColor(BACK_COLOUR);
 		m_mouseClickedEvent.Call();
 	}
 

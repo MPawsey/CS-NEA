@@ -57,13 +57,17 @@ namespace UI
 
 	void Clickable::OnMouseMoved(sf::Vector2i mousePos)
 	{
-		if (!m_isActive)
+		if (!m_isActive || m_mousePressed)
 			return;
 
 		sf::Vector2f viewPos;
 		if (InputManager::IsPointInView(*m_containerView, mousePos, viewPos) && getTransform().transformRect(m_clickBounds).contains(viewPos))
 		{
 			OnMouseHover();
+		}
+		else if (!m_mousePressed)
+		{
+			OnMouseUnhover();
 		}
 	}
 

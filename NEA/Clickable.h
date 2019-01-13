@@ -13,6 +13,7 @@ namespace UI
 		static inline Logger logger{ "Clickable" };
 
 		bool m_mousePressed = false;
+		bool m_mouseHovered = false;
 
 		// EventID's
 		EventID m_mouseMovedID;
@@ -30,6 +31,7 @@ namespace UI
 
 
 		virtual void OnMouseHover() {}
+		virtual void OnMouseUnhover() {}
 		virtual void OnMouseHoverPress() {}
 		virtual void OnMouseRelease() {} // Triggered if pressed but not clicked
 		virtual void OnMouseClick() = 0;
