@@ -20,6 +20,9 @@ namespace UI
 		sf::Text m_label;
 		bool m_textCentred = false;
 
+
+		void RecalculateButton();
+
 		//virtual void OnMouseHover();
 		//virtual void OnMouseHoverPress();
 		//virtual void OnMouseRelease(); // Triggered if pressed but not clicked
@@ -32,14 +35,18 @@ namespace UI
 
 		Button() {}
 		Button(const Button& btn);
-		Button(sf::Vector2f pos, sf::View& view, std::string text, UI::Padding padding = { 0.f, 0.f, 0.f, 0.f }, unsigned int characterSize = 30u);
+		Button(std::string text, sf::View& view, UI::Padding padding = { });
 
 		Button& operator=(const Button& btn);
 
+		
 		void SetBackgroundSize(sf::Vector2f size);
 		void SetCentreText(bool shouldCentre);
+		void SetPadding(UI::Padding padding);
+
 
 		const sf::FloatRect& GetBounds() const;
+		const UI::Padding& GetPadding() const;
 
 		Event<>& GetMouseClickedEvent();
 

@@ -55,7 +55,8 @@ namespace Menu::MapSelectMenu
 		float startOffset = 10.f;
 		yGap = UI::GetFont().getLineSpacing(30) + 20.f;
 
-		m_backBtn = UI::Button{ sf::Vector2f{ 50.f, window.getSize().y - UI::GetFont().getLineSpacing(30) - 5.f }, m_mapSelectView, "Back", { 5.f, 5.f, 0.f, 0.f } };
+		m_backBtn = UI::Button{ "Back", m_mapSelectView, { 5.f, 5.f, 0.f, 0.f } };
+		m_backBtn.setPosition(50.f, window.getSize().y - UI::GetFont().getLineSpacing(30) - 5.f);
 		m_backBtn.SetCentreText(true);
 		m_backBtn.GetMouseClickedEvent().AddCallback([&]() { Menu::GoToState(Menu::MenuState::StartConfig); });
 
@@ -64,7 +65,8 @@ namespace Menu::MapSelectMenu
 			//if (entry.path().extension() != ".track")
 			//	continue;
 
-			UI::Button b{ sf::Vector2f{ 10.f, startOffset + (pos++ * yGap) }, m_mapButtonView, entry.path().filename().replace_extension().u8string(), { 5.f } };
+			UI::Button b{ entry.path().filename().replace_extension().u8string(), m_mapButtonView, { 5.f } };
+			b.setPosition(10.f, startOffset + (pos++ * yGap));
 			b.SetBackgroundSize(sf::Vector2f{ m_mapButtonView.getSize().x - 20.f, b.GetClickBounds().height });
 			b.GetMouseClickedEvent().AddCallback([=]() { std::cout << "pressed " << entry.path() << "\n"; });
 			m_buttons.push_back(b);

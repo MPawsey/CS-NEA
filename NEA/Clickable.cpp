@@ -14,6 +14,8 @@ namespace UI
 	Clickable::Clickable(const Clickable& clickable)
 		: m_containerView{ clickable.m_containerView }, m_clickBounds{ clickable.m_clickBounds }
 	{
+		dynamic_cast<sf::Transformable&>(*this) = clickable;
+
 		InitialiseEvents();
 	}
 
@@ -59,7 +61,7 @@ namespace UI
 			return;
 
 		sf::Vector2f viewPos;
-		if (InputManager::IsPointInView(*m_containerView, mousePos, viewPos) && m_clickBounds.contains(getTransform().transformPoint(viewPos)))
+		if (InputManager::IsPointInView(*m_containerView, mousePos, viewPos) && getTransform().transformRect(m_clickBounds).contains(viewPos))
 		{
 			OnMouseHover();
 		}
@@ -71,7 +73,7 @@ namespace UI
 			return;
 
 		sf::Vector2f mousePos;
-		if (InputManager::IsMouseInView(*m_containerView, mousePos) &&  m_clickBounds.contains(getTransform().transformPoint(mousePos)))
+		if (InputManager::IsMouseInView(*m_containerView, mousePos) && getTransform().transformRect(m_clickBounds).contains(mousePos))
 		{
 			m_mousePressed = true;
 			OnMouseHoverPress();
@@ -81,7 +83,7 @@ namespace UI
 	void Clickable::OnMouseReleased()
 	{
 		sf::Vector2f mousePos;
-		if (m_mousePressed && InputManager::IsMouseInView(*m_containerView, mousePos) && m_clickBounds.contains(getTransform().transformPoint(mousePos)))
+		if (m_mousePressed && InputManager::IsMouseInView(*m_containerView, mousePos) && getTransform().transformRect(m_clickBounds).contains(mousePos))
 		{
 			OnMouseClick();
 		}
@@ -119,7 +121,7 @@ namespace UI
 
 	const sf::FloatRect Clickable::GetClickBounds() const
 	{
-		return m_clickBounds;
+		return getTransform().transformRect(m_clickBounds);
 	}
 
 }

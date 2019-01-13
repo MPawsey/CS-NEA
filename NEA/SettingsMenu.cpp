@@ -99,13 +99,15 @@ namespace Menu::SettingsMenu
 		// WIDTH
 		m_widthLabel = sf::Text{ "Car width", font };
 		m_widthLabel.setPosition(xPos1, yPos);
-		m_widthPlusBtn = UI::Button{ sf::Vector2f{ xPos1, yPos + yLineSpace }, m_settingsView, "+" };
+		m_widthPlusBtn = UI::Button{ "+", m_settingsView };
+		m_widthPlusBtn.setPosition(xPos1, yPos + yLineSpace);
 		m_widthPlusBtn.SetBackgroundSize(sf::Vector2f{ buttonWidth, buttonWidth });
 		m_widthPlusBtn.SetCentreText(true);
 		m_widthPlusBtn.GetMouseClickedEvent().AddCallback([&]() { m_widthTF.SetRawText(DoubleToString(std::clamp(std::stod(m_widthTF.GetRawText().toAnsiString()) + 0.5, m_widthMinVal, m_widthMaxVal))); });
 		m_widthTF = UI::TextField{ sf::Vector2f{ xPos1 + buttonWidth + xGap, yPos + yLineSpace }, m_settingsView, textFieldWidth, UI::TextField::Decimal };
 		m_widthTF.GetLostFocusEvent().AddCallback([&]() { ClampTextFieldDoubleValue(m_widthTF, m_widthMinVal, m_widthMaxVal); });
-		m_widthMinusBtn = UI::Button{ sf::Vector2f{ xPos1 + buttonWidth + xGap + textFieldWidth + xGap, yPos + yLineSpace }, m_settingsView, "-" };
+		m_widthMinusBtn = UI::Button{ "-", m_settingsView };
+		m_widthMinusBtn.setPosition(xPos1 + buttonWidth + xGap + textFieldWidth + xGap, yPos + yLineSpace);
 		m_widthMinusBtn.SetBackgroundSize(sf::Vector2f{ buttonWidth, buttonWidth });
 		m_widthMinusBtn.SetCentreText(true);
 		m_widthMinusBtn.GetMouseClickedEvent().AddCallback([&]() { m_widthTF.SetRawText(DoubleToString(std::clamp(std::stod(m_widthTF.GetRawText().toAnsiString()) - 0.5, m_widthMinVal, m_widthMaxVal))); });
@@ -113,13 +115,15 @@ namespace Menu::SettingsMenu
 		// HEIGHT
 		m_heightLabel = sf::Text{ "Car height", font };
 		m_heightLabel.setPosition(xPos2, yPos);
-		m_heightPlusBtn = UI::Button{ sf::Vector2f{ xPos2, yPos + yLineSpace }, m_settingsView, "+" };
+		m_heightPlusBtn = UI::Button{ "+", m_settingsView };
+		m_heightPlusBtn.setPosition(xPos2, yPos + yLineSpace);
 		m_heightPlusBtn.SetBackgroundSize(sf::Vector2f{ buttonWidth, buttonWidth });
 		m_heightPlusBtn.SetCentreText(true);
 		m_heightPlusBtn.GetMouseClickedEvent().AddCallback([&]() { m_heightTF.SetRawText(DoubleToString(std::clamp(std::stod(m_heightTF.GetRawText().toAnsiString()) + 0.5, m_heightMinVal, m_heightMaxVal))); });
 		m_heightTF = UI::TextField{ sf::Vector2f{ xPos2 + buttonWidth + xGap, yPos + yLineSpace }, m_settingsView, textFieldWidth, UI::TextField::Decimal };
 		m_heightTF.GetLostFocusEvent().AddCallback([&]() { ClampTextFieldDoubleValue(m_heightTF, m_heightMinVal, m_heightMaxVal); });
-		m_heightMinusBtn = UI::Button{ sf::Vector2f{ xPos2 + buttonWidth + xGap + textFieldWidth + xGap, yPos + yLineSpace }, m_settingsView, "-" };
+		m_heightMinusBtn = UI::Button{ "-", m_settingsView };
+		m_heightMinusBtn.setPosition(xPos2 + buttonWidth + xGap + textFieldWidth + xGap, yPos + yLineSpace);
 		m_heightMinusBtn.SetBackgroundSize(sf::Vector2f{ buttonWidth, buttonWidth });
 		m_heightMinusBtn.SetCentreText(true);
 		m_heightMinusBtn.GetMouseClickedEvent().AddCallback([&]() { m_heightTF.SetRawText(DoubleToString(std::clamp(std::stod(m_heightTF.GetRawText().toAnsiString()) - 0.5, m_heightMinVal, m_heightMaxVal))); });
@@ -129,13 +133,15 @@ namespace Menu::SettingsMenu
 		// RAY COUNT
 		m_rayCountLabel = sf::Text{ "Ray count", font };
 		m_rayCountLabel.setPosition(xPos1, yPos);
-		m_rayCountPlusBtn = UI::Button{ sf::Vector2f{ xPos1, yPos + yLineSpace }, m_settingsView, "+" };
+		m_rayCountPlusBtn = UI::Button{ "+", m_settingsView };
+		m_rayCountPlusBtn.setPosition(xPos1, yPos + yLineSpace);
 		m_rayCountPlusBtn.SetBackgroundSize(sf::Vector2f{ buttonWidth, buttonWidth });
 		m_rayCountPlusBtn.SetCentreText(true);
 		m_rayCountPlusBtn.GetMouseClickedEvent().AddCallback([&]() { m_rayCountTF.SetRawText(DoubleToString(std::clamp(std::stoi(m_rayCountTF.GetRawText().toAnsiString()) + 1, m_rayCountMinVal, m_rayCountMaxVal))); });
 		m_rayCountTF = UI::TextField{ sf::Vector2f{ xPos1 + buttonWidth + xGap, yPos + yLineSpace }, m_settingsView, textFieldWidth, UI::TextField::Decimal };
 		m_rayCountTF.GetLostFocusEvent().AddCallback([&]() { ClampTextFieldIntegerValue(m_rayCountTF, m_rayCountMinVal, m_rayCountMaxVal); });
-		m_rayCountMinusBtn = UI::Button{ sf::Vector2f{ xPos1 + buttonWidth + xGap + textFieldWidth + xGap, yPos + yLineSpace }, m_settingsView, "-" };
+		m_rayCountMinusBtn = UI::Button{ "-", m_settingsView };
+		m_rayCountMinusBtn.setPosition(xPos1 + buttonWidth + xGap + textFieldWidth + xGap, yPos + yLineSpace);
 		m_rayCountMinusBtn.SetBackgroundSize(sf::Vector2f{ buttonWidth, buttonWidth });
 		m_rayCountMinusBtn.SetCentreText(true);
 		m_rayCountMinusBtn.GetMouseClickedEvent().AddCallback([&]() { m_rayCountTF.SetRawText(DoubleToString(std::clamp(std::stoi(m_rayCountTF.GetRawText().toAnsiString()) - 1, m_rayCountMinVal, m_rayCountMaxVal))); });
@@ -145,13 +151,15 @@ namespace Menu::SettingsMenu
 		// POPULATION SIZE
 		m_popSizeLabel = sf::Text{ "Population size", font };
 		m_popSizeLabel.setPosition(xPos2, yPos);
-		m_popSizePlusBtn = UI::Button{ sf::Vector2f{ xPos2, yPos + yLineSpace }, m_settingsView, "+" };
+		m_popSizePlusBtn = UI::Button{ "+", m_settingsView };
+		m_popSizePlusBtn.setPosition(xPos2, yPos + yLineSpace);
 		m_popSizePlusBtn.SetBackgroundSize(sf::Vector2f{ buttonWidth, buttonWidth });
 		m_popSizePlusBtn.SetCentreText(true);
 		m_popSizePlusBtn.GetMouseClickedEvent().AddCallback([&]() { m_popSizeTF.SetRawText(DoubleToString(std::clamp(std::stoi(m_popSizeTF.GetRawText().toAnsiString()) + 1, m_popSizeMinVal, m_popSizeMaxVal))); });
 		m_popSizeTF = UI::TextField{ sf::Vector2f{ xPos2 + buttonWidth + xGap, yPos + yLineSpace }, m_settingsView, textFieldWidth, UI::TextField::Decimal };
 		m_popSizeTF.GetLostFocusEvent().AddCallback([&]() { ClampTextFieldDoubleValue(m_popSizeTF, m_popSizeMinVal, m_popSizeMaxVal); });
-		m_popSizeMinusBtn = UI::Button{ sf::Vector2f{ xPos2 + buttonWidth + xGap + textFieldWidth + xGap, yPos + yLineSpace }, m_settingsView, "-" };
+		m_popSizeMinusBtn = UI::Button{ "-", m_settingsView };
+		m_popSizeMinusBtn.setPosition(xPos2 + buttonWidth + xGap + textFieldWidth + xGap, yPos + yLineSpace);
 		m_popSizeMinusBtn.SetBackgroundSize(sf::Vector2f{ buttonWidth, buttonWidth });
 		m_popSizeMinusBtn.SetCentreText(true);
 		m_popSizeMinusBtn.GetMouseClickedEvent().AddCallback([&]() { m_popSizeTF.SetRawText(DoubleToString(std::clamp(std::stoi(m_popSizeTF.GetRawText().toAnsiString()) - 1, m_popSizeMinVal, m_popSizeMaxVal))); });
@@ -161,13 +169,15 @@ namespace Menu::SettingsMenu
 		// ENGINE POWER
 		m_enginePowLabel = sf::Text{ "Engine power", font };
 		m_enginePowLabel.setPosition(xPos1, yPos);
-		m_enginePowPlusBtn = UI::Button{ sf::Vector2f{ xPos1, yPos + yLineSpace }, m_settingsView, "+" };
+		m_enginePowPlusBtn = UI::Button{ "+", m_settingsView };
+		m_enginePowPlusBtn.setPosition(xPos1, yPos + yLineSpace);
 		m_enginePowPlusBtn.SetBackgroundSize(sf::Vector2f{ buttonWidth, buttonWidth });
 		m_enginePowPlusBtn.SetCentreText(true);
 		m_enginePowPlusBtn.GetMouseClickedEvent().AddCallback([&]() { m_enginePowTF.SetRawText(DoubleToString(std::clamp(std::stod(m_enginePowTF.GetRawText().toAnsiString()) + 0.5, m_enginePowMinVal, m_enginePowMaxVal))); });
 		m_enginePowTF = UI::TextField{ sf::Vector2f{ xPos1 + buttonWidth + xGap, yPos + yLineSpace }, m_settingsView, textFieldWidth, UI::TextField::Decimal };
 		m_enginePowTF.GetLostFocusEvent().AddCallback([&]() { ClampTextFieldIntegerValue(m_enginePowTF, m_enginePowMinVal, m_enginePowMaxVal); });
-		m_enginePowMinusBtn = UI::Button{ sf::Vector2f{ xPos1 + buttonWidth + xGap + textFieldWidth + xGap, yPos + yLineSpace }, m_settingsView, "-" };
+		m_enginePowMinusBtn = UI::Button{ "-", m_settingsView };
+		m_enginePowMinusBtn.setPosition(xPos1 + buttonWidth + xGap + textFieldWidth + xGap, yPos + yLineSpace);
 		m_enginePowMinusBtn.SetBackgroundSize(sf::Vector2f{ buttonWidth, buttonWidth });
 		m_enginePowMinusBtn.SetCentreText(true);
 		m_enginePowMinusBtn.GetMouseClickedEvent().AddCallback([&]() { m_enginePowTF.SetRawText(DoubleToString(std::clamp(std::stod(m_enginePowTF.GetRawText().toAnsiString()) - 0.5, m_enginePowMinVal, m_enginePowMaxVal))); });
@@ -175,22 +185,26 @@ namespace Menu::SettingsMenu
 		// ROTATION POWER
 		m_rotPowLabel = sf::Text{ "Rotation power", font };
 		m_rotPowLabel.setPosition(xPos2, yPos);
-		m_rotPowPlusBtn = UI::Button{ sf::Vector2f{ xPos2, yPos + yLineSpace }, m_settingsView, "+" };
+		m_rotPowPlusBtn = UI::Button{ "+", m_settingsView };
+		m_rotPowPlusBtn.setPosition(xPos2, yPos + yLineSpace);
 		m_rotPowPlusBtn.SetBackgroundSize(sf::Vector2f{ buttonWidth, buttonWidth });
 		m_rotPowPlusBtn.SetCentreText(true);
 		m_rotPowPlusBtn.GetMouseClickedEvent().AddCallback([&]() { m_rotPowTF.SetRawText(DoubleToString(std::clamp(std::stod(m_rotPowTF.GetRawText().toAnsiString()) + 0.5, m_rotPowMinVal, m_rotPowMaxVal))); });
 		m_rotPowTF = UI::TextField{ sf::Vector2f{ xPos2 + buttonWidth + xGap, yPos + yLineSpace }, m_settingsView, textFieldWidth, UI::TextField::Decimal };
 		m_rotPowTF.GetLostFocusEvent().AddCallback([&]() { ClampTextFieldDoubleValue(m_rotPowTF, m_rotPowMinVal, m_rotPowMaxVal); });
-		m_rotPowMinusBtn = UI::Button{ sf::Vector2f{ xPos2 + buttonWidth + xGap + textFieldWidth + xGap, yPos + yLineSpace }, m_settingsView, "-" };
+		m_rotPowMinusBtn = UI::Button{ "-", m_settingsView };
+		m_rotPowMinusBtn.setPosition(xPos2 + buttonWidth + xGap + textFieldWidth + xGap, yPos + yLineSpace);
 		m_rotPowMinusBtn.SetBackgroundSize(sf::Vector2f{ buttonWidth, buttonWidth });
 		m_rotPowMinusBtn.SetCentreText(true);
 		m_rotPowMinusBtn.GetMouseClickedEvent().AddCallback([&]() { m_rotPowTF.SetRawText(DoubleToString(std::clamp(std::stod(m_rotPowTF.GetRawText().toAnsiString()) - 0.5, m_rotPowMinVal, m_rotPowMaxVal))); });
 
-		m_backBtn = UI::Button{ sf::Vector2f{ xPos1, window.getSize().y - yLineSpace }, m_settingsView, "Back", { 5.f, 5.f, 0.f, 0.f } };
+		m_backBtn = UI::Button{ "Back", m_settingsView, { 5.f, 5.f, 0.f, 0.f } };
+		m_backBtn.setPosition(xPos1, window.getSize().y - yLineSpace);
 		m_backBtn.SetCentreText(true);
 		m_backBtn.GetMouseClickedEvent().AddCallback([&]() { GoToState(MenuState::MainMenu); });
 
-		m_nextBtn = UI::Button{ sf::Vector2f{ 675.f, window.getSize().y - yLineSpace }, m_settingsView, "Next", { 5.f, 5.f, 0.f, 0.f } };
+		m_nextBtn = UI::Button{ "Next", m_settingsView, { 5.f, 5.f, 0.f, 0.f } };
+		m_nextBtn.setPosition(675.f, window.getSize().y - yLineSpace);
 		m_nextBtn.SetCentreText(true);
 		m_nextBtn.GetMouseClickedEvent().AddCallback([&]() { GoToState(MenuState::StartMap); });
 
