@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <random>
 
 namespace EvolutionManager
 {
@@ -12,6 +13,6 @@ namespace EvolutionManager
 	void CreateGenerationFromFile(std::string filename);
 
 
-	const unsigned int GetSeed();
+	const std::default_random_engine& GetRandomEngine();
 
 }
