@@ -126,12 +126,17 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Button.cpp" />
+    <ClCompile Include="Car.cpp" />
     <ClCompile Include="Clickable.cpp" />
+    <ClCompile Include="EvolutionManager.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MainMenu.cpp" />
     <ClCompile Include="MapSelectMenu.cpp" />
     <ClCompile Include="Menu.cpp" />
+    <ClCompile Include="NeuralNetwork.cpp" />
+    <ClCompile Include="Neuron.cpp" />
+    <ClCompile Include="RaceTrack.cpp" />
     <ClCompile Include="SettingsMenu.cpp" />
     <ClCompile Include="Slider.cpp" />
     <ClCompile Include="TextField.cpp" />
@@ -156,13 +161,18 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Button.h" />
+    <ClInclude Include="Car.h" />
     <ClInclude Include="Clickable.h" />
     <ClInclude Include="Event.h" />
+    <ClInclude Include="EvolutionManager.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="MainMenu.h" />
     <ClInclude Include="MapSelectMenu.h" />
     <ClInclude Include="Menu.h" />
+    <ClInclude Include="NeuralNetwork.h" />
+    <ClInclude Include="Neuron.h" />
+    <ClInclude Include="RaceTrack.h" />
     <ClInclude Include="SettingsMenu.h" />
     <ClInclude Include="Slider.h" />
     <ClInclude Include="TextField.h" />

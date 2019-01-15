@@ -3,15 +3,11 @@
 
 namespace UI
 {
-	
-
-
-
 
 	TextField::TextField() {}
 
 	TextField::TextField(const TextField& textField)
-		: Clickable{textField.m_clickBounds, textField.m_containerView}
+		: Clickable(textField)
 	{
 		m_textContainer = textField.m_textContainer;
 		m_padding = textField.m_padding;
@@ -19,24 +15,18 @@ namespace UI
 		m_rawText = textField.m_rawText;
 	}
 
-	TextField::TextField(sf::Vector2f pos, sf::View& view, float width, FieldType type, Padding padding, unsigned int charSize)
-		: m_padding{ padding }, m_type{ type }, Clickable{ sf::FloatRect{ pos - sf::Vector2f{padding.left, padding.top}, 
-																				sf::Vector2f{ width, GetFont().getLineSpacing(charSize) } + 
-																							  (sf::Vector2f{padding.right, padding.bottom} * 2.f) }, view }
+	TextField::TextField(float width, FieldType type, sf::View& view, UI::Padding padding)
+		: m_padding{ padding }, m_type{ type }, Clickable(sf::FloatRect{ sf::Vector2f{0.f, 0.f}, sf::Vector2f{width + padding.left + padding.right, GetFont().getLineSpacing(30) + padding.top + padding.bottom} }, view)
 	{
-		m_text.setPosition(pos);
+		m_text.setPosition(m_padding.left, m_padding.top);
 		m_text.setFont(GetFont());
-		m_text.setCharacterSize(charSize);
+		m_text.setCharacterSize(30);
 		m_text.setFillColor(sf::Color::White);
 		
-		m_textContainer.setPosition(pos - sf::Vector2f{ padding.left, padding.top });
 		m_textContainer.setSize(sf::Vector2f{ GetClickBounds().width, GetClickBounds().height });
 		m_textContainer.setFillColor(UNACTIVE_COLOUR);
 		m_textContainer.setOutlineColor(sf::Color::White);
 		m_textContainer.setOutlineThickness(1.f);
-
-		OnDeactivated();
-
 	}
 
 	TextField& TextField::operator=(const TextField& textField)
@@ -100,7 +90,7 @@ namespace UI
 		}
 	}
 
-	void TextField::OnMouseClick()
+	void TextField::OnMouseHoverPress()
 	{
 		if (!m_hasFocus)
 		{
@@ -147,6 +137,7 @@ namespace UI
 
 	void TextField::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	{
+		states.transform *= getTransform();
 		target.draw(m_textContainer, states);
 		target.draw(m_text, states);
 	}
@@ -207,5 +198,25 @@ namespace UI
 			m_text.setString(m_rawText.substring(++pos));
 		}
 
+	}
+
+	float TextField::GetFloatValue() const
+	{
+		return std::stof(m_rawText.toAnsiString());
+	}
+
+	float TextField::GetDoubleValue() const
+	{
+		return std::stod(m_rawText.toAnsiString());
+	}
+
+	float TextField::GetIntegerValue() const
+	{
+		return std::stoi(m_rawText.toAnsiString());
+	}
+
+	float TextField::GetUIntegerValue() const
+	{
+		return (unsigned int)std::stoi(m_rawText.toAnsiString());
 	}
 }

@@ -5,6 +5,7 @@
 #include <filesystem>
 #include "Menu.h"
 #include "InputManager.h"
+#include "RaceTrack.h"
 
 namespace Menu::MapSelectMenu
 {
@@ -27,6 +28,12 @@ namespace Menu::MapSelectMenu
 	{
 		if (m_isActive)
 			m_slider.Move(-delta * (yGap / m_sliderMax));
+	}
+
+	void LoadMap(std::string filename)
+	{
+		RaceTrack::LoadFromFile(filename);
+		Window::SetWindowState(Window::Evolution);
 	}
 
 	// Public
@@ -62,13 +69,13 @@ namespace Menu::MapSelectMenu
 
 		for (const auto& entry : std::filesystem::directory_iterator(path))
 		{
-			//if (entry.path().extension() != ".track")
-			//	continue;
+			if (entry.path().extension() != ".track")
+				continue;
 
 			UI::Button b{ entry.path().filename().replace_extension().u8string(), m_mapButtonView, { 5.f } };
 			b.setPosition(10.f, startOffset + (pos++ * yGap));
 			b.SetBackgroundSize(sf::Vector2f{ m_mapButtonView.getSize().x - 20.f, b.GetClickBounds().height });
-			b.GetMouseClickedEvent().AddCallback([=]() { std::cout << "pressed " << entry.path() << "\n"; });
+			b.GetMouseClickedEvent().AddCallback([=]() { LoadMap(entry.path().u8string()); });
 			m_buttons.push_back(b);
 		}
 

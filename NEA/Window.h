@@ -5,10 +5,16 @@
 
 namespace Window
 {
-	enum WindowStates;
+	enum WindowStates
+	{
+		Menu,
+		Evolution
+	};
 
 	void Init();
 	void Run();
+
+	void SetWindowState(WindowStates state);
 
 	sf::RenderWindow& GetWindow();
 	const WindowStates GetWindowState();

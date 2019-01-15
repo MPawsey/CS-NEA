@@ -3,6 +3,7 @@
 #include "Window.h"
 #include <algorithm>
 #include "Menu.h"
+#include "EvolutionManager.h"
 
 namespace Menu::SettingsMenu
 {
@@ -32,6 +33,15 @@ namespace Menu::SettingsMenu
 	UI::Button m_rayCountPlusBtn;
 	UI::Button m_rayCountMinusBtn;
 	UI::TextField m_rayCountTF;
+
+	// RAY SIZE
+	constexpr double m_raySizeMinVal = 100.0;
+	constexpr double m_raySizeMaxVal = 250.0;
+	sf::Text m_raySizeLabel;
+	UI::Button m_raySizePlusBtn;
+	UI::Button m_raySizeMinusBtn;
+	UI::TextField m_raySizeTF;
+
 
 	// POPULATION SIZE
 	constexpr int m_popSizeMinVal = 15;
@@ -88,42 +98,46 @@ namespace Menu::SettingsMenu
 		const sf::Font& font = UI::GetFont();
 
 		float xPos1 = 50.f;
-		float xPos2 = 500.f;
+		float xPos2 = 300.f;
+		float xPos3 = 550.f;
 		float yPos = 50.f;
 		float yLineSpace = font.getLineSpacing(30) + 5.f;
 		float yGap = 125.f;
 		float xGap = 10.f;
 		float textFieldWidth = 100.f;
 		float buttonWidth = 35.f;
+		float topPadding = 2.f, hzPadding = 4.f;
 
 		// WIDTH
 		m_widthLabel = sf::Text{ "Car width", font };
 		m_widthLabel.setPosition(xPos1, yPos);
 		m_widthPlusBtn = UI::Button{ "+", m_settingsView };
-		m_widthPlusBtn.setPosition(xPos1, yPos + yLineSpace);
+		m_widthPlusBtn.setPosition(xPos1, yPos + topPadding + yLineSpace);
 		m_widthPlusBtn.SetBackgroundSize(sf::Vector2f{ buttonWidth, buttonWidth });
 		m_widthPlusBtn.SetCentreText(true);
 		m_widthPlusBtn.GetMouseClickedEvent().AddCallback([&]() { m_widthTF.SetRawText(DoubleToString(std::clamp(std::stod(m_widthTF.GetRawText().toAnsiString()) + 0.5, m_widthMinVal, m_widthMaxVal))); });
-		m_widthTF = UI::TextField{ sf::Vector2f{ xPos1 + buttonWidth + xGap, yPos + yLineSpace }, m_settingsView, textFieldWidth, UI::TextField::Decimal };
+		m_widthTF = UI::TextField{ textFieldWidth, UI::TextField::Decimal, m_settingsView };
+		m_widthTF.setPosition(xPos1 + buttonWidth + xGap, yPos + yLineSpace);
 		m_widthTF.GetLostFocusEvent().AddCallback([&]() { ClampTextFieldDoubleValue(m_widthTF, m_widthMinVal, m_widthMaxVal); });
 		m_widthMinusBtn = UI::Button{ "-", m_settingsView };
-		m_widthMinusBtn.setPosition(xPos1 + buttonWidth + xGap + textFieldWidth + xGap, yPos + yLineSpace);
+		m_widthMinusBtn.setPosition(xPos1 + buttonWidth + xGap + textFieldWidth + xGap + hzPadding, yPos + topPadding + yLineSpace);
 		m_widthMinusBtn.SetBackgroundSize(sf::Vector2f{ buttonWidth, buttonWidth });
 		m_widthMinusBtn.SetCentreText(true);
 		m_widthMinusBtn.GetMouseClickedEvent().AddCallback([&]() { m_widthTF.SetRawText(DoubleToString(std::clamp(std::stod(m_widthTF.GetRawText().toAnsiString()) - 0.5, m_widthMinVal, m_widthMaxVal))); });
 
 		// HEIGHT
 		m_heightLabel = sf::Text{ "Car height", font };
-		m_heightLabel.setPosition(xPos2, yPos);
+		m_heightLabel.setPosition(xPos3, yPos);
 		m_heightPlusBtn = UI::Button{ "+", m_settingsView };
-		m_heightPlusBtn.setPosition(xPos2, yPos + yLineSpace);
+		m_heightPlusBtn.setPosition(xPos3, yPos + topPadding + yLineSpace);
 		m_heightPlusBtn.SetBackgroundSize(sf::Vector2f{ buttonWidth, buttonWidth });
 		m_heightPlusBtn.SetCentreText(true);
 		m_heightPlusBtn.GetMouseClickedEvent().AddCallback([&]() { m_heightTF.SetRawText(DoubleToString(std::clamp(std::stod(m_heightTF.GetRawText().toAnsiString()) + 0.5, m_heightMinVal, m_heightMaxVal))); });
-		m_heightTF = UI::TextField{ sf::Vector2f{ xPos2 + buttonWidth + xGap, yPos + yLineSpace }, m_settingsView, textFieldWidth, UI::TextField::Decimal };
+		m_heightTF = UI::TextField{ textFieldWidth, UI::TextField::Decimal, m_settingsView };
+		m_heightTF.setPosition(xPos3 + buttonWidth + xGap, yPos + yLineSpace);
 		m_heightTF.GetLostFocusEvent().AddCallback([&]() { ClampTextFieldDoubleValue(m_heightTF, m_heightMinVal, m_heightMaxVal); });
 		m_heightMinusBtn = UI::Button{ "-", m_settingsView };
-		m_heightMinusBtn.setPosition(xPos2 + buttonWidth + xGap + textFieldWidth + xGap, yPos + yLineSpace);
+		m_heightMinusBtn.setPosition(xPos3 + buttonWidth + xGap + textFieldWidth + xGap + hzPadding, yPos + topPadding + yLineSpace);
 		m_heightMinusBtn.SetBackgroundSize(sf::Vector2f{ buttonWidth, buttonWidth });
 		m_heightMinusBtn.SetCentreText(true);
 		m_heightMinusBtn.GetMouseClickedEvent().AddCallback([&]() { m_heightTF.SetRawText(DoubleToString(std::clamp(std::stod(m_heightTF.GetRawText().toAnsiString()) - 0.5, m_heightMinVal, m_heightMaxVal))); });
@@ -134,35 +148,53 @@ namespace Menu::SettingsMenu
 		m_rayCountLabel = sf::Text{ "Ray count", font };
 		m_rayCountLabel.setPosition(xPos1, yPos);
 		m_rayCountPlusBtn = UI::Button{ "+", m_settingsView };
-		m_rayCountPlusBtn.setPosition(xPos1, yPos + yLineSpace);
+		m_rayCountPlusBtn.setPosition(xPos1, yPos + topPadding + yLineSpace);
 		m_rayCountPlusBtn.SetBackgroundSize(sf::Vector2f{ buttonWidth, buttonWidth });
 		m_rayCountPlusBtn.SetCentreText(true);
 		m_rayCountPlusBtn.GetMouseClickedEvent().AddCallback([&]() { m_rayCountTF.SetRawText(DoubleToString(std::clamp(std::stoi(m_rayCountTF.GetRawText().toAnsiString()) + 1, m_rayCountMinVal, m_rayCountMaxVal))); });
-		m_rayCountTF = UI::TextField{ sf::Vector2f{ xPos1 + buttonWidth + xGap, yPos + yLineSpace }, m_settingsView, textFieldWidth, UI::TextField::Decimal };
+		m_rayCountTF = UI::TextField{ textFieldWidth, UI::TextField::Integer, m_settingsView };
+		m_rayCountTF.setPosition(xPos1 + buttonWidth + xGap, yPos + yLineSpace);
 		m_rayCountTF.GetLostFocusEvent().AddCallback([&]() { ClampTextFieldIntegerValue(m_rayCountTF, m_rayCountMinVal, m_rayCountMaxVal); });
 		m_rayCountMinusBtn = UI::Button{ "-", m_settingsView };
-		m_rayCountMinusBtn.setPosition(xPos1 + buttonWidth + xGap + textFieldWidth + xGap, yPos + yLineSpace);
+		m_rayCountMinusBtn.setPosition(xPos1 + buttonWidth + xGap + textFieldWidth + xGap + hzPadding, yPos + topPadding + yLineSpace);
 		m_rayCountMinusBtn.SetBackgroundSize(sf::Vector2f{ buttonWidth, buttonWidth });
 		m_rayCountMinusBtn.SetCentreText(true);
 		m_rayCountMinusBtn.GetMouseClickedEvent().AddCallback([&]() { m_rayCountTF.SetRawText(DoubleToString(std::clamp(std::stoi(m_rayCountTF.GetRawText().toAnsiString()) - 1, m_rayCountMinVal, m_rayCountMaxVal))); });
 
-
+		// RAY SIZE
+		m_raySizeLabel = sf::Text{ "Ray count", font };
+		m_raySizeLabel.setPosition(xPos2, yPos);
+		m_raySizePlusBtn = UI::Button{ "+", m_settingsView };
+		m_raySizePlusBtn.setPosition(xPos2, yPos + topPadding + yLineSpace);
+		m_raySizePlusBtn.SetBackgroundSize(sf::Vector2f{ buttonWidth, buttonWidth });
+		m_raySizePlusBtn.SetCentreText(true);
+		m_raySizePlusBtn.GetMouseClickedEvent().AddCallback([&]() { m_raySizeTF.SetRawText(DoubleToString(std::clamp(std::stod(m_raySizeTF.GetRawText().toAnsiString()) + 25, m_raySizeMinVal, m_raySizeMaxVal))); });
+		m_raySizeTF = UI::TextField{ textFieldWidth, UI::TextField::Decimal, m_settingsView };
+		m_raySizeTF.setPosition(xPos2 + buttonWidth + xGap, yPos + yLineSpace);
+		m_raySizeTF.GetLostFocusEvent().AddCallback([&]() { ClampTextFieldIntegerValue(m_raySizeTF, m_raySizeMinVal, m_raySizeMaxVal); });
+		m_raySizeMinusBtn = UI::Button{ "-", m_settingsView };
+		m_raySizeMinusBtn.setPosition(xPos2 + buttonWidth + xGap + textFieldWidth + xGap + hzPadding, yPos + topPadding + yLineSpace);
+		m_raySizeMinusBtn.SetBackgroundSize(sf::Vector2f{ buttonWidth, buttonWidth });
+		m_raySizeMinusBtn.SetCentreText(true);
+		m_raySizeMinusBtn.GetMouseClickedEvent().AddCallback([&]() { m_raySizeTF.SetRawText(DoubleToString(std::clamp(std::stod(m_raySizeTF.GetRawText().toAnsiString()) - 25, m_raySizeMinVal, m_raySizeMaxVal))); });
 
 		// POPULATION SIZE
 		m_popSizeLabel = sf::Text{ "Population size", font };
-		m_popSizeLabel.setPosition(xPos2, yPos);
+		m_popSizeLabel.setPosition(xPos3, yPos);
 		m_popSizePlusBtn = UI::Button{ "+", m_settingsView };
-		m_popSizePlusBtn.setPosition(xPos2, yPos + yLineSpace);
+		m_popSizePlusBtn.setPosition(xPos3, yPos + topPadding + yLineSpace);
 		m_popSizePlusBtn.SetBackgroundSize(sf::Vector2f{ buttonWidth, buttonWidth });
 		m_popSizePlusBtn.SetCentreText(true);
 		m_popSizePlusBtn.GetMouseClickedEvent().AddCallback([&]() { m_popSizeTF.SetRawText(DoubleToString(std::clamp(std::stoi(m_popSizeTF.GetRawText().toAnsiString()) + 1, m_popSizeMinVal, m_popSizeMaxVal))); });
-		m_popSizeTF = UI::TextField{ sf::Vector2f{ xPos2 + buttonWidth + xGap, yPos + yLineSpace }, m_settingsView, textFieldWidth, UI::TextField::Decimal };
+		m_popSizeTF = UI::TextField{ textFieldWidth, UI::TextField::Integer, m_settingsView };
+		m_popSizeTF.setPosition(xPos3 + buttonWidth + xGap, yPos + yLineSpace);
 		m_popSizeTF.GetLostFocusEvent().AddCallback([&]() { ClampTextFieldDoubleValue(m_popSizeTF, m_popSizeMinVal, m_popSizeMaxVal); });
 		m_popSizeMinusBtn = UI::Button{ "-", m_settingsView };
-		m_popSizeMinusBtn.setPosition(xPos2 + buttonWidth + xGap + textFieldWidth + xGap, yPos + yLineSpace);
+		m_popSizeMinusBtn.setPosition(xPos3 + buttonWidth + xGap + textFieldWidth + xGap + hzPadding, yPos + topPadding + yLineSpace);
 		m_popSizeMinusBtn.SetBackgroundSize(sf::Vector2f{ buttonWidth, buttonWidth });
 		m_popSizeMinusBtn.SetCentreText(true);
 		m_popSizeMinusBtn.GetMouseClickedEvent().AddCallback([&]() { m_popSizeTF.SetRawText(DoubleToString(std::clamp(std::stoi(m_popSizeTF.GetRawText().toAnsiString()) - 1, m_popSizeMinVal, m_popSizeMaxVal))); });
+
 
 		yPos += yGap;
 
@@ -170,30 +202,32 @@ namespace Menu::SettingsMenu
 		m_enginePowLabel = sf::Text{ "Engine power", font };
 		m_enginePowLabel.setPosition(xPos1, yPos);
 		m_enginePowPlusBtn = UI::Button{ "+", m_settingsView };
-		m_enginePowPlusBtn.setPosition(xPos1, yPos + yLineSpace);
+		m_enginePowPlusBtn.setPosition(xPos1, yPos + topPadding + yLineSpace);
 		m_enginePowPlusBtn.SetBackgroundSize(sf::Vector2f{ buttonWidth, buttonWidth });
 		m_enginePowPlusBtn.SetCentreText(true);
 		m_enginePowPlusBtn.GetMouseClickedEvent().AddCallback([&]() { m_enginePowTF.SetRawText(DoubleToString(std::clamp(std::stod(m_enginePowTF.GetRawText().toAnsiString()) + 0.5, m_enginePowMinVal, m_enginePowMaxVal))); });
-		m_enginePowTF = UI::TextField{ sf::Vector2f{ xPos1 + buttonWidth + xGap, yPos + yLineSpace }, m_settingsView, textFieldWidth, UI::TextField::Decimal };
+		m_enginePowTF = UI::TextField{ textFieldWidth, UI::TextField::Decimal, m_settingsView };
+		m_enginePowTF.setPosition(xPos1 + buttonWidth + xGap, yPos + yLineSpace);
 		m_enginePowTF.GetLostFocusEvent().AddCallback([&]() { ClampTextFieldIntegerValue(m_enginePowTF, m_enginePowMinVal, m_enginePowMaxVal); });
 		m_enginePowMinusBtn = UI::Button{ "-", m_settingsView };
-		m_enginePowMinusBtn.setPosition(xPos1 + buttonWidth + xGap + textFieldWidth + xGap, yPos + yLineSpace);
+		m_enginePowMinusBtn.setPosition(xPos1 + buttonWidth + xGap + textFieldWidth + xGap + hzPadding, yPos + topPadding + yLineSpace);
 		m_enginePowMinusBtn.SetBackgroundSize(sf::Vector2f{ buttonWidth, buttonWidth });
 		m_enginePowMinusBtn.SetCentreText(true);
 		m_enginePowMinusBtn.GetMouseClickedEvent().AddCallback([&]() { m_enginePowTF.SetRawText(DoubleToString(std::clamp(std::stod(m_enginePowTF.GetRawText().toAnsiString()) - 0.5, m_enginePowMinVal, m_enginePowMaxVal))); });
 
 		// ROTATION POWER
 		m_rotPowLabel = sf::Text{ "Rotation power", font };
-		m_rotPowLabel.setPosition(xPos2, yPos);
+		m_rotPowLabel.setPosition(xPos3, yPos);
 		m_rotPowPlusBtn = UI::Button{ "+", m_settingsView };
-		m_rotPowPlusBtn.setPosition(xPos2, yPos + yLineSpace);
+		m_rotPowPlusBtn.setPosition(xPos3, yPos + topPadding + yLineSpace);
 		m_rotPowPlusBtn.SetBackgroundSize(sf::Vector2f{ buttonWidth, buttonWidth });
 		m_rotPowPlusBtn.SetCentreText(true);
 		m_rotPowPlusBtn.GetMouseClickedEvent().AddCallback([&]() { m_rotPowTF.SetRawText(DoubleToString(std::clamp(std::stod(m_rotPowTF.GetRawText().toAnsiString()) + 0.5, m_rotPowMinVal, m_rotPowMaxVal))); });
-		m_rotPowTF = UI::TextField{ sf::Vector2f{ xPos2 + buttonWidth + xGap, yPos + yLineSpace }, m_settingsView, textFieldWidth, UI::TextField::Decimal };
+		m_rotPowTF = UI::TextField{ textFieldWidth, UI::TextField::Decimal, m_settingsView };
+		m_rotPowTF.setPosition(xPos3 + buttonWidth + xGap, yPos + yLineSpace);
 		m_rotPowTF.GetLostFocusEvent().AddCallback([&]() { ClampTextFieldDoubleValue(m_rotPowTF, m_rotPowMinVal, m_rotPowMaxVal); });
 		m_rotPowMinusBtn = UI::Button{ "-", m_settingsView };
-		m_rotPowMinusBtn.setPosition(xPos2 + buttonWidth + xGap + textFieldWidth + xGap, yPos + yLineSpace);
+		m_rotPowMinusBtn.setPosition(xPos3 + buttonWidth + xGap + textFieldWidth + xGap + hzPadding, yPos + topPadding + yLineSpace);
 		m_rotPowMinusBtn.SetBackgroundSize(sf::Vector2f{ buttonWidth, buttonWidth });
 		m_rotPowMinusBtn.SetCentreText(true);
 		m_rotPowMinusBtn.GetMouseClickedEvent().AddCallback([&]() { m_rotPowTF.SetRawText(DoubleToString(std::clamp(std::stod(m_rotPowTF.GetRawText().toAnsiString()) - 0.5, m_rotPowMinVal, m_rotPowMaxVal))); });
@@ -230,6 +264,11 @@ namespace Menu::SettingsMenu
 		window.draw(m_rayCountTF);
 		window.draw(m_rayCountMinusBtn);
 
+		window.draw(m_raySizeLabel);
+		window.draw(m_raySizePlusBtn);
+		window.draw(m_raySizeTF);
+		window.draw(m_raySizeMinusBtn);
+
 		window.draw(m_popSizeLabel);
 		window.draw(m_popSizePlusBtn);
 		window.draw(m_popSizeTF);
@@ -265,6 +304,10 @@ namespace Menu::SettingsMenu
 		m_rayCountTF.SetActive(true);
 		m_rayCountMinusBtn.SetActive(true);
 
+		m_raySizePlusBtn.SetActive(true);
+		m_raySizeTF.SetActive(true);
+		m_raySizeMinusBtn.SetActive(true);
+
 		m_popSizePlusBtn.SetActive(true);
 		m_popSizeTF.SetActive(true);
 		m_popSizeMinusBtn.SetActive(true);
@@ -283,6 +326,7 @@ namespace Menu::SettingsMenu
 		m_widthTF.SetRawText("15");
 		m_heightTF.SetRawText("25");
 		m_rayCountTF.SetRawText("5");
+		m_raySizeTF.SetRawText("150");
 		m_popSizeTF.SetRawText("25");
 		m_enginePowTF.SetRawText("10");
 		m_rotPowTF.SetRawText("1");
@@ -302,6 +346,10 @@ namespace Menu::SettingsMenu
 		m_rayCountTF.SetActive(false);
 		m_rayCountMinusBtn.SetActive(false);
 
+		m_raySizePlusBtn.SetActive(false);
+		m_raySizeTF.SetActive(false);
+		m_raySizeMinusBtn.SetActive(false);
+
 		m_popSizePlusBtn.SetActive(false);
 		m_popSizeTF.SetActive(false);
 		m_popSizeMinusBtn.SetActive(false);
@@ -316,5 +364,8 @@ namespace Menu::SettingsMenu
 
 		m_backBtn.SetActive(false);
 		m_nextBtn.SetActive(false);
+
+		EvolutionManager::CreateGenerationFromSettings(m_widthTF.GetFloatValue(), m_heightTF.GetFloatValue(), m_rayCountTF.GetUIntegerValue(), m_raySizeTF.GetFloatValue(),
+													   m_popSizeTF.GetUIntegerValue(), m_enginePowTF.GetFloatValue(), m_rotPowTF.GetFloatValue());
 	}
 }

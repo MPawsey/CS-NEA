@@ -3,6 +3,7 @@
 #include "InputManager.h"
 #include "Menu.h"
 #include "UI.h"
+#include "EvolutionManager.h"
 
 namespace Window
 {
@@ -52,11 +53,6 @@ namespace Window
 	}
 
 	// Public
-	enum WindowStates
-	{
-		Menu
-	};
-
 
 	void Init()
 	{
@@ -99,6 +95,9 @@ namespace Window
 				case Menu:
 					Menu::Update();
 					break;
+				case Evolution:
+					EvolutionManager::Update();
+					break;
 				}
 
 				m_window.display();
@@ -110,6 +109,11 @@ namespace Window
 		{
 			m_logger.Error("Run attempted after program started running.");
 		}
+	}
+
+	void SetWindowState(WindowStates state)
+	{
+		m_state = state;
 	}
 
 	sf::RenderWindow& GetWindow()

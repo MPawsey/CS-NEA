@@ -31,6 +31,12 @@
     <Filter Include="Source Files\Menu">
       <UniqueIdentifier>{591f08f1-beb7-45f0-a487-6feb19fd8e34}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Machine">
+      <UniqueIdentifier>{f9103eb3-ca66-4cb8-9fda-2ca35bc9d48b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Machine">
+      <UniqueIdentifier>{819071d0-5431-449c-85c9-5fda433904d1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -68,6 +74,21 @@
     </ClCompile>
     <ClCompile Include="Slider.cpp">
       <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="EvolutionManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Car.cpp">
+      <Filter>Source Files\Machine</Filter>
+    </ClCompile>
+    <ClCompile Include="Neuron.cpp">
+      <Filter>Source Files\Machine</Filter>
+    </ClCompile>
+    <ClCompile Include="NeuralNetwork.cpp">
+      <Filter>Source Files\Machine</Filter>
+    </ClCompile>
+    <ClCompile Include="RaceTrack.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -149,6 +170,21 @@
     </ClInclude>
     <ClInclude Include="Slider.h">
       <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="EvolutionManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Car.h">
+      <Filter>Header Files\Machine</Filter>
+    </ClInclude>
+    <ClInclude Include="NeuralNetwork.h">
+      <Filter>Header Files\Machine</Filter>
+    </ClInclude>
+    <ClInclude Include="Neuron.h">
+      <Filter>Header Files\Machine</Filter>
+    </ClInclude>
+    <ClInclude Include="RaceTrack.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

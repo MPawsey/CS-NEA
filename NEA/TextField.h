@@ -31,7 +31,7 @@ namespace UI
 		void OnMouseLeftClick();
 		void OnTextEntered(char input);
 
-		virtual void OnMouseClick();
+		virtual void OnMouseHoverPress();
 		virtual void OnDeactivated();
 
 		virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
@@ -42,7 +42,7 @@ namespace UI
 
 		TextField();
 		TextField(const TextField& textField);
-		TextField(sf::Vector2f pos, sf::View& view, float width, FieldType type, UI::Padding padding = { 2.f, 2.f, 2.f, 2.f }, unsigned int charSize = 30u);
+		TextField(float width, FieldType type, sf::View& view, UI::Padding padding = { 2.f, 2.f, 2.f, 2.f });
 
 		TextField& operator=(const TextField& textField);
 
@@ -51,6 +51,11 @@ namespace UI
 
 		const sf::String& GetRawText() const;
 		void SetRawText(sf::String s);
+
+		float GetFloatValue() const;
+		float GetDoubleValue() const;
+		float GetIntegerValue() const;
+		float GetUIntegerValue() const;
 
 	};
 

@@ -34,7 +34,7 @@ namespace UI
 		virtual void OnMouseUnhover() {}
 		virtual void OnMouseHoverPress() {}
 		virtual void OnMouseRelease() {} // Triggered if pressed but not clicked
-		virtual void OnMouseClick() = 0;
+		virtual void OnMouseClick() {};
 
 		virtual void OnActivated() {}
 		virtual void OnDeactivated() {}
