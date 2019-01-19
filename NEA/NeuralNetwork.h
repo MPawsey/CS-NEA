@@ -9,7 +9,7 @@ namespace Machine
 	class NeuralNetwork
 	{
 	private:
-		std::vector<std::vector<Neuron>> m_network;
+		std::vector<std::vector<Neuron*>> m_network;
 
 
 	public:

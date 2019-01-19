@@ -7,6 +7,7 @@
 #include <sstream>
 #include <fstream>
 #include <numeric>
+#include "EvolutionManager.h"
 
 namespace RaceTrack
 {
@@ -180,6 +181,8 @@ namespace RaceTrack
 				m_checkpointDistances.push_back(Magnitude(m_checkpoints[i].pos, m_checkpoints[i-1].pos));
 
 			std::partial_sum(m_checkpointDistances.begin(), m_checkpointDistances.end(), m_checkpointDistances.begin());
+
+			EvolutionManager::ResetCars();
 		}
 	}
 
@@ -190,6 +193,18 @@ namespace RaceTrack
 		for (auto wall : m_walls)
 		{
 			window.draw(wall.data(), 2, sf::LinesStrip);
+		}
+
+		sf::CircleShape s;
+		s.setFillColor(sf::Color::Transparent);
+		s.setOutlineColor(sf::Color::White);
+		s.setOutlineThickness(1.f);
+		for (auto cp : m_checkpoints)
+		{
+			s.setRadius(cp.radius);
+			s.setOrigin(cp.radius, cp.radius);
+			s.setPosition(cp.pos);
+			window.draw(s);
 		}
 	}
 

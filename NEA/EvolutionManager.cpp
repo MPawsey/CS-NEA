@@ -12,7 +12,7 @@ namespace EvolutionManager
 
 	unsigned int m_aliveSize;
 	unsigned int m_seed;
-	std::default_random_engine m_randomEngine;
+	static std::default_random_engine m_randomEngine;
 	sf::View m_evolutionView;
 
 	std::vector<Machine::Car*> m_cars;
@@ -20,7 +20,7 @@ namespace EvolutionManager
 	void Init()
 	{
 		m_evolutionView = Window::GetWindow().getDefaultView();
-		m_evolutionView.setSize((sf::Vector2f)Window::GetWindowSize() * 10.f);
+		m_evolutionView.setSize((sf::Vector2f)Window::GetWindowSize());
 		m_evolutionView.setCenter(0.f, 0.f);
 
 		m_randomEngine = std::default_random_engine{ std::random_device()() };
@@ -32,12 +32,7 @@ namespace EvolutionManager
 		sf::RenderWindow& window = Window::GetWindow();
 		window.setView(m_evolutionView);
 
-		std::cout << window.mapPixelToCoords(sf::Mouse::getPosition(window)).x << ", " << window.mapPixelToCoords(sf::Mouse::getPosition(window)).y << "\n";
-
 		RaceTrack::Update();
-
-		return;
-
 
 		if (m_aliveSize > 0)
 		{
@@ -81,6 +76,7 @@ namespace EvolutionManager
 				std::sample(m_cars.begin(), m_cars.end(), std::back_inserter(c), 2, std::mt19937(std::random_device{}()));
 				Machine::Car* c1 = new Machine::Car(*c[0]);
 				Machine::Car* c2 = new Machine::Car(*c[1]);
+				Machine::Car::SpliceCars(*c1, *c2);
 				newCars.push_back(c1);
 				newCars.push_back(c2);
 				m_cars.erase(std::find(m_cars.begin(), m_cars.end(), c[0]));
@@ -115,13 +111,18 @@ namespace EvolutionManager
 		for (unsigned int i = 0; i < popSize; i++)
 		{
 			m_cars.push_back(new Machine::Car{ width, height, { rayCount, 4, 3, 2 } });
-			m_cars.back()->Reset();
 		}
 	}
 
 	void CreateGenerationFromFile(std::string filename)
 	{
 
+	}
+
+	void ResetCars()
+	{
+		for (auto* car : m_cars)
+			car->Reset();
 	}
 
 	const std::default_random_engine& GetRandomEngine()

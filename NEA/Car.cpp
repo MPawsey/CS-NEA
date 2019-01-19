@@ -27,6 +27,12 @@ namespace Machine
 		: m_network{car.m_network}
 	{
 		m_body = car.m_body;
+		m_rays = car.m_rays;
+	}
+
+	void Car::SpliceCars(Car& c1, Car& c2)
+	{
+		NeuralNetwork::SpliceNeuralNetworks(c1.m_network, c2.m_network);
 	}
 
 	void Car::CreateRays(unsigned int rayCount, double raySize, float width, float height)
@@ -48,23 +54,27 @@ namespace Machine
 
 	bool Car::Update()
 	{
-		sf::RenderWindow& window = Window::GetWindow();
+		if (m_frameCount++ > 4000)
+		{
+			m_alive = false;
+			return true;
+		}
 
 		std::vector<double> inputs;
 		inputs.reserve(raysEnds.size());
 
 		sf::Vertex v;
-		sf::Vector2f newPos, oldPos;
 
 		for (unsigned int i = 0; i < raysEnds.size(); i++)
 		{
-			m_rays[i].position = raysEnds[i];
+			m_rays[i].position = m_body.getTransform().transformPoint(raysEnds[i]);
 		}
 
 		for (sf::Vertex& point : m_rays)
 		{
-			newPos = oldPos = m_body.getTransform().transformPoint(point.position);
-			if (RaceTrack::CheckCollisions(m_body.getPosition(), oldPos, newPos))
+			sf::Vector2f oldPos = point.position;
+
+			if (RaceTrack::CheckCollisions(m_body.getPosition(), point.position, point.position))
 			{
 				point.color = sf::Color::Red;
 			}
@@ -73,14 +83,15 @@ namespace Machine
 				point.color = sf::Color::Green;
 			}
 
-			inputs.push_back((double)(sqrtf(powf(oldPos.x - newPos.x, 2) + powf(oldPos.y - newPos.y, 2)) / raySize));
+			inputs.push_back((double)(sqrtf(powf(point.position.x - oldPos.x, 2) + powf(point.position.y - oldPos.y, 2)) / raySize));
 
 		}
 
 		// MOVE
 		std::vector<double> output = m_network.GetOutput(inputs);
 		float engine = output[0] * enginePower;
-		m_body.rotate((output[1] - 0.5f) * rotationPower);
+		m_body.rotate((output[1] - 0.5) * rotationPower);
+		m_body.move(GetForward() * engine * 0.1f);
 
 		// Check collisions
 		sf::Transform t = m_body.getTransform();
@@ -106,6 +117,11 @@ namespace Machine
 			m_frameCount = 0;
 		}
 
+		if (!m_alive)
+		{
+			m_fitness = RaceTrack::CalcFitness(m_body.getPosition(), m_nextCheckpoint);
+		}
+
 		return !m_alive;
 	}
 
@@ -117,7 +133,7 @@ namespace Machine
 		{
 			std::for_each(m_rays.begin(), m_rays.end(), [&](sf::Vertex ray)
 			{
-				target.draw(&ray, 1, sf::LinesStrip);
+				target.draw(&ray, 1, sf::Points);
 			});
 		}
 	}
@@ -130,7 +146,10 @@ namespace Machine
 
 	const float Car::CalcFitness()
 	{
-		return m_fitness = RaceTrack::CalcFitness(m_body.getPosition(), m_nextCheckpoint);
+		if (m_alive)
+			return m_fitness = RaceTrack::CalcFitness(m_body.getPosition(), m_nextCheckpoint);
+		else
+			return m_fitness;
 	}
 
 	const float Car::GetFitness() const

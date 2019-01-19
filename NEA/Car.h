@@ -29,15 +29,11 @@ namespace Machine
 	public:
 		static inline float enginePower, rotationPower;
 		
+		static void SpliceCars(Car& c1, Car& c2);
 		static void CreateRays(unsigned int rayCount, double raySize, float width, float height);
 
 		Car(float width, float height, std::vector<unsigned int> sizes);
 		Car(const Car& car);
-
-		bool operator==(const Car& car)
-		{
-			return m_fitness == car.m_fitness;
-		}
 
 		bool Update();
 		void Reset();

@@ -15,7 +15,7 @@ namespace Machine
 
 
 	public:
-		static inline double mutatePC, splicePC;
+		static inline double mutatePC = 0.25, splicePC = 0.6;
 
 		static void SpliceNeurons(Neuron& n1, Neuron& n2);
 

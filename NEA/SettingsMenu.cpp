@@ -334,6 +334,9 @@ namespace Menu::SettingsMenu
 
 	void Unload()
 	{
+		EvolutionManager::CreateGenerationFromSettings(m_widthTF.GetFloatValue(), m_heightTF.GetFloatValue(), m_rayCountTF.GetUIntegerValue(), m_raySizeTF.GetFloatValue(),
+			m_popSizeTF.GetUIntegerValue(), m_enginePowTF.GetFloatValue(), m_rotPowTF.GetFloatValue());
+
 		m_widthPlusBtn.SetActive(false);
 		m_widthTF.SetActive(false);
 		m_widthMinusBtn.SetActive(false);
@@ -364,8 +367,5 @@ namespace Menu::SettingsMenu
 
 		m_backBtn.SetActive(false);
 		m_nextBtn.SetActive(false);
-
-		EvolutionManager::CreateGenerationFromSettings(m_widthTF.GetFloatValue(), m_heightTF.GetFloatValue(), m_rayCountTF.GetUIntegerValue(), m_raySizeTF.GetFloatValue(),
-													   m_popSizeTF.GetUIntegerValue(), m_enginePowTF.GetFloatValue(), m_rotPowTF.GetFloatValue());
 	}
 }

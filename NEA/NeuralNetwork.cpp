@@ -12,12 +12,12 @@ namespace Machine
 
 		for (unsigned int i = 1; i < sizes.size(); i++)
 		{
-			m_network.push_back(std::vector<Neuron>());
+			m_network.push_back(std::vector<Neuron*>());
 			m_network.back().reserve(sizes[i]);
 
 			for (unsigned int j = 0; j < sizes[i]; j++)
 			{
-				m_network.back().emplace_back(sizes[i - 1]);
+				m_network.back().push_back(new Neuron(sizes[i - 1]));
 			}
 		}
 
@@ -29,11 +29,11 @@ namespace Machine
 
 		for (unsigned int i = 0; i < nn.m_network.size(); i++)
 		{
-			m_network.push_back(std::vector<Neuron>());
+			m_network.push_back(std::vector<Neuron*>());
 
 			for (unsigned int j = 0; j < nn.m_network[i].size(); j++)
 			{
-				m_network[i].emplace_back( nn.m_network[i][j] );
+				m_network[i].push_back( new Neuron(*nn.m_network[i][j]) );
 			}
 		}
 
@@ -45,7 +45,7 @@ namespace Machine
 		{
 			for (unsigned int j = 0; j < nn1.m_network[i].size(); j++)
 			{
-				Neuron::SpliceNeurons(nn1.m_network[i][j], nn2.m_network[i][j]);
+				Neuron::SpliceNeurons(*nn1.m_network[i][j], *nn2.m_network[i][j]);
 			}
 		}
 	}
@@ -58,9 +58,9 @@ namespace Machine
 		std::vector<double> outputs;
 		outputs.reserve(m_network[layer].size());
 
-		for (Neuron& neuron : m_network[layer])
+		for (Neuron* neuron : m_network[layer])
 		{
-			outputs.push_back(neuron.GetOutput(inputs));
+			outputs.push_back(neuron->GetOutput(inputs));
 		}
 
 		return GetOutput(outputs, layer + 1);
@@ -72,7 +72,7 @@ namespace Machine
 		{
 			for (unsigned int j = 0; j < m_network[i].size(); j++)
 			{
-				m_network[i][j].Mutate();
+				m_network[i][j]->Mutate();
 			}
 		}
 	}
