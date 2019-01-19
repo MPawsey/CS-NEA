@@ -13,8 +13,8 @@ namespace RaceTrack
 	// Private
 	struct Checkpoint
 	{
-		const sf::Vector2f pos;
-		const float radius;
+		sf::Vector2f pos;
+		float radius;
 	};
 
 	std::vector<std::array<sf::Vertex, 2>> m_walls;
@@ -158,7 +158,7 @@ namespace RaceTrack
 					{
 						continue;
 					}
-					m_walls.push_back({ sf::Vertex{points[w1]}, sf::Vertex{points[w2]} });
+					m_walls.push_back({ sf::Vertex{points[w1], sf::Color::White}, sf::Vertex{points[w2], sf::Color::White} });
 				}
 				else if (s[0] == 's')
 				{
@@ -170,13 +170,13 @@ namespace RaceTrack
 				{
 					float r;
 					ss >> junk >> x >> y >> r;
-					m_checkpoints.emplace_back(sf::Vector2f{x, y}, r);
+					m_checkpoints.push_back({ sf::Vector2f{x, y}, r });
 				}
 			}
 
 			// Accumulate checkpoints
 			m_checkpointDistances.push_back(0.f);
-			for (unsigned int i = 1; i < m_checkpointDistances.size(); i++)
+			for (unsigned int i = 1; i < m_checkpoints.size(); i++)
 				m_checkpointDistances.push_back(Magnitude(m_checkpoints[i].pos, m_checkpoints[i-1].pos));
 
 			std::partial_sum(m_checkpointDistances.begin(), m_checkpointDistances.end(), m_checkpointDistances.begin());
@@ -189,7 +189,7 @@ namespace RaceTrack
 
 		for (auto wall : m_walls)
 		{
-			window.draw(wall.data(), wall.size(), sf::LinesStrip);
+			window.draw(wall.data(), 2, sf::LinesStrip);
 		}
 	}
 

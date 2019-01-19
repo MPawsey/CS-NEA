@@ -162,7 +162,7 @@ namespace Menu::SettingsMenu
 		m_rayCountMinusBtn.GetMouseClickedEvent().AddCallback([&]() { m_rayCountTF.SetRawText(DoubleToString(std::clamp(std::stoi(m_rayCountTF.GetRawText().toAnsiString()) - 1, m_rayCountMinVal, m_rayCountMaxVal))); });
 
 		// RAY SIZE
-		m_raySizeLabel = sf::Text{ "Ray count", font };
+		m_raySizeLabel = sf::Text{ "Ray size", font };
 		m_raySizeLabel.setPosition(xPos2, yPos);
 		m_raySizePlusBtn = UI::Button{ "+", m_settingsView };
 		m_raySizePlusBtn.setPosition(xPos2, yPos + topPadding + yLineSpace);
@@ -345,7 +345,7 @@ namespace Menu::SettingsMenu
 		m_rayCountPlusBtn.SetActive(false);
 		m_rayCountTF.SetActive(false);
 		m_rayCountMinusBtn.SetActive(false);
-
+		
 		m_raySizePlusBtn.SetActive(false);
 		m_raySizeTF.SetActive(false);
 		m_raySizeMinusBtn.SetActive(false);

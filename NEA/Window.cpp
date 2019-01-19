@@ -67,6 +67,7 @@ namespace Window
 
 			UI::Init();
 			Menu::Init();
+			EvolutionManager::Init();
 
 			initComplete = true;
 		}

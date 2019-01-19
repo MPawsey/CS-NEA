@@ -4,6 +4,7 @@
 
 #include "Logger.h"
 #include "Window.h"
+#include "RaceTrack.h"
 
 namespace EvolutionManager
 {
@@ -14,11 +15,13 @@ namespace EvolutionManager
 	std::default_random_engine m_randomEngine;
 	sf::View m_evolutionView;
 
-	std::vector<Machine::Car> m_cars;
+	std::vector<Machine::Car*> m_cars;
 
 	void Init()
 	{
 		m_evolutionView = Window::GetWindow().getDefaultView();
+		m_evolutionView.setSize((sf::Vector2f)Window::GetWindowSize() * 10.f);
+		m_evolutionView.setCenter(0.f, 0.f);
 
 		m_randomEngine = std::default_random_engine{ std::random_device()() };
 
@@ -27,20 +30,28 @@ namespace EvolutionManager
 	void Update()
 	{
 		sf::RenderWindow& window = Window::GetWindow();
+		window.setView(m_evolutionView);
+
+		std::cout << window.mapPixelToCoords(sf::Mouse::getPosition(window)).x << ", " << window.mapPixelToCoords(sf::Mouse::getPosition(window)).y << "\n";
+
+		RaceTrack::Update();
+
+		return;
+
 
 		if (m_aliveSize > 0)
 		{
 
-			Machine::Car* bestCar = &m_cars[0];
-			for (Machine::Car& car : m_cars)
+			Machine::Car* bestCar = m_cars[0];
+			for (Machine::Car* car : m_cars)
 			{
-				if (car.IsAlive() && car.Update())
+				if (car->IsAlive() && car->Update())
 					m_aliveSize--;
 
-				if (car.CalcFitness() > bestCar->GetFitness())
-					bestCar = &car;
+				if (car->CalcFitness() > bestCar->GetFitness())
+					bestCar = car;
 
-				window.draw(car);
+				window.draw(*car);
 			}
 
 			m_evolutionView.setCenter(bestCar->GetPos());
@@ -50,45 +61,45 @@ namespace EvolutionManager
 		{
 			m_aliveSize = m_cars.size();
 
-			std::sort(m_cars.begin(), m_cars.end(), [](Machine::Car& lhs, Machine::Car& rhs)
+			std::sort(m_cars.begin(), m_cars.end(), [](Machine::Car* lhs, Machine::Car* rhs)
 			{
-				return lhs.GetFitness() > rhs.GetFitness();
+				return lhs->GetFitness() > rhs->GetFitness();
 			});
 
-			std::vector<Machine::Car> newCars;
+			std::vector<Machine::Car*> newCars;
 			newCars.reserve(m_aliveSize);
 
 			for (unsigned int i = 0; i < m_aliveSize / 10; i++)
 			{
-				newCars.push_back(Machine::Car(m_cars[i]));
+				newCars.push_back(new Machine::Car(*m_cars[i]));
 				m_cars.pop_back();
 			}
 
 			while (m_cars.size() > 1)
 			{
-				std::vector<Machine::Car> c;
+				std::vector<Machine::Car*> c;
 				std::sample(m_cars.begin(), m_cars.end(), std::back_inserter(c), 2, std::mt19937(std::random_device{}()));
-				Machine::Car c1 = Machine::Car(c[0]);
-				Machine::Car c2 = Machine::Car(c[1]);
+				Machine::Car* c1 = new Machine::Car(*c[0]);
+				Machine::Car* c2 = new Machine::Car(*c[1]);
 				newCars.push_back(c1);
 				newCars.push_back(c2);
-				m_cars.erase(std::find(cars.begin(), cars.end(), c[0]));
-				m_cars.erase(std::find(cars.begin(), cars.end(), c[1]));
+				m_cars.erase(std::find(m_cars.begin(), m_cars.end(), c[0]));
+				m_cars.erase(std::find(m_cars.begin(), m_cars.end(), c[1]));
 			}
 
-			if (cars.size() == 1)
+			if (m_cars.size() == 1)
 			{
-				newCars.push_back(cars[0]);
+				newCars.push_back(m_cars[0]);
 			}
 
 			for (unsigned int i = 0; i < newCars.size(); i++)
 			{
-				if (i >= PopulationSize / 10)
+				if (i >= newCars.size() / 10)
 					newCars[i]->Mutate();
 				newCars[i]->Reset();
 			}
 
-			cars = newCars;
+			m_cars = newCars;
 		}
 	}
 
@@ -103,7 +114,8 @@ namespace EvolutionManager
 
 		for (unsigned int i = 0; i < popSize; i++)
 		{
-			m_cars.emplace_back(width, height, rayCount);
+			m_cars.push_back(new Machine::Car{ width, height, { rayCount, 4, 3, 2 } });
+			m_cars.back()->Reset();
 		}
 	}
 

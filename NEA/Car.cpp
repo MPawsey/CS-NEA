@@ -19,7 +19,8 @@ namespace Machine
 		m_body.setFillColor(sf::Color::Transparent);
 
 		m_rays.reserve(sizes[0]);
-		m_rays.assign(sizes[0], sf::Vertex{ sf::Vector2f{0.f, 0.f}, sf::Color::White });
+		for (unsigned int i = 0; i < sizes[0]; i++)
+			m_rays.push_back(sf::Vertex{ sf::Vector2f{0.f, 0.f}, sf::Color::White });
 	}
 
 	Car::Car(const Car& car)
@@ -74,35 +75,38 @@ namespace Machine
 
 			inputs.push_back((double)(sqrtf(powf(oldPos.x - newPos.x, 2) + powf(oldPos.y - newPos.y, 2)) / raySize));
 
-			// MOVE
-			std::vector<double> output = m_network.GetOutput(inputs);
-			float engine = output[0] * enginePower;
-			m_body.rotate((output[1] - 0.5f) * rotationPower);
-
-			// Check collisions
-			sf::Transform t = m_body.getTransform();
-			if (RaceTrack::CheckCollisions(t.transformPoint(m_body.getPoint(0)), t.transformPoint(m_body.getPoint(1)),
-				t.transformPoint(m_body.getPoint(2)), t.transformPoint(m_body.getPoint(3))))
-			{
-				m_body.setOutlineColor(sf::Color::Red);
-				m_alive = false;
-			}
-			else
-			{
-				m_body.setOutlineColor(sf::Color::White);
-			}
-
-			if (RaceTrack::CheckCheckpoints(m_body.getPosition(), m_nextCheckpoint))
-			{
-				if (++m_nextCheckpoint == RaceTrack::GetCheckpointCount() /* && !EvolutionManager::complete */)
-				{
-					// TODO
-					//EvolutionManager::complete = true; 
-					//logger.Info("Car has completed course in " + std::to_string(EvolutionManager::iterations) + " iterations!");
-				}
-				m_frameCount = 0;
-			}
 		}
+
+		// MOVE
+		std::vector<double> output = m_network.GetOutput(inputs);
+		float engine = output[0] * enginePower;
+		m_body.rotate((output[1] - 0.5f) * rotationPower);
+
+		// Check collisions
+		sf::Transform t = m_body.getTransform();
+		if (RaceTrack::CheckCollisions(t.transformPoint(m_body.getPoint(0)), t.transformPoint(m_body.getPoint(1)),
+			t.transformPoint(m_body.getPoint(2)), t.transformPoint(m_body.getPoint(3))))
+		{
+			m_body.setOutlineColor(sf::Color::Red);
+			m_alive = false;
+		}
+		else
+		{
+			m_body.setOutlineColor(sf::Color::White);
+		}
+
+		if (RaceTrack::CheckCheckpoints(m_body.getPosition(), m_nextCheckpoint))
+		{
+			if (++m_nextCheckpoint == RaceTrack::GetCheckpointCount() /* && !EvolutionManager::complete */)
+			{
+				// TODO
+				//EvolutionManager::complete = true; 
+				//logger.Info("Car has completed course in " + std::to_string(EvolutionManager::iterations) + " iterations!");
+			}
+			m_frameCount = 0;
+		}
+
+		return !m_alive;
 	}
 
 	void Car::draw(sf::RenderTarget& target, sf::RenderStates states) const

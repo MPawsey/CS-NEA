@@ -11,7 +11,7 @@ namespace Machine
 	class Car : public sf::Drawable
 	{
 	private:
-		static std::vector<sf::Vector2f> raysEnds;
+		static inline std::vector<sf::Vector2f> raysEnds;
 		static inline double raySize;
 
 		float m_fitness;
@@ -33,6 +33,11 @@ namespace Machine
 
 		Car(float width, float height, std::vector<unsigned int> sizes);
 		Car(const Car& car);
+
+		bool operator==(const Car& car)
+		{
+			return m_fitness == car.m_fitness;
+		}
 
 		bool Update();
 		void Reset();

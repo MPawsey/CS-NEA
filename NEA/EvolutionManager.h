@@ -6,6 +6,7 @@
 namespace EvolutionManager
 {
 
+	void Init();
 	void Update();
 
 
