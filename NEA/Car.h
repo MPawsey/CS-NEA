@@ -20,6 +20,7 @@ namespace Machine
 		NeuralNetwork m_network;
 		unsigned int m_frameCount;
 		bool m_alive;
+		bool m_complete;
 		std::vector<sf::Vertex> m_rays;
 
 		sf::Vector2f GetForward();

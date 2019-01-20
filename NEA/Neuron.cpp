@@ -15,7 +15,7 @@ namespace Machine
 
 	Neuron::Neuron(unsigned int prevLayerSize)
 	{
-		auto rand = std::bind(std::normal_distribution{}, std::default_random_engine{ std::random_device()() });
+		auto rand = std::bind(std::normal_distribution{}, std::ref(EvolutionManager::GetRandomEngine()));
 
 		m_weights.reserve(prevLayerSize);
 		for (unsigned int i = 0; i < prevLayerSize; i++)
@@ -34,7 +34,7 @@ namespace Machine
 
 	void Neuron::SpliceNeurons(Neuron& n1, Neuron& n2)
 	{
-		auto pc = std::bind(std::uniform_real_distribution{}, std::default_random_engine{ std::random_device()() });
+		auto pc = std::bind(std::uniform_real_distribution{}, std::ref(EvolutionManager::GetRandomEngine()));
 
 		for (unsigned int i = 0; i < n1.m_weights.size(); i++)
 		{
@@ -71,8 +71,8 @@ namespace Machine
 
 	void Neuron::Mutate()
 	{
-		auto pc = std::bind(std::uniform_real_distribution{}, std::default_random_engine{ std::random_device()() });
-		auto rand = std::bind(std::normal_distribution{ 0.0, 0.5 }, std::default_random_engine{ std::random_device()() });
+		auto pc = std::bind(std::uniform_real_distribution{}, std::ref(EvolutionManager::GetRandomEngine()));
+		auto rand = std::bind(std::normal_distribution{ 0.0, 0.5 }, std::ref(EvolutionManager::GetRandomEngine()));
 
 		for (unsigned int i = 0; i < m_weights.size(); i++)
 		{

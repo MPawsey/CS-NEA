@@ -108,11 +108,10 @@ namespace Machine
 
 		if (RaceTrack::CheckCheckpoints(m_body.getPosition(), m_nextCheckpoint))
 		{
-			if (++m_nextCheckpoint == RaceTrack::GetCheckpointCount() /* && !EvolutionManager::complete */)
+			if (++m_nextCheckpoint == RaceTrack::GetCheckpointCount())
 			{
-				// TODO
-				//EvolutionManager::complete = true; 
-				//logger.Info("Car has completed course in " + std::to_string(EvolutionManager::iterations) + " iterations!");
+				m_body.setOutlineColor(sf::Color::Green);
+				m_alive = false;
 			}
 			m_frameCount = 0;
 		}
@@ -167,6 +166,7 @@ namespace Machine
 		m_body.setPosition(RaceTrack::GetStartPos());
 		m_body.setRotation(RaceTrack::GetStartRot());
 		m_alive = true;
+		m_complete = false;
 		m_nextCheckpoint = 1;
 		m_fitness = 0.f;
 	}

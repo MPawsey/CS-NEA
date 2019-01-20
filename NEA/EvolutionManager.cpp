@@ -12,8 +12,8 @@ namespace EvolutionManager
 
 	unsigned int m_aliveSize;
 	unsigned int m_seed;
-	static std::default_random_engine m_randomEngine;
 	sf::View m_evolutionView;
+	std::mt19937 m_randomEngine;
 
 	std::vector<Machine::Car*> m_cars;
 
@@ -23,8 +23,7 @@ namespace EvolutionManager
 		m_evolutionView.setSize((sf::Vector2f)Window::GetWindowSize());
 		m_evolutionView.setCenter(0.f, 0.f);
 
-		m_randomEngine = std::default_random_engine{ std::random_device()() };
-
+		m_randomEngine.seed(std::random_device{}());
 	}
 
 	void Update()
@@ -125,7 +124,7 @@ namespace EvolutionManager
 			car->Reset();
 	}
 
-	const std::default_random_engine& GetRandomEngine()
+	std::mt19937& GetRandomEngine()
 	{
 		return m_randomEngine;
 	}

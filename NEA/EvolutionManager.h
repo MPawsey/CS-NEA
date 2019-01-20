@@ -15,6 +15,6 @@ namespace EvolutionManager
 
 	void ResetCars();
 
-	const std::default_random_engine& GetRandomEngine();
+	std::mt19937& GetRandomEngine();
 
 }
