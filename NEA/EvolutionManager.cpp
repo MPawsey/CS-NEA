@@ -70,7 +70,7 @@ namespace EvolutionManager
 			while (m_cars.size() > 1)
 			{
 				std::vector<Machine::Car*> c;
-				std::sample(m_cars.begin(), m_cars.end(), std::back_inserter(c), 2, std::mt19937(std::random_device{}()));
+				std::sample(m_cars.begin(), m_cars.end(), std::back_inserter(c), 2, m_randomEngine);
 				Machine::Car* c1 = new Machine::Car(*c[0]);
 				Machine::Car* c2 = new Machine::Car(*c[1]);
 				Machine::Car::SpliceCars(*c1, *c2);
