@@ -72,19 +72,19 @@ namespace UI
 			{
 				transformedPos.x = 0;
 			}
-			else if (transformedPos.x + m_background.getGlobalBounds().width > Window::GetWindowSize().x)
+			else if (transformedPos.x + m_background.getGlobalBounds().width > m_view->getSize().x)
 			{
-				transformedPos.x = Window::GetWindowSize().x - m_background.getGlobalBounds().width;
+				transformedPos.x = m_view->getSize().x - m_background.getGlobalBounds().width;
 			}
 
 			// TOP-BOTTOM
-			if (transformedPos.y < 0)
+			if (transformedPos.y < m_background.getGlobalBounds().height)
 			{
-				transformedPos.y = 0;
+				transformedPos.y = m_background.getGlobalBounds().height;
 			}
-			else if (transformedPos.y + m_background.getGlobalBounds().height > Window::GetWindowSize().y)
+			else if (transformedPos.y > m_view->getSize().y)
 			{
-				transformedPos.y = Window::GetWindowSize().y - m_background.getGlobalBounds().height;
+				transformedPos.y = m_view->getSize().y;
 			}
 
 			setPosition(transformedPos);

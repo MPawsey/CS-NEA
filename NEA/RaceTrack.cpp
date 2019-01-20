@@ -195,7 +195,7 @@ namespace RaceTrack
 			window.draw(wall.data(), 2, sf::LinesStrip);
 		}
 
-		/*sf::CircleShape s;
+		sf::CircleShape s;
 		s.setFillColor(sf::Color::Transparent);
 		s.setOutlineColor(sf::Color::White);
 		s.setOutlineThickness(1.f);
@@ -205,7 +205,7 @@ namespace RaceTrack
 			s.setOrigin(cp.radius, cp.radius);
 			s.setPosition(cp.pos);
 			window.draw(s);
-		}*/
+		}
 	}
 
 	const unsigned int GetCheckpointCount()
