@@ -22,8 +22,6 @@ namespace EvolutionManager
 		m_evolutionView = Window::GetWindow().getDefaultView();
 		m_evolutionView.setSize((sf::Vector2f)Window::GetWindowSize());
 		m_evolutionView.setCenter(0.f, 0.f);
-
-		m_randomEngine.seed(std::random_device{}());
 	}
 
 	void Update()
@@ -99,12 +97,17 @@ namespace EvolutionManager
 	}
 
 
-	void CreateGenerationFromSettings(float width, float height, unsigned int rayCount, float raySize, unsigned int popSize, float enginePow, float rotPow)
+	void CreateGenerationFromSettings(float width, float height, unsigned int rayCount, float raySize, unsigned int popSize, float enginePow, float rotPow, double mutPC, double splicePC, unsigned int seed)
 	{
 		m_aliveSize = popSize;
 
 		Machine::Car::enginePower = enginePow;
 		Machine::Car::rotationPower = rotPow;
+		Machine::Neuron::mutatePC = mutPC;
+		Machine::Neuron::splicePC = splicePC;
+
+		m_randomEngine.seed(seed);
+
 		Machine::Car::CreateRays(rayCount, raySize, width, height);
 
 		for (unsigned int i = 0; i < popSize; i++)
