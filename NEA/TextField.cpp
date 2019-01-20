@@ -13,6 +13,7 @@ namespace UI
 		m_padding = textField.m_padding;
 		m_text = textField.m_text;
 		m_rawText = textField.m_rawText;
+		m_tooltip = textField.m_tooltip;
 	}
 
 	TextField::TextField(float width, FieldType type, sf::View& view, UI::Padding padding)
@@ -38,6 +39,7 @@ namespace UI
 		m_padding = textField.m_padding;
 		m_text = sf::Text{ textField.m_text };
 		m_rawText = sf::String{ textField.m_rawText };
+		m_tooltip = textField.m_tooltip;
 
 		InputManager::GetMousePressedEvent(sf::Mouse::Left).AddCallback(&TextField::OnMouseLeftClick, *this);
 		InputManager::GetTextEnteredEvent().AddCallback(&TextField::OnTextEntered, *this);
@@ -88,6 +90,15 @@ namespace UI
 				m_text.setString(m_rawText.substring(++pos));
 			}
 		}
+	}
+
+	void TextField::OnMouseHover()
+	{
+		m_tooltip.SetActive(true);
+	}
+	void TextField::OnMouseUnhover()
+	{
+		m_tooltip.SetActive(false);
 	}
 
 	void TextField::OnMouseHoverPress()
@@ -198,6 +209,16 @@ namespace UI
 			m_text.setString(m_rawText.substring(++pos));
 		}
 
+	}
+
+	void TextField::SetTooltipText(sf::Text content)
+	{
+		m_tooltip.SetText(content);
+	}
+
+	void TextField::SetTooltipText(std::string content)
+	{
+		m_tooltip.SetText(content);
 	}
 
 	float TextField::GetFloatValue() const

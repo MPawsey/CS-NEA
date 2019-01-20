@@ -140,6 +140,7 @@
     <ClCompile Include="SettingsMenu.cpp" />
     <ClCompile Include="Slider.cpp" />
     <ClCompile Include="TextField.cpp" />
+    <ClCompile Include="Tooltip.cpp" />
     <ClCompile Include="UI.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
@@ -176,6 +177,7 @@
     <ClInclude Include="SettingsMenu.h" />
     <ClInclude Include="Slider.h" />
     <ClInclude Include="TextField.h" />
+    <ClInclude Include="Tooltip.h" />
     <ClInclude Include="UI.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>

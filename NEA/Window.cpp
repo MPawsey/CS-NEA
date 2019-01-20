@@ -4,13 +4,15 @@
 #include "Menu.h"
 #include "UI.h"
 #include "EvolutionManager.h"
+#include <vector>
 
 namespace Window
 {
 	// Private
 	sf::RenderWindow m_window;
 	WindowStates m_state;
-	
+	std::vector<sf::Drawable*> m_lateDraws;
+	sf::View m_defaultView;
 	
 	Event m_windowClosedEvent;
 
@@ -62,6 +64,7 @@ namespace Window
 		{
 			m_window.create(sf::VideoMode{ 800, 600 }, "Matthew Pawsey NEA Project");
 			m_window.setKeyRepeatEnabled(false);
+			m_defaultView = m_window.getDefaultView();
 
 			m_state = Menu;
 
@@ -101,6 +104,9 @@ namespace Window
 					break;
 				}
 
+				for (sf::Drawable* drawable : m_lateDraws)
+					m_window.draw(*drawable);
+
 				m_window.display();
 			}
 
@@ -132,8 +138,24 @@ namespace Window
 		return m_window.getSize();
 	}
 
+	const sf::View& GetDefaultWindowView()
+	{
+		return m_defaultView;
+	}
+
 	const Event<>& GetWindowClosedEvent()
 	{
 		return m_windowClosedEvent;
+	}
+
+	void AddToLateDraw(sf::Drawable& drawable)
+	{
+		m_lateDraws.push_back(&drawable);
+	}
+
+	void RemoveFromLateDraw(sf::Drawable& drawable)
+	{
+		if (auto i = std::find(m_lateDraws.begin(), m_lateDraws.end(), &drawable); i != m_lateDraws.end())
+			m_lateDraws.erase(i);
 	}
 }

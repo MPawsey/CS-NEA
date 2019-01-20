@@ -3,6 +3,7 @@
 #include "UI.h"
 #include "Clickable.h"
 #include "Logger.h"
+#include "Tooltip.h"
 
 namespace UI
 {
@@ -27,10 +28,13 @@ namespace UI
 		sf::Text m_text;
 		sf::String m_rawText;
 		Event<> m_lostFocusEvent;
+		Tooltip m_tooltip;
 
 		void OnMouseLeftClick();
 		void OnTextEntered(char input);
 
+		virtual void OnMouseHover();
+		virtual void OnMouseUnhover();
 		virtual void OnMouseHoverPress();
 		virtual void OnDeactivated();
 
@@ -51,6 +55,9 @@ namespace UI
 
 		const sf::String& GetRawText() const;
 		void SetRawText(sf::String s);
+
+		void SetTooltipText(sf::Text content);
+		void SetTooltipText(std::string content);
 
 		float GetFloatValue() const;
 		float GetDoubleValue() const;

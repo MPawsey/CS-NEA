@@ -119,6 +119,7 @@ namespace Menu::SettingsMenu
 		m_widthTF = UI::TextField{ textFieldWidth, UI::TextField::Decimal, m_settingsView };
 		m_widthTF.setPosition(xPos1 + buttonWidth + xGap, yPos + yLineSpace);
 		m_widthTF.GetLostFocusEvent().AddCallback([&]() { ClampTextFieldDoubleValue(m_widthTF, m_widthMinVal, m_widthMaxVal); });
+		m_widthTF.SetTooltipText("[15.0-25.0]. Default=15\nWidth of the car.");
 		m_widthMinusBtn = UI::Button{ "-", m_settingsView };
 		m_widthMinusBtn.setPosition(xPos1 + buttonWidth + xGap + textFieldWidth + xGap + hzPadding, yPos + topPadding + yLineSpace);
 		m_widthMinusBtn.SetBackgroundSize(sf::Vector2f{ buttonWidth, buttonWidth });
@@ -136,6 +137,7 @@ namespace Menu::SettingsMenu
 		m_heightTF = UI::TextField{ textFieldWidth, UI::TextField::Decimal, m_settingsView };
 		m_heightTF.setPosition(xPos3 + buttonWidth + xGap, yPos + yLineSpace);
 		m_heightTF.GetLostFocusEvent().AddCallback([&]() { ClampTextFieldDoubleValue(m_heightTF, m_heightMinVal, m_heightMaxVal); });
+		m_heightTF.SetTooltipText("[15.0-25.0]. Default=25\nHeight of the car.");
 		m_heightMinusBtn = UI::Button{ "-", m_settingsView };
 		m_heightMinusBtn.setPosition(xPos3 + buttonWidth + xGap + textFieldWidth + xGap + hzPadding, yPos + topPadding + yLineSpace);
 		m_heightMinusBtn.SetBackgroundSize(sf::Vector2f{ buttonWidth, buttonWidth });
@@ -155,6 +157,7 @@ namespace Menu::SettingsMenu
 		m_rayCountTF = UI::TextField{ textFieldWidth, UI::TextField::Integer, m_settingsView };
 		m_rayCountTF.setPosition(xPos1 + buttonWidth + xGap, yPos + yLineSpace);
 		m_rayCountTF.GetLostFocusEvent().AddCallback([&]() { ClampTextFieldIntegerValue(m_rayCountTF, m_rayCountMinVal, m_rayCountMaxVal); });
+		m_rayCountTF.SetTooltipText("[3-7]. Default=5\nThe number of detector rays\nthat the car uses to detect walls.");
 		m_rayCountMinusBtn = UI::Button{ "-", m_settingsView };
 		m_rayCountMinusBtn.setPosition(xPos1 + buttonWidth + xGap + textFieldWidth + xGap + hzPadding, yPos + topPadding + yLineSpace);
 		m_rayCountMinusBtn.SetBackgroundSize(sf::Vector2f{ buttonWidth, buttonWidth });
@@ -172,6 +175,7 @@ namespace Menu::SettingsMenu
 		m_raySizeTF = UI::TextField{ textFieldWidth, UI::TextField::Decimal, m_settingsView };
 		m_raySizeTF.setPosition(xPos2 + buttonWidth + xGap, yPos + yLineSpace);
 		m_raySizeTF.GetLostFocusEvent().AddCallback([&]() { ClampTextFieldIntegerValue(m_raySizeTF, m_raySizeMinVal, m_raySizeMaxVal); });
+		m_raySizeTF.SetTooltipText("[100.0-250.0]. Default=150\nThe size of the detector rays.");
 		m_raySizeMinusBtn = UI::Button{ "-", m_settingsView };
 		m_raySizeMinusBtn.setPosition(xPos2 + buttonWidth + xGap + textFieldWidth + xGap + hzPadding, yPos + topPadding + yLineSpace);
 		m_raySizeMinusBtn.SetBackgroundSize(sf::Vector2f{ buttonWidth, buttonWidth });
@@ -189,6 +193,7 @@ namespace Menu::SettingsMenu
 		m_popSizeTF = UI::TextField{ textFieldWidth, UI::TextField::Integer, m_settingsView };
 		m_popSizeTF.setPosition(xPos3 + buttonWidth + xGap, yPos + yLineSpace);
 		m_popSizeTF.GetLostFocusEvent().AddCallback([&]() { ClampTextFieldDoubleValue(m_popSizeTF, m_popSizeMinVal, m_popSizeMaxVal); });
+		m_popSizeTF.SetTooltipText("[15-25]. Default=25\nThe number of cars in a generation.");
 		m_popSizeMinusBtn = UI::Button{ "-", m_settingsView };
 		m_popSizeMinusBtn.setPosition(xPos3 + buttonWidth + xGap + textFieldWidth + xGap + hzPadding, yPos + topPadding + yLineSpace);
 		m_popSizeMinusBtn.SetBackgroundSize(sf::Vector2f{ buttonWidth, buttonWidth });
@@ -209,6 +214,7 @@ namespace Menu::SettingsMenu
 		m_enginePowTF = UI::TextField{ textFieldWidth, UI::TextField::Decimal, m_settingsView };
 		m_enginePowTF.setPosition(xPos1 + buttonWidth + xGap, yPos + yLineSpace);
 		m_enginePowTF.GetLostFocusEvent().AddCallback([&]() { ClampTextFieldIntegerValue(m_enginePowTF, m_enginePowMinVal, m_enginePowMaxVal); });
+		m_enginePowTF.SetTooltipText("[5.0-15.0]. Default=10.0\nThe power of the engine.\ni.e the max speed of the car.");
 		m_enginePowMinusBtn = UI::Button{ "-", m_settingsView };
 		m_enginePowMinusBtn.setPosition(xPos1 + buttonWidth + xGap + textFieldWidth + xGap + hzPadding, yPos + topPadding + yLineSpace);
 		m_enginePowMinusBtn.SetBackgroundSize(sf::Vector2f{ buttonWidth, buttonWidth });
@@ -226,6 +232,7 @@ namespace Menu::SettingsMenu
 		m_rotPowTF = UI::TextField{ textFieldWidth, UI::TextField::Decimal, m_settingsView };
 		m_rotPowTF.setPosition(xPos3 + buttonWidth + xGap, yPos + yLineSpace);
 		m_rotPowTF.GetLostFocusEvent().AddCallback([&]() { ClampTextFieldDoubleValue(m_rotPowTF, m_rotPowMinVal, m_rotPowMaxVal); });
+		m_rotPowTF.SetTooltipText("[0.5-2.5]. Default=1.0\nThe rotational power of the car.\ni.e the max rotational speed.");
 		m_rotPowMinusBtn = UI::Button{ "-", m_settingsView };
 		m_rotPowMinusBtn.setPosition(xPos3 + buttonWidth + xGap + textFieldWidth + xGap + hzPadding, yPos + topPadding + yLineSpace);
 		m_rotPowMinusBtn.SetBackgroundSize(sf::Vector2f{ buttonWidth, buttonWidth });

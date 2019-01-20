@@ -90,6 +90,9 @@
     <ClCompile Include="RaceTrack.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Tooltip.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="sfml-window-d-2.dll">
@@ -185,6 +188,9 @@
     </ClInclude>
     <ClInclude Include="RaceTrack.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Tooltip.h">
+      <Filter>Header Files\UI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
