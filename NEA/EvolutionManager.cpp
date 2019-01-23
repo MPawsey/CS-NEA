@@ -44,7 +44,7 @@ namespace Evolution::EvolutionManager
 		}
 		else
 		{
-			Evolution::Simulation::SetIteration(++iteration);
+			Simulation::SetIteration(++iteration);
 
 			m_aliveSize = m_cars.size();
 
@@ -127,6 +127,7 @@ namespace Evolution::EvolutionManager
 
 	void ResetCars()
 	{
+		Simulation::SetIteration(iteration);
 		for (auto* car : m_cars)
 			car->Reset();
 	}

@@ -162,6 +162,7 @@ namespace Machine
 	{
 		m_body.setPosition(RaceTrack::GetStartPos());
 		m_body.setRotation(RaceTrack::GetStartRot());
+		m_body.setOutlineColor(sf::Color::White);
 		m_alive = true;
 		m_complete = false;
 		m_nextCheckpoint = 1;
@@ -176,13 +177,11 @@ namespace Machine
 	void Car::SetBestCar(bool isBest)
 	{
 		if (isBest)
-		{
 			m_body.setOutlineColor(sf::Color::Blue);
-		}
-		else
-		{
+		else if (m_alive)
 			m_body.setOutlineColor(sf::Color::White);
-		}
+		else
+			m_body.setOutlineColor(sf::Color::Red);
 	}
 
 	NeuralNetwork& Car::GetNeuralNetwork()
