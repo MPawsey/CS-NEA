@@ -17,6 +17,12 @@ namespace Evolution::EvolutionManager
 
 	std::vector<Machine::Car*> m_cars;
 
+	void OnWindowClosed()
+	{
+		for (Machine::Car* car : m_cars)
+			delete car;
+	}
+
 	void Init()
 	{
 		Simulation::Init();
@@ -128,11 +134,5 @@ namespace Evolution::EvolutionManager
 	std::mt19937& GetRandomEngine()
 	{
 		return m_randomEngine;
-	}
-
-	void OnWindowClosed()
-	{
-		for (Machine::Car* car : m_cars)
-			delete car;
 	}
 }
