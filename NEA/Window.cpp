@@ -15,6 +15,7 @@ namespace Window
 	sf::View m_defaultView;
 	
 	Event m_windowClosedEvent;
+	Event<sf::Vector2u> m_windowResizedEvent;
 
 	Logger m_logger{ "Window" };
 
@@ -28,6 +29,9 @@ namespace Window
 			{
 			case sf::Event::Closed:
 				m_window.close();
+				break;
+			case sf::Event::Resized:
+				m_windowResizedEvent.Call(m_window.getSize());
 				break;
 			case sf::Event::KeyPressed:
 				InputManager::KeyPressed(e.key.code);
@@ -147,6 +151,11 @@ namespace Window
 	const Event<>& GetWindowClosedEvent()
 	{
 		return m_windowClosedEvent;
+	}
+
+	const Event<sf::Vector2u>& GetWindowResizedEvent()
+	{
+		return m_windowResizedEvent;
 	}
 
 	void AddToLateDraw(sf::Drawable& drawable)

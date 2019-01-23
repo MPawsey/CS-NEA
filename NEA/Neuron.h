@@ -25,7 +25,8 @@ namespace Machine
 		double GetOutput(std::vector<double> inputs);
 		void Mutate();
 
-
+		double GetWeight(size_t index) const;
+		double GetBias() const;
 	};
 
 

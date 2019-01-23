@@ -39,11 +39,12 @@ namespace Machine
 		bool Update();
 		void Reset();
 		void Mutate();
+		void SetBestCar(bool isBest);
 
 		const float CalcFitness();
 		const float GetFitness() const;
 		const bool IsAlive() const;
-
+		NeuralNetwork& GetNeuralNetwork();
 		sf::Vector2f GetPos() const;
 
 	};

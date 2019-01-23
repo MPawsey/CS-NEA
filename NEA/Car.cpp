@@ -6,6 +6,7 @@
 #include <algorithm>
 
 constexpr float DEGTORAD = 3.14159265359f / 180.f;
+constexpr unsigned int IDLETIME = 3;
 
 namespace Machine
 {
@@ -54,7 +55,7 @@ namespace Machine
 
 	bool Car::Update()
 	{
-		if (m_frameCount++ > 4000)
+		if (m_frameCount++ > IDLETIME * 500)
 		{
 			m_alive = false;
 			return true;
@@ -100,10 +101,6 @@ namespace Machine
 		{
 			m_body.setOutlineColor(sf::Color::Red);
 			m_alive = false;
-		}
-		else
-		{
-			m_body.setOutlineColor(sf::Color::White);
 		}
 
 		if (RaceTrack::CheckCheckpoints(m_body.getPosition(), m_nextCheckpoint))
@@ -174,6 +171,23 @@ namespace Machine
 	void Car::Mutate()
 	{
 		m_network.Mutate();
+	}
+
+	void Car::SetBestCar(bool isBest)
+	{
+		if (isBest)
+		{
+			m_body.setOutlineColor(sf::Color::Blue);
+		}
+		else
+		{
+			m_body.setOutlineColor(sf::Color::White);
+		}
+	}
+
+	NeuralNetwork& Car::GetNeuralNetwork()
+	{
+		return m_network;
 	}
 
 	sf::Vector2f Car::GetPos() const

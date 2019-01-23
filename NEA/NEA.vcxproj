@@ -128,6 +128,7 @@
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Car.cpp" />
     <ClCompile Include="Clickable.cpp" />
+    <ClCompile Include="LineShape.cpp" />
     <ClCompile Include="Simulation.cpp" />
     <ClCompile Include="EvolutionManager.cpp" />
     <ClCompile Include="InputManager.cpp" />
@@ -168,6 +169,7 @@
     <ClInclude Include="Event.h" />
     <ClInclude Include="EvolutionManager.h" />
     <ClInclude Include="InputManager.h" />
+    <ClInclude Include="LineShape.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="MainMenu.h" />
     <ClInclude Include="MapSelectMenu.h" />

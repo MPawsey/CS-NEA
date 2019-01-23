@@ -24,6 +24,8 @@ namespace Evolution::EvolutionManager
 		m_evolutionView = Window::GetWindow().getDefaultView();
 		m_evolutionView.setSize((sf::Vector2f)Window::GetWindowSize());
 		m_evolutionView.setCenter(0.f, 0.f);
+
+		Window::GetWindowClosedEvent().AddCallback(OnWindowClosed);
 	}
 
 	void Update()
@@ -51,6 +53,7 @@ namespace Evolution::EvolutionManager
 			for (unsigned int i = 0; i < m_aliveSize / 10; i++)
 			{
 				newCars.push_back(new Machine::Car(*m_cars[i]));
+				delete m_cars.back();
 				m_cars.pop_back();
 			}
 
@@ -75,7 +78,10 @@ namespace Evolution::EvolutionManager
 			for (unsigned int i = 0; i < newCars.size(); i++)
 			{
 				if (i >= newCars.size() / 10)
+				{
 					newCars[i]->Mutate();
+					newCars[i]->GetNeuralNetwork().CreateNetworkDiagram();
+				}
 				newCars[i]->Reset();
 			}
 
@@ -104,6 +110,7 @@ namespace Evolution::EvolutionManager
 		for (unsigned int i = 0; i < popSize; i++)
 		{
 			m_cars.push_back(new Machine::Car{ width, height, { rayCount, 4, 3, 2 } });
+			m_cars.back()->GetNeuralNetwork().CreateNetworkDiagram();
 		}
 	}
 
@@ -121,5 +128,11 @@ namespace Evolution::EvolutionManager
 	std::mt19937& GetRandomEngine()
 	{
 		return m_randomEngine;
+	}
+
+	void OnWindowClosed()
+	{
+		for (Machine::Car* car : m_cars)
+			delete car;
 	}
 }

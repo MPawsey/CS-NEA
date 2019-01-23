@@ -88,4 +88,14 @@ namespace Machine
 		}
 	}
 
+	double Neuron::GetWeight(size_t index) const
+	{
+		return m_weights[index];
+	}
+
+	double Neuron::GetBias() const
+	{
+		return m_bias;
+	}
+
 }

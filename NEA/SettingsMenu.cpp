@@ -45,7 +45,7 @@ namespace Menu::SettingsMenu
 
 	// POPULATION SIZE
 	constexpr int m_popSizeMinVal = 15;
-	constexpr int m_popSizeMaxVal = 25;
+	constexpr int m_popSizeMaxVal = 35;
 	sf::Text m_popSizeLabel;
 	UI::Button m_popSizePlusBtn;
 	UI::Button m_popSizeMinusBtn;
@@ -69,7 +69,7 @@ namespace Menu::SettingsMenu
 
 	// MUTATE PERCENTAGE
 	constexpr double m_mutPCMinVal = 0.0;
-	constexpr double m_mutPCMaxVal = 1.0;
+	constexpr double m_mutPCMaxVal = 100.0;
 	sf::Text m_mutPCLabel;
 	UI::Button m_mutPCPlusBtn;
 	UI::Button m_mutPCMinusBtn;
@@ -77,7 +77,7 @@ namespace Menu::SettingsMenu
 
 	// SPLICE PERCENTAGE
 	constexpr double m_splicePCMinVal = 0.0;
-	constexpr double m_splicePCMaxVal = 1.0;
+	constexpr double m_splicePCMaxVal = 100.0;
 	sf::Text m_splicePCLabel;
 	UI::Button m_splicePCPlusBtn;
 	UI::Button m_splicePCMinusBtn;
@@ -279,7 +279,7 @@ namespace Menu::SettingsMenu
 		m_mutPCTF = UI::TextField{ textFieldWidth, UI::TextField::Decimal, m_settingsView };
 		m_mutPCTF.setPosition(xPos2 + buttonWidth + xGap, yPos + yLineSpace);
 		m_mutPCTF.GetLostFocusEvent().AddCallback([&]() { ClampTextFieldDoubleValue(m_mutPCTF, m_mutPCMinVal, m_mutPCMaxVal); });
-		m_mutPCTF.SetTooltipText("[0.0-1.0] Default=0.25\nThe percentage a weight in the\nneural network will mutate.");
+		m_mutPCTF.SetTooltipText("[0.0-100.0] Default=25.0\nThe percentage a weight in the\nneural network will mutate.");
 		m_mutPCMinusBtn = UI::Button{ "-", m_settingsView };
 		m_mutPCMinusBtn.setPosition(xPos2 + buttonWidth + xGap + textFieldWidth + xGap + hzPadding, yPos + topPadding + yLineSpace);
 		m_mutPCMinusBtn.SetBackgroundSize(sf::Vector2f{ buttonWidth, buttonWidth });
@@ -297,7 +297,7 @@ namespace Menu::SettingsMenu
 		m_splicePCTF = UI::TextField{ textFieldWidth, UI::TextField::Decimal, m_settingsView };
 		m_splicePCTF.setPosition(xPos3 + buttonWidth + xGap, yPos + yLineSpace);
 		m_splicePCTF.GetLostFocusEvent().AddCallback([&]() { ClampTextFieldDoubleValue(m_splicePCTF, m_splicePCMinVal, m_splicePCMaxVal); });
-		m_splicePCTF.SetTooltipText("[0.0-1.0] Default=0.6\nThe percentage the weights\n between two cars swap\n when reproducing.");
+		m_splicePCTF.SetTooltipText("[0.0-100.0] Default=60\nThe percentage the weights\n between two cars swap\n when reproducing.");
 		m_splicePCMinusBtn = UI::Button{ "-", m_settingsView };
 		m_splicePCMinusBtn.setPosition(xPos3 + buttonWidth + xGap + textFieldWidth + xGap + hzPadding, yPos + topPadding + yLineSpace);
 		m_splicePCMinusBtn.SetBackgroundSize(sf::Vector2f{ buttonWidth, buttonWidth });
@@ -333,8 +333,8 @@ namespace Menu::SettingsMenu
 		m_popSizeTF.SetRawText("25");
 		m_enginePowTF.SetRawText("10");
 		m_rotPowTF.SetRawText("1");
-		m_mutPCTF.SetRawText("0.25");
-		m_splicePCTF.SetRawText("0.6");
+		m_mutPCTF.SetRawText("25");
+		m_splicePCTF.SetRawText("60");
 		m_seedTF.SetRawText("");
 
 	}
@@ -445,7 +445,7 @@ namespace Menu::SettingsMenu
 	void Unload()
 	{
 		Evolution::EvolutionManager::CreateGenerationFromSettings(m_widthTF.GetFloatValue(), m_heightTF.GetFloatValue(), m_rayCountTF.GetUIntegerValue(), m_raySizeTF.GetFloatValue(),
-			m_popSizeTF.GetUIntegerValue(), m_enginePowTF.GetFloatValue(), m_rotPowTF.GetFloatValue(), m_mutPCTF.GetDoubleValue(), m_splicePCTF.GetDoubleValue(), m_seedTF.GetRawText() == "" ? std::random_device{}() : m_seedTF.GetUIntegerValue());
+			m_popSizeTF.GetUIntegerValue(), m_enginePowTF.GetFloatValue(), m_rotPowTF.GetFloatValue(), m_mutPCTF.GetDoubleValue() / 100.0, m_splicePCTF.GetDoubleValue() / 100.0, m_seedTF.GetRawText() == "" ? std::random_device{}() : m_seedTF.GetUIntegerValue());
 
 		m_widthPlusBtn.SetActive(false);
 		m_widthTF.SetActive(false);
