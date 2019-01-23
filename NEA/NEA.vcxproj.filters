@@ -37,6 +37,12 @@
     <Filter Include="Source Files\Machine">
       <UniqueIdentifier>{819071d0-5431-449c-85c9-5fda433904d1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Evolution">
+      <UniqueIdentifier>{3b602ae0-66e6-43de-9fbd-e8c80f3c2136}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Evolution">
+      <UniqueIdentifier>{ad1d4f31-4e07-4a11-9467-4365ad4e7217}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -75,9 +81,6 @@
     <ClCompile Include="Slider.cpp">
       <Filter>Source Files\UI</Filter>
     </ClCompile>
-    <ClCompile Include="EvolutionManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Car.cpp">
       <Filter>Source Files\Machine</Filter>
     </ClCompile>
@@ -92,6 +95,12 @@
     </ClCompile>
     <ClCompile Include="Tooltip.cpp">
       <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Simulation.cpp">
+      <Filter>Source Files\Evolution</Filter>
+    </ClCompile>
+    <ClCompile Include="EvolutionManager.cpp">
+      <Filter>Source Files\Evolution</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -174,9 +183,6 @@
     <ClInclude Include="Slider.h">
       <Filter>Header Files\UI</Filter>
     </ClInclude>
-    <ClInclude Include="EvolutionManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Car.h">
       <Filter>Header Files\Machine</Filter>
     </ClInclude>
@@ -191,6 +197,12 @@
     </ClInclude>
     <ClInclude Include="Tooltip.h">
       <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Simulation.h">
+      <Filter>Header Files\Evolution</Filter>
+    </ClInclude>
+    <ClInclude Include="EvolutionManager.h">
+      <Filter>Header Files\Evolution</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -71,7 +71,7 @@ namespace Window
 
 			UI::Init();
 			Menu::Init();
-			EvolutionManager::Init();
+			Evolution::EvolutionManager::Init();
 
 			initComplete = true;
 		}
@@ -101,7 +101,7 @@ namespace Window
 					Menu::Update();
 					break;
 				case Evolution:
-					EvolutionManager::Update();
+					Evolution::EvolutionManager::Update();
 					break;
 				}
 

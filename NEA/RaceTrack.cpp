@@ -182,7 +182,7 @@ namespace RaceTrack
 
 			std::partial_sum(m_checkpointDistances.begin(), m_checkpointDistances.end(), m_checkpointDistances.begin());
 
-			EvolutionManager::ResetCars();
+			Evolution::EvolutionManager::ResetCars();
 		}
 	}
 

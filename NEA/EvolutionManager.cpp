@@ -5,13 +5,13 @@
 #include "Logger.h"
 #include "Window.h"
 #include "RaceTrack.h"
+#include "Simulation.h"
 
-namespace EvolutionManager
+namespace Evolution::EvolutionManager
 {
 	Logger logger{ "EvolutionManager" };
 
-	unsigned int m_aliveSize;
-	unsigned int m_seed;
+	unsigned int m_aliveSize, iteration;
 	sf::View m_evolutionView;
 	std::mt19937 m_randomEngine;
 
@@ -19,6 +19,8 @@ namespace EvolutionManager
 
 	void Init()
 	{
+		Simulation::Init();
+
 		m_evolutionView = Window::GetWindow().getDefaultView();
 		m_evolutionView.setSize((sf::Vector2f)Window::GetWindowSize());
 		m_evolutionView.setCenter(0.f, 0.f);
@@ -27,30 +29,15 @@ namespace EvolutionManager
 	void Update()
 	{
 		sf::RenderWindow& window = Window::GetWindow();
-		window.setView(m_evolutionView);
-
-		RaceTrack::Update();
 
 		if (m_aliveSize > 0)
 		{
-
-			Machine::Car* bestCar = m_cars[0];
-			for (Machine::Car* car : m_cars)
-			{
-				if (car->IsAlive() && car->Update())
-					m_aliveSize--;
-
-				if (car->CalcFitness() > bestCar->GetFitness())
-					bestCar = car;
-
-				window.draw(*car);
-			}
-
-			m_evolutionView.setCenter(bestCar->GetPos());
-			window.setView(m_evolutionView);
+			Simulation::Update(m_cars, m_aliveSize);
 		}
 		else
 		{
+			Evolution::Simulation::SetIteration(++iteration);
+
 			m_aliveSize = m_cars.size();
 
 			std::sort(m_cars.begin(), m_cars.end(), [](Machine::Car* lhs, Machine::Car* rhs)
@@ -99,6 +86,10 @@ namespace EvolutionManager
 
 	void CreateGenerationFromSettings(float width, float height, unsigned int rayCount, float raySize, unsigned int popSize, float enginePow, float rotPow, double mutPC, double splicePC, unsigned int seed)
 	{
+		iteration = 0;
+		Simulation::SetIteration(iteration);
+		Simulation::SetSeedText(seed);
+
 		m_aliveSize = popSize;
 
 		Machine::Car::enginePower = enginePow;

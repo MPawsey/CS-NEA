@@ -123,13 +123,14 @@ namespace UI
 	void TextField::OnDeactivated()
 	{
 		m_hasFocus = false;
-		m_lostFocusEvent.Call();
 
 		m_textContainer.setFillColor(UNACTIVE_COLOUR);
 
 		if (m_rawText.getSize() > 0 && m_rawText.toAnsiString().back() == '_')
 			m_rawText.erase(m_rawText.getSize() - 1);
 		m_text.setString(m_rawText);
+
+		m_lostFocusEvent.Call();
 
 		unsigned int size = 0;
 		while (m_text.getGlobalBounds().width > m_textContainer.getGlobalBounds().width - ((m_padding.left + m_padding.right) * 2) && size < m_rawText.getSize())

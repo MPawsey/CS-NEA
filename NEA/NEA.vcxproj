@@ -128,6 +128,7 @@
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Car.cpp" />
     <ClCompile Include="Clickable.cpp" />
+    <ClCompile Include="Simulation.cpp" />
     <ClCompile Include="EvolutionManager.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -175,6 +176,7 @@
     <ClInclude Include="Neuron.h" />
     <ClInclude Include="RaceTrack.h" />
     <ClInclude Include="SettingsMenu.h" />
+    <ClInclude Include="Simulation.h" />
     <ClInclude Include="Slider.h" />
     <ClInclude Include="TextField.h" />
     <ClInclude Include="Tooltip.h" />

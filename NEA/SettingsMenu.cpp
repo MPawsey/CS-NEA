@@ -104,7 +104,7 @@ namespace Menu::SettingsMenu
 
 	void ClampTextFieldIntegerValue(UI::TextField& text, int boundLower, int boundUpper)
 	{
-		if (text.GetRawText().getSize() == 1)
+		if (text.GetRawText().getSize() == 0)
 			text.SetRawText("0");
 		text.SetRawText(DoubleToString(std::clamp(std::stoi(text.GetRawText().toAnsiString()), boundLower, boundUpper)));
 	}
@@ -184,7 +184,7 @@ namespace Menu::SettingsMenu
 		m_enginePowPlusBtn.GetMouseClickedEvent().AddCallback([&]() { m_enginePowTF.SetRawText(DoubleToString(std::clamp(std::stod(m_enginePowTF.GetRawText().toAnsiString()) + 0.5, m_enginePowMinVal, m_enginePowMaxVal))); });
 		m_enginePowTF = UI::TextField{ textFieldWidth, UI::TextField::Decimal, m_settingsView };
 		m_enginePowTF.setPosition(xPos3 + buttonWidth + xGap, yPos + yLineSpace);
-		m_enginePowTF.GetLostFocusEvent().AddCallback([&]() { ClampTextFieldIntegerValue(m_enginePowTF, m_enginePowMinVal, m_enginePowMaxVal); });
+		m_enginePowTF.GetLostFocusEvent().AddCallback([&]() { ClampTextFieldDoubleValue(m_enginePowTF, m_enginePowMinVal, m_enginePowMaxVal); });
 		m_enginePowTF.SetTooltipText("[5.0-15.0] Default=10.0\nThe power of the engine.\ni.e the max speed of the car.");
 		m_enginePowMinusBtn = UI::Button{ "-", m_settingsView };
 		m_enginePowMinusBtn.setPosition(xPos3 + buttonWidth + xGap + textFieldWidth + xGap + hzPadding, yPos + topPadding + yLineSpace);
@@ -222,7 +222,7 @@ namespace Menu::SettingsMenu
 		m_raySizePlusBtn.GetMouseClickedEvent().AddCallback([&]() { m_raySizeTF.SetRawText(DoubleToString(std::clamp(std::stod(m_raySizeTF.GetRawText().toAnsiString()) + 25, m_raySizeMinVal, m_raySizeMaxVal))); });
 		m_raySizeTF = UI::TextField{ textFieldWidth, UI::TextField::Decimal, m_settingsView };
 		m_raySizeTF.setPosition(xPos2 + buttonWidth + xGap, yPos + yLineSpace);
-		m_raySizeTF.GetLostFocusEvent().AddCallback([&]() { ClampTextFieldIntegerValue(m_raySizeTF, m_raySizeMinVal, m_raySizeMaxVal); });
+		m_raySizeTF.GetLostFocusEvent().AddCallback([&]() { ClampTextFieldDoubleValue(m_raySizeTF, m_raySizeMinVal, m_raySizeMaxVal); });
 		m_raySizeTF.SetTooltipText("[100.0-250.0] Default=150\nThe size of the detector rays.");
 		m_raySizeMinusBtn = UI::Button{ "-", m_settingsView };
 		m_raySizeMinusBtn.setPosition(xPos2 + buttonWidth + xGap + textFieldWidth + xGap + hzPadding, yPos + topPadding + yLineSpace);
@@ -260,7 +260,7 @@ namespace Menu::SettingsMenu
 		m_popSizePlusBtn.GetMouseClickedEvent().AddCallback([&]() { m_popSizeTF.SetRawText(DoubleToString(std::clamp(std::stoi(m_popSizeTF.GetRawText().toAnsiString()) + 1, m_popSizeMinVal, m_popSizeMaxVal))); });
 		m_popSizeTF = UI::TextField{ textFieldWidth, UI::TextField::Integer, m_settingsView };
 		m_popSizeTF.setPosition(xPos1 + buttonWidth + xGap, yPos + yLineSpace);
-		m_popSizeTF.GetLostFocusEvent().AddCallback([&]() { ClampTextFieldDoubleValue(m_popSizeTF, m_popSizeMinVal, m_popSizeMaxVal); });
+		m_popSizeTF.GetLostFocusEvent().AddCallback([&]() { ClampTextFieldIntegerValue(m_popSizeTF, m_popSizeMinVal, m_popSizeMaxVal); });
 		m_popSizeTF.SetTooltipText("[15-25] Default=25\nThe number of cars in a generation.");
 		m_popSizeMinusBtn = UI::Button{ "-", m_settingsView };
 		m_popSizeMinusBtn.setPosition(xPos1 + buttonWidth + xGap + textFieldWidth + xGap + hzPadding, yPos + topPadding + yLineSpace);
@@ -444,8 +444,8 @@ namespace Menu::SettingsMenu
 
 	void Unload()
 	{
-		EvolutionManager::CreateGenerationFromSettings(m_widthTF.GetFloatValue(), m_heightTF.GetFloatValue(), m_rayCountTF.GetUIntegerValue(), m_raySizeTF.GetFloatValue(),
-			m_popSizeTF.GetUIntegerValue(), m_enginePowTF.GetFloatValue(), m_rotPowTF.GetFloatValue(), m_mutPCTF.GetDoubleValue(), m_splicePCTF.GetDoubleValue(), m_seedTF.GetRawText() == "" ? std::random_device{}() : (unsigned int)m_seedTF.GetIntegerValue());
+		Evolution::EvolutionManager::CreateGenerationFromSettings(m_widthTF.GetFloatValue(), m_heightTF.GetFloatValue(), m_rayCountTF.GetUIntegerValue(), m_raySizeTF.GetFloatValue(),
+			m_popSizeTF.GetUIntegerValue(), m_enginePowTF.GetFloatValue(), m_rotPowTF.GetFloatValue(), m_mutPCTF.GetDoubleValue(), m_splicePCTF.GetDoubleValue(), m_seedTF.GetRawText() == "" ? std::random_device{}() : m_seedTF.GetUIntegerValue());
 
 		m_widthPlusBtn.SetActive(false);
 		m_widthTF.SetActive(false);
