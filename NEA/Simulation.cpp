@@ -16,6 +16,7 @@ namespace Evolution::Simulation
 	{
 		m_simulationView.setSize((sf::Vector2f)size);
 		m_uiView.setSize((sf::Vector2f)size);
+		m_uiView.setCenter((sf::Vector2f)size / 2.f);
 	}
 
 	void Init()

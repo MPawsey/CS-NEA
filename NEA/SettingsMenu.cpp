@@ -275,7 +275,7 @@ namespace Menu::SettingsMenu
 		m_mutPCPlusBtn.setPosition(xPos2, yPos + topPadding + yLineSpace);
 		m_mutPCPlusBtn.SetBackgroundSize(sf::Vector2f{ buttonWidth, buttonWidth });
 		m_mutPCPlusBtn.SetCentreText(true);
-		m_mutPCPlusBtn.GetMouseClickedEvent().AddCallback([&]() { m_mutPCTF.SetRawText(DoubleToString(std::clamp(std::stod(m_mutPCTF.GetRawText().toAnsiString()) + 0.05, m_mutPCMinVal, m_mutPCMaxVal))); });
+		m_mutPCPlusBtn.GetMouseClickedEvent().AddCallback([&]() { m_mutPCTF.SetRawText(DoubleToString(std::clamp(std::stod(m_mutPCTF.GetRawText().toAnsiString()) + 5.0, m_mutPCMinVal, m_mutPCMaxVal))); });
 		m_mutPCTF = UI::TextField{ textFieldWidth, UI::TextField::Decimal, m_settingsView };
 		m_mutPCTF.setPosition(xPos2 + buttonWidth + xGap, yPos + yLineSpace);
 		m_mutPCTF.GetLostFocusEvent().AddCallback([&]() { ClampTextFieldDoubleValue(m_mutPCTF, m_mutPCMinVal, m_mutPCMaxVal); });
@@ -284,7 +284,7 @@ namespace Menu::SettingsMenu
 		m_mutPCMinusBtn.setPosition(xPos2 + buttonWidth + xGap + textFieldWidth + xGap + hzPadding, yPos + topPadding + yLineSpace);
 		m_mutPCMinusBtn.SetBackgroundSize(sf::Vector2f{ buttonWidth, buttonWidth });
 		m_mutPCMinusBtn.SetCentreText(true);
-		m_mutPCMinusBtn.GetMouseClickedEvent().AddCallback([&]() { m_mutPCTF.SetRawText(DoubleToString(std::clamp(std::stod(m_mutPCTF.GetRawText().toAnsiString()) - 0.05, m_mutPCMinVal, m_mutPCMaxVal))); });
+		m_mutPCMinusBtn.GetMouseClickedEvent().AddCallback([&]() { m_mutPCTF.SetRawText(DoubleToString(std::clamp(std::stod(m_mutPCTF.GetRawText().toAnsiString()) - 5.0, m_mutPCMinVal, m_mutPCMaxVal))); });
 
 		// SPLICE PC
 		m_splicePCLabel = sf::Text{ "Splice %", font };
@@ -293,7 +293,7 @@ namespace Menu::SettingsMenu
 		m_splicePCPlusBtn.setPosition(xPos3, yPos + topPadding + yLineSpace);
 		m_splicePCPlusBtn.SetBackgroundSize(sf::Vector2f{ buttonWidth, buttonWidth });
 		m_splicePCPlusBtn.SetCentreText(true);
-		m_splicePCPlusBtn.GetMouseClickedEvent().AddCallback([&]() { m_splicePCTF.SetRawText(DoubleToString(std::clamp(std::stod(m_splicePCTF.GetRawText().toAnsiString()) + 0.05, m_splicePCMinVal, m_splicePCMaxVal))); });
+		m_splicePCPlusBtn.GetMouseClickedEvent().AddCallback([&]() { m_splicePCTF.SetRawText(DoubleToString(std::clamp(std::stod(m_splicePCTF.GetRawText().toAnsiString()) + 5.0, m_splicePCMinVal, m_splicePCMaxVal))); });
 		m_splicePCTF = UI::TextField{ textFieldWidth, UI::TextField::Decimal, m_settingsView };
 		m_splicePCTF.setPosition(xPos3 + buttonWidth + xGap, yPos + yLineSpace);
 		m_splicePCTF.GetLostFocusEvent().AddCallback([&]() { ClampTextFieldDoubleValue(m_splicePCTF, m_splicePCMinVal, m_splicePCMaxVal); });
@@ -302,7 +302,7 @@ namespace Menu::SettingsMenu
 		m_splicePCMinusBtn.setPosition(xPos3 + buttonWidth + xGap + textFieldWidth + xGap + hzPadding, yPos + topPadding + yLineSpace);
 		m_splicePCMinusBtn.SetBackgroundSize(sf::Vector2f{ buttonWidth, buttonWidth });
 		m_splicePCMinusBtn.SetCentreText(true);
-		m_splicePCMinusBtn.GetMouseClickedEvent().AddCallback([&]() { m_splicePCTF.SetRawText(DoubleToString(std::clamp(std::stod(m_splicePCTF.GetRawText().toAnsiString()) - 0.05, m_splicePCMinVal, m_splicePCMaxVal))); });
+		m_splicePCMinusBtn.GetMouseClickedEvent().AddCallback([&]() { m_splicePCTF.SetRawText(DoubleToString(std::clamp(std::stod(m_splicePCTF.GetRawText().toAnsiString()) - 5.0, m_splicePCMinVal, m_splicePCMaxVal))); });
 
 		yPos += yGap;
 
