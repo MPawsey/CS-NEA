@@ -72,7 +72,7 @@ namespace Machine
 	void Neuron::Mutate()
 	{
 		auto pc = std::bind(std::uniform_real_distribution{}, std::ref(Evolution::EvolutionManager::GetRandomEngine()));
-		auto rand = std::bind(std::normal_distribution{ 0.0, 0.5 }, std::ref(Evolution::EvolutionManager::GetRandomEngine()));
+		auto rand = std::bind(std::normal_distribution{ 0.0, mutateSize }, std::ref(Evolution::EvolutionManager::GetRandomEngine()));
 
 		for (unsigned int i = 0; i < m_weights.size(); i++)
 		{

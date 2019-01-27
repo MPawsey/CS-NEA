@@ -69,23 +69,19 @@ namespace Machine
 		for (unsigned int i = 0; i < raysEnds.size(); i++)
 		{
 			m_rays[i].position = m_body.getTransform().transformPoint(raysEnds[i]);
-		}
 
-		for (sf::Vertex& point : m_rays)
-		{
-			sf::Vector2f oldPos = point.position;
+			sf::Vector2f oldPos = m_rays[i].position;
 
-			if (RaceTrack::CheckCollisions(m_body.getPosition(), point.position, point.position))
+			if (RaceTrack::CheckCollisions(m_body.getPosition(), m_rays[i].position, m_rays[i].position))
 			{
-				point.color = sf::Color::Red;
+				m_rays[i].color = sf::Color::Red;
 			}
 			else
 			{
-				point.color = sf::Color::Green;
+				m_rays[i].color = sf::Color::Green;
 			}
 
-			inputs.push_back((double)(sqrtf(powf(point.position.x - oldPos.x, 2) + powf(point.position.y - oldPos.y, 2)) / raySize));
-
+			inputs.push_back((double)(sqrtf(powf(m_rays[i].position.x - oldPos.x, 2) + powf(m_rays[i].position.y - oldPos.y, 2)) / raySize));
 		}
 
 		// MOVE

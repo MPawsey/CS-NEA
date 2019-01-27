@@ -97,7 +97,7 @@ namespace Menu::SettingsMenu
 
 	void ClampTextFieldDoubleValue(UI::TextField& text, double boundLower, double boundUpper)
 	{
-		if (text.GetRawText().getSize() == 1)
+		if (text.GetRawText().getSize() == 0)
 			text.SetRawText("0");
 		text.SetRawText(DoubleToString(std::clamp(std::stod(text.GetRawText().toAnsiString()), boundLower, boundUpper)));
 	}
