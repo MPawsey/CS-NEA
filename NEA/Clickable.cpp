@@ -8,7 +8,7 @@ namespace UI
 
 	Clickable::Clickable()
 	{
-		InitialiseEvents();
+		//InitialiseEvents();
 	}
 
 	Clickable::Clickable(const Clickable& clickable)

@@ -173,7 +173,7 @@ namespace Machine
 	void Car::SetBestCar(bool isBest)
 	{
 		if (isBest)
-			m_body.setOutlineColor(sf::Color::Blue);
+			m_body.setOutlineColor(sf::Color::Cyan);
 		else if (m_alive)
 			m_body.setOutlineColor(sf::Color::White);
 		else

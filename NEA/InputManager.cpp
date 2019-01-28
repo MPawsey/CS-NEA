@@ -132,6 +132,8 @@ namespace InputManager
 
 	const Event<>& GetMousePressedEvent(sf::Mouse::Button btn)
 	{
+
+
 		if (mousePressedEvents[btn])
 		{
 			return *mousePressedEvents[btn];

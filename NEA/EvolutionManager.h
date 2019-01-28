@@ -16,6 +16,8 @@ namespace Evolution
 		void CreateGenerationFromFile(std::string filename);
 
 		void ResetCars();
+		
+		void StartNextGeneration();
 
 		std::mt19937& GetRandomEngine();
 

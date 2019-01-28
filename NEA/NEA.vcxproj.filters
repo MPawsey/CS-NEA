@@ -105,6 +105,9 @@
     <ClCompile Include="LineShape.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Analysis.cpp">
+      <Filter>Source Files\Evolution</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="sfml-window-d-2.dll">
@@ -209,6 +212,9 @@
     </ClInclude>
     <ClInclude Include="LineShape.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Analysis.h">
+      <Filter>Header Files\Evolution</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
