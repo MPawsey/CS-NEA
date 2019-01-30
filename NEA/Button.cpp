@@ -16,7 +16,7 @@ namespace UI
 	}
 
 	Button::Button(std::string text, sf::View& view, UI::Padding padding)
-		: m_padding{ padding }
+		: Clickable(true), m_padding{ padding }
 	{
 		m_label = sf::Text{ text, GetFont(), 30 };
 

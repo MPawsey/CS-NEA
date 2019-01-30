@@ -46,7 +46,7 @@ namespace UI
 
 	public:
 
-		Clickable();
+		Clickable(bool initialise = false);
 		Clickable(const Clickable& clickable);
 		Clickable(sf::FloatRect bounds, sf::View* view);
 		Clickable(sf::FloatRect bounds, sf::View& view);

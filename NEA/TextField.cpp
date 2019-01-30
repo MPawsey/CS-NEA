@@ -4,8 +4,6 @@
 namespace UI
 {
 
-	TextField::TextField() {}
-
 	TextField::TextField(const TextField& textField)
 		: Clickable(textField)
 	{

@@ -44,7 +44,7 @@ namespace UI
 		const static inline sf::Color UNACTIVE_COLOUR{ 50, 50, 50, 255 };
 		const static inline sf::Color ACTIVE_COLOUR{ 40, 46, 71, 255 };
 
-		TextField();
+		TextField() {}
 		TextField(const TextField& textField);
 		TextField(float width, FieldType type, sf::View& view, UI::Padding padding = { 2.f, 2.f, 2.f, 2.f });
 

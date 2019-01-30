@@ -6,9 +6,10 @@ namespace UI
 {
 	sf::View nullView;
 
-	Clickable::Clickable()
+	Clickable::Clickable(bool initialise)
 	{
-		//InitialiseEvents();
+		if (initialise)
+			InitialiseEvents();
 	}
 
 	Clickable::Clickable(const Clickable& clickable)
@@ -44,6 +45,11 @@ namespace UI
 
 		m_containerView = clickable.m_containerView;
 		m_clickBounds = clickable.m_clickBounds;
+
+		// Reinitialise events
+		// Fixes problems
+		this->~Clickable();
+		InitialiseEvents();
 
 		return *this;
 	}
