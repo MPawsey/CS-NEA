@@ -36,6 +36,12 @@ namespace Menu::MapSelectMenu
 		Window::SetWindowState(Window::Evolution);
 	}
 
+	void OnWindowClosed()
+	{
+		m_backBtn.UninitialiseEvents();
+		m_slider.~Slider();
+	}
+
 	// Public
 
 	void Init()
@@ -43,6 +49,8 @@ namespace Menu::MapSelectMenu
 		sf::RenderWindow& window = Window::GetWindow();
 		m_mapSelectView = window.getDefaultView();
 		m_mapButtonView = window.getDefaultView();
+
+		Window::GetWindowClosedEvent().AddCallback(OnWindowClosed);
 
 		m_mapButtonView.setViewport({0.1f, 0.1f, 0.8f, 0.8f});
 		m_mapButtonView.setSize(m_mapButtonView.getSize() * 0.8f);

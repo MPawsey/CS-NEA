@@ -22,6 +22,7 @@ namespace UI
 
 		// Clickable isn't active by default
 		bool m_isActive = false;
+		bool m_initialised = false;
 
 		void InitialiseEvents();
 
@@ -54,6 +55,7 @@ namespace UI
 
 		Clickable& operator=(const Clickable& clickable);
 
+		void UninitialiseEvents();
 		const bool IsActive() const;
 		const sf::FloatRect GetClickBounds() const;
 		const sf::View& GetContainerView() const;

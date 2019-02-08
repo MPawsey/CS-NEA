@@ -30,7 +30,7 @@ namespace UI
 
 	TextField& TextField::operator=(const TextField& textField)
 	{
-		dynamic_cast<Clickable&>(*this) = textField;
+		Clickable::operator=(textField);
 
 		m_type = textField.m_type;
 		m_textContainer = sf::RectangleShape{ textField.m_textContainer };

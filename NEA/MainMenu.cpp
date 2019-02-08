@@ -29,12 +29,21 @@ namespace Menu::MainMenu
 		std::cout << "Map Editor Clicked" << std::endl;
 	}
 
+	void OnWindowClosed()
+	{
+		m_startConfigBtn.UninitialiseEvents();
+		m_startSavedBtn.UninitialiseEvents();
+		m_mapEditorBtn.UninitialiseEvents();
+	}
+
 	// Public
 
 	void Init()
 	{
 		sf::RenderWindow& window = Window::GetWindow();
 		m_mainMenuView = window.getDefaultView();
+
+		Window::GetWindowClosedEvent().AddCallback(OnWindowClosed);
 
 		float xPos = 50.f;
 		float yPos = 50.f;

@@ -109,6 +109,55 @@ namespace Menu::SettingsMenu
 		text.SetRawText(DoubleToString(std::clamp(std::stoi(text.GetRawText().toAnsiString()), boundLower, boundUpper)));
 	}
 
+	void OnWindowClosed()
+	{
+		// WIDTH
+		m_widthPlusBtn.UninitialiseEvents();
+		m_widthMinusBtn.UninitialiseEvents();
+		m_widthTF.UninitialiseEvents();
+
+		// HEIGHT
+		m_heightPlusBtn.UninitialiseEvents();
+		m_heightMinusBtn.UninitialiseEvents();
+		m_heightTF.UninitialiseEvents();
+
+		// RAY COUNT
+		m_rayCountPlusBtn.UninitialiseEvents();
+		m_rayCountMinusBtn.UninitialiseEvents();
+		m_rayCountTF.UninitialiseEvents();
+
+		// RAY SIZE
+		m_raySizePlusBtn.UninitialiseEvents();
+		m_raySizeMinusBtn.UninitialiseEvents();
+		m_raySizeTF.UninitialiseEvents();
+
+
+		// POPULATION SIZE
+		m_popSizePlusBtn.UninitialiseEvents();
+		m_popSizeMinusBtn.UninitialiseEvents();
+		m_popSizeTF.UninitialiseEvents();
+
+		// ENGINE POWER
+		m_enginePowPlusBtn.UninitialiseEvents();
+		m_enginePowMinusBtn.UninitialiseEvents();
+		m_enginePowTF.UninitialiseEvents();
+
+		// ROTATION POWER
+		m_rotPowPlusBtn.UninitialiseEvents();
+		m_rotPowMinusBtn.UninitialiseEvents();
+		m_rotPowTF.UninitialiseEvents();
+
+		// MUTATE PERCENTAGE
+		m_mutPCPlusBtn.UninitialiseEvents();
+		m_mutPCMinusBtn.UninitialiseEvents();
+		m_mutPCTF.UninitialiseEvents();
+
+		// SPLICE PERCENTAGE
+		m_splicePCPlusBtn.UninitialiseEvents();
+		m_splicePCMinusBtn.UninitialiseEvents();
+		m_splicePCTF.UninitialiseEvents();
+	}
+
 	// Public
 
 	void Init()
@@ -116,6 +165,8 @@ namespace Menu::SettingsMenu
 		sf::RenderWindow& window = Window::GetWindow();
 		m_settingsView = window.getDefaultView();
 		const sf::Font& font = UI::GetFont();
+
+		Window::GetWindowClosedEvent().AddCallback(OnWindowClosed);
 
 		float xPos1 = 50.f;
 		float xPos2 = 300.f;
@@ -261,7 +312,7 @@ namespace Menu::SettingsMenu
 		m_popSizeTF = UI::TextField{ textFieldWidth, UI::TextField::Integer, m_settingsView };
 		m_popSizeTF.setPosition(xPos1 + buttonWidth + xGap, yPos + yLineSpace);
 		m_popSizeTF.GetLostFocusEvent().AddCallback([&]() { ClampTextFieldIntegerValue(m_popSizeTF, m_popSizeMinVal, m_popSizeMaxVal); });
-		m_popSizeTF.SetTooltipText("[15-25] Default=25\nThe number of cars in a generation.");
+		m_popSizeTF.SetTooltipText("[15-35] Default=35\nThe number of cars in a generation.");
 		m_popSizeMinusBtn = UI::Button{ "-", m_settingsView };
 		m_popSizeMinusBtn.setPosition(xPos1 + buttonWidth + xGap + textFieldWidth + xGap + hzPadding, yPos + topPadding + yLineSpace);
 		m_popSizeMinusBtn.SetBackgroundSize(sf::Vector2f{ buttonWidth, buttonWidth });

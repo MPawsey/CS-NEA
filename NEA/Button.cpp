@@ -31,12 +31,12 @@ namespace UI
 
 	Button& Button::operator=(const Button& btn)
 	{
-		dynamic_cast<Clickable&>(*this) = btn;
+		Clickable::operator=(btn);
 
 		m_mouseClickedEvent = btn.m_mouseClickedEvent;
 		m_padding = btn.m_padding;
 		m_background = btn.m_background;
-		m_label = btn.m_label ;
+		m_label = btn.m_label;
 		m_textCentred = btn.m_textCentred;
 
 		return *this;

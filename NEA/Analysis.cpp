@@ -8,10 +8,12 @@ namespace Evolution::Analysis
 {
 	// Private
 	std::vector<sf::Vertex> m_fitnessMax, m_fitnessAvg, m_fitnessMin;
-	UI::Button m_nextBtn;// , m_saveBtn, m_menuBtn;
+	//UI::Button m_nextBtn;// , m_saveBtn, m_menuBtn;
 	size_t m_size = 0;
 	sf::View m_analysisView, m_graphView;
 	float m_graphMin, m_graphMax;
+
+
 
 	// Public
 

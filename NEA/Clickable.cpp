@@ -34,21 +34,18 @@ namespace UI
 
 	Clickable::~Clickable()
 	{
-		InputManager::GetMouseMovedEvent().RemoveCallback(m_mouseMovedID);
-		InputManager::GetMousePressedEvent(sf::Mouse::Left).RemoveCallback(m_mousePressedID);
-		InputManager::GetMouseReleasedEvent(sf::Mouse::Left).RemoveCallback(m_mouseReleasedID);
+		UninitialiseEvents();
 	}
 
 	Clickable& Clickable::operator=(const Clickable& clickable)
 	{
-		dynamic_cast<sf::Transformable&>(*this) = clickable;
+		Transformable::operator=(clickable);
 
 		m_containerView = clickable.m_containerView;
 		m_clickBounds = clickable.m_clickBounds;
 
 		// Reinitialise events
-		// Fixes problems
-		this->~Clickable();
+		// Fixes problems in case of already initialised events
 		InitialiseEvents();
 
 		return *this;
@@ -56,6 +53,16 @@ namespace UI
 
 	void Clickable::InitialiseEvents()
 	{
+		if (m_initialised)
+			return;
+		m_initialised = true;
+
+		// Removes events from the callback list
+		InputManager::GetMouseMovedEvent().RemoveCallback(m_mouseMovedID);
+		InputManager::GetMousePressedEvent(sf::Mouse::Left).RemoveCallback(m_mousePressedID);
+		InputManager::GetMouseReleasedEvent(sf::Mouse::Left).RemoveCallback(m_mouseReleasedID);
+
+		// Pushes new events to the callback list
 		m_mouseMovedID = InputManager::GetMouseMovedEvent().AddCallback(&Clickable::OnMouseMoved, *this);
 		m_mousePressedID = InputManager::GetMousePressedEvent(sf::Mouse::Left).AddCallback(&Clickable::OnMousePressed, *this);
 		m_mouseReleasedID = InputManager::GetMouseReleasedEvent(sf::Mouse::Left).AddCallback(&Clickable::OnMouseReleased, *this);
@@ -106,6 +113,17 @@ namespace UI
 		m_mousePressed = false;
 	}
 
+
+	void Clickable::UninitialiseEvents()
+	{
+		if (!m_initialised)
+			return;
+		m_initialised = false;
+
+		InputManager::GetMouseMovedEvent().RemoveCallback(m_mouseMovedID);
+		InputManager::GetMousePressedEvent(sf::Mouse::Left).RemoveCallback(m_mousePressedID);
+		InputManager::GetMouseReleasedEvent(sf::Mouse::Left).RemoveCallback(m_mouseReleasedID);
+	}
 
 	const bool Clickable::IsActive() const
 	{
