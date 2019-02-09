@@ -45,11 +45,13 @@ namespace Evolution::Simulation
 		Window::GetWindowResizedEvent().AddCallback(OnWindowResized);
 	}
 
-	void Update(std::vector<Machine::Car*>& cars, unsigned int& aliveCount)
+	void Update(std::vector<Machine::Car*>& cars, unsigned int& aliveCount, bool draw)
 	{
 		sf::RenderWindow& window = Window::GetWindow();
 		window.setView(m_simulationView);
-		RaceTrack::Update();
+
+		if (draw)
+			RaceTrack::Update();
 
 		Machine::Car* bestCar = cars[0];
 		for (Machine::Car* car : cars)
@@ -60,7 +62,8 @@ namespace Evolution::Simulation
 			if (car->CalcFitness() > bestCar->GetFitness())
 				bestCar = car;
 
-			window.draw(*car);
+			if (draw)
+				window.draw(*car);
 		}
 
 		if (m_prevBestCar != bestCar)
@@ -71,14 +74,19 @@ namespace Evolution::Simulation
 			m_prevBestCar = bestCar;
 		}
 		
-		m_simulationView.move((bestCar->GetPos() - m_simulationView.getCenter()) / 50.f);
 
-		window.setView(m_uiView);
-		window.draw(m_seedText);
-		window.draw(m_iterationText);
+		if (draw)
+		{
+			m_simulationView.move((bestCar->GetPos() - m_simulationView.getCenter()) / 50.f);
 
-		window.setView(m_networkView);
-		window.draw(bestCar->GetNeuralNetwork());
+			window.setView(m_uiView);
+			window.draw(m_seedText);
+			window.draw(m_iterationText);
+
+			window.setView(m_networkView);
+			window.draw(bestCar->GetNeuralNetwork());
+		}
+
 	}
 
 

@@ -67,8 +67,8 @@ namespace Window
 		if (!initComplete)
 		{
 			m_window.create(sf::VideoMode{ 800, 600 }, "Matthew Pawsey NEA Project");
+			m_window.setFramerateLimit(MENU_FRAMERATE);
 			m_window.setKeyRepeatEnabled(false);
-			m_window.setFramerateLimit(500);
 			m_defaultView = m_window.getDefaultView();
 
 			m_state = Menu;

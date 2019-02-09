@@ -17,7 +17,7 @@ namespace Evolution
 
 		void ResetCars();
 		
-		void StartNextGeneration();
+		void StartNextGeneration(int cycleCount, bool draw);
 
 		std::mt19937& GetRandomEngine();
 

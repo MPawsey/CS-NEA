@@ -5,6 +5,8 @@
 
 namespace Window
 {
+	constexpr unsigned int MENU_FRAMERATE = 60u;
+
 	enum WindowStates
 	{
 		Menu,

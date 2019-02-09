@@ -17,6 +17,9 @@ namespace Evolution::EvolutionManager
 	sf::View m_evolutionView;
 	std::mt19937 m_randomEngine;
 
+	int m_cycleCount = 1;
+	bool m_display = true;
+
 	std::vector<Machine::Car*> m_cars;
 
 	void OnWindowClosed()
@@ -44,7 +47,7 @@ namespace Evolution::EvolutionManager
 
 		if (!m_analysis)
 		{
-			Simulation::Update(m_cars, m_aliveSize);
+			Simulation::Update(m_cars, m_aliveSize, m_display);
 
 			// If the generation is complete
 			if (m_aliveSize == 0)
@@ -113,7 +116,16 @@ namespace Evolution::EvolutionManager
 
 				m_cars = newCars;
 
-				Analysis::Load();
+				if (--m_cycleCount == 0)
+				{
+					Analysis::Load();
+					m_analysis = true;
+				}
+			}
+			
+			if (!m_display)
+			{
+				Analysis::Update();
 			}
 		}
 		else
@@ -145,6 +157,8 @@ namespace Evolution::EvolutionManager
 			m_cars.push_back(new Machine::Car{ width, height, { rayCount, 4, 3, 2 } });
 			m_cars.back()->GetNeuralNetwork().CreateNetworkDiagram();
 		}
+
+		Window::GetWindow().setFramerateLimit(Simulation::SIMULATION_FRAMERATE);
 	}
 
 	void CreateGenerationFromFile(std::string filename)
@@ -159,8 +173,19 @@ namespace Evolution::EvolutionManager
 			car->Reset();
 	}
 
-	void StartNextGeneration()
+	void StartNextGeneration(int cycleCount, bool draw)
 	{
+		m_cycleCount = cycleCount;
+		
+		if (m_display = draw)
+		{
+			Window::GetWindow().setFramerateLimit(Simulation::SIMULATION_FRAMERATE);
+		}
+		else
+		{
+			Window::GetWindow().setFramerateLimit(0);
+		}
+
 		m_analysis = false;
 		Analysis::Unload();
 	}
