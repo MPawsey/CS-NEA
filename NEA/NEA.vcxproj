@@ -179,6 +179,7 @@
     <ClInclude Include="NeuralNetwork.h" />
     <ClInclude Include="Neuron.h" />
     <ClInclude Include="RaceTrack.h" />
+    <ClInclude Include="RNG.h" />
     <ClInclude Include="SettingsMenu.h" />
     <ClInclude Include="Simulation.h" />
     <ClInclude Include="Slider.h" />

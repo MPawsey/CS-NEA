@@ -60,9 +60,9 @@ namespace UI
 		void SetTooltipText(std::string content);
 
 		float GetFloatValue() const;
-		float GetDoubleValue() const;
-		float GetIntegerValue() const;
-		float GetUIntegerValue() const;
+		double GetDoubleValue() const;
+		int GetIntegerValue() const;
+		unsigned int GetUIntegerValue() const;
 
 	};
 

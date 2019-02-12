@@ -13,6 +13,12 @@ namespace Machine
 	}
 
 
+	Neuron::Neuron(std::vector<double> weights, double bias)
+	{
+		m_weights = weights;
+		m_bias = bias;
+	}
+
 	Neuron::Neuron(unsigned int prevLayerSize)
 	{
 		auto rand = std::bind(std::normal_distribution{}, std::ref(Evolution::EvolutionManager::GetRandomEngine()));

@@ -25,6 +25,7 @@ namespace Machine
 	public:
 		static void SpliceNeuralNetworks(NeuralNetwork& n1, NeuralNetwork& n2);
 
+		NeuralNetwork(std::vector<unsigned int> sizes, std::vector<std::vector<std::vector<double>>> networkWeights, std::vector<std::vector<double>> networkBiases);
 		NeuralNetwork(std::vector<unsigned int> sizes);
 		NeuralNetwork(const NeuralNetwork& n);
 		~NeuralNetwork();

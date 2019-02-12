@@ -19,6 +19,7 @@ namespace Machine
 
 		static void SpliceNeurons(Neuron& n1, Neuron& n2);
 
+		Neuron(std::vector<double> weights, double bias);
 		Neuron(unsigned int prevLayerSize);
 		Neuron(const Neuron& neuron);
 

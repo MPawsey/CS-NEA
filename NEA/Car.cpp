@@ -10,6 +10,21 @@ constexpr unsigned int IDLETIME = 3;
 
 namespace Machine
 {
+
+	Car::Car(float width, float height, std::vector<unsigned int> sizes, std::vector<std::vector<std::vector<double>>> networkWeights, std::vector<std::vector<double>> networkBiases)
+		: m_network{sizes, networkWeights, networkBiases}
+	{
+		m_body.setSize(sf::Vector2f{ width, height });
+		m_body.setOrigin(m_body.getSize() / 2.f);
+		m_body.setOutlineColor(sf::Color::White);
+		m_body.setOutlineThickness(1.f);
+		m_body.setFillColor(sf::Color::Transparent);
+
+		m_rays.reserve(sizes[0]);
+		for (unsigned int i = 0; i < sizes[0]; i++)
+			m_rays.push_back(sf::Vertex{ sf::Vector2f{0.f, 0.f}, sf::Color::White });
+	}
+
 	Car::Car(float width, float height, std::vector<unsigned int> sizes)
 		: m_network{sizes}
 	{
@@ -38,6 +53,7 @@ namespace Machine
 
 	void Car::CreateRays(unsigned int rayCount, double raySize, float width, float height)
 	{
+		raysEnds.clear();
 		raysEnds.reserve(rayCount);
 		Car::raySize = raySize;
 

@@ -33,6 +33,7 @@ namespace Menu::MapSelectMenu
 	void LoadMap(std::string filename)
 	{
 		RaceTrack::LoadFromFile(filename);
+		Menu::GoToState(Menu::MenuState::None); // Unloads map select menu
 		Window::SetWindowState(Window::Evolution);
 	}
 

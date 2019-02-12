@@ -9,7 +9,8 @@ namespace Menu
 		MainMenu,
 		StartConfig,
 		StartCar,
-		StartMap
+		StartMap,
+		None
 	};
 
 	void Init();

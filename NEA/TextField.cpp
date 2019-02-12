@@ -225,18 +225,18 @@ namespace UI
 		return std::stof(m_rawText.toAnsiString());
 	}
 
-	float TextField::GetDoubleValue() const
+	double TextField::GetDoubleValue() const
 	{
 		return std::stod(m_rawText.toAnsiString());
 	}
 
-	float TextField::GetIntegerValue() const
+	int TextField::GetIntegerValue() const
 	{
 		return std::stoi(m_rawText.toAnsiString());
 	}
 
-	float TextField::GetUIntegerValue() const
+	unsigned int TextField::GetUIntegerValue() const
 	{
-		return (unsigned int)std::stoi(m_rawText.toAnsiString());
+		return (unsigned int)std::stoul(m_rawText.toAnsiString());
 	}
 }

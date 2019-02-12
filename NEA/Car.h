@@ -33,6 +33,7 @@ namespace Machine
 		static void SpliceCars(Car& c1, Car& c2);
 		static void CreateRays(unsigned int rayCount, double raySize, float width, float height);
 
+		Car(float width, float height, std::vector<unsigned int> sizes, std::vector<std::vector<std::vector<double>>> networkWeights, std::vector<std::vector<double>> networkBiases);
 		Car(float width, float height, std::vector<unsigned int> sizes);
 		Car(const Car& car);
 

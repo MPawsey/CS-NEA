@@ -28,9 +28,6 @@
     <Filter Include="Header Files\Menu">
       <UniqueIdentifier>{237325ae-9a02-42d1-b9c9-f542b5fdff61}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Menu">
-      <UniqueIdentifier>{591f08f1-beb7-45f0-a487-6feb19fd8e34}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Machine">
       <UniqueIdentifier>{f9103eb3-ca66-4cb8-9fda-2ca35bc9d48b}</UniqueIdentifier>
     </Filter>
@@ -42,6 +39,9 @@
     </Filter>
     <Filter Include="Source Files\Evolution">
       <UniqueIdentifier>{ad1d4f31-4e07-4a11-9467-4365ad4e7217}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Menu">
+      <UniqueIdentifier>{591f08f1-beb7-45f0-a487-6feb19fd8e34}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -215,6 +215,9 @@
     </ClInclude>
     <ClInclude Include="Analysis.h">
       <Filter>Header Files\Evolution</Filter>
+    </ClInclude>
+    <ClInclude Include="RNG.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

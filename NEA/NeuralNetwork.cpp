@@ -7,6 +7,23 @@
 namespace Machine
 {
 
+	NeuralNetwork::NeuralNetwork(std::vector<unsigned int> sizes, std::vector<std::vector<std::vector<double>>> networkWeights, std::vector<std::vector<double>> networkBiases)
+		: m_sizes{sizes}
+	{
+		m_network.reserve(sizes.size());
+
+		for (unsigned int i = 1; i < sizes.size(); i++)
+		{
+			m_network.push_back(std::vector<Neuron*>());
+			m_network.back().reserve(sizes[i]);
+
+			for (unsigned int j = 0; j < sizes[i]; j++)
+			{
+				m_network.back().push_back(new Neuron(networkWeights[i - 1][j], networkBiases[i - 1][j]));
+			}
+		}
+	}
+
 	NeuralNetwork::NeuralNetwork(std::vector<unsigned int> sizes)
 		: m_sizes{sizes}
 	{

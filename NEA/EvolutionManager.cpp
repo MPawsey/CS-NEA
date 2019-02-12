@@ -7,6 +7,9 @@
 #include "RaceTrack.h"
 #include "Simulation.h"
 #include "Analysis.h"
+#include <sstream>
+#include <fstream>
+#include "RNG.h"
 
 namespace Evolution::EvolutionManager
 {
@@ -15,7 +18,8 @@ namespace Evolution::EvolutionManager
 	bool m_analysis = false, m_canMultiReproduce = true;
 	unsigned int m_aliveSize, m_iteration, m_saveSize = 0, m_killSize = 22;
 	sf::View m_evolutionView;
-	std::mt19937 m_randomEngine;
+	RNG::Random m_randomEngine;
+	//std::mt19937 m_randomEngine;
 
 	int m_cycleCount = 1;
 	bool m_display = true;
@@ -163,7 +167,136 @@ namespace Evolution::EvolutionManager
 
 	void CreateGenerationFromFile(std::string filename)
 	{
+		std::ifstream file{ filename };
 
+		std::string track;
+		unsigned int seed;
+		float width, height, raySize;
+		std::vector<unsigned int> sizes;
+		std::vector<std::vector<std::vector<std::vector<double>>>> networkWeights;
+		std::vector<std::vector<std::vector<double>>> networkBiases;
+
+		if (file.is_open())
+		{
+			// Parse file
+			while (!file.eof())
+			{
+				std::string s;
+
+				std::getline(file, s);
+				std::stringstream ss;
+				ss << s;
+
+				char junk;
+
+
+				if (s[0] == 't') // Track & Seed & iteration
+				{
+					unsigned int count;
+					ss >> junk >> track >> seed >> count >> m_iteration;
+					m_randomEngine.seed(seed);
+					m_randomEngine.discard(count);
+				}
+				else if (s[0] == 'd') // Dimensions
+				{
+					ss >> junk >> width >> height;
+				}
+				else if (s[0] == 's') // Sizes
+				{
+					std::vector<std::string> parts;
+					parts.push_back("");
+					for (char c : s)
+					{
+						if (c == ' ')
+						{
+							parts.push_back("");
+						}
+						else
+						{
+							parts.back().push_back(c);
+						}
+					}
+					for (unsigned int i = 1; i < parts.size(); i++)
+					{
+						if (parts[i] == "")
+							continue;
+						sizes.push_back(std::stoi(parts[i]));
+					}
+				}
+				else if (s[0] == 'r') // Ray Size
+				{
+					ss >> junk >> raySize;
+				}
+				else if (s[0] == 'p') // Population Size
+				{
+					ss >> junk >> m_aliveSize;
+				}
+				else if (s[0] == 'e') // Engine & Rotation Power
+				{
+					ss >> junk >> Machine::Car::enginePower >> Machine::Car::rotationPower;
+				}
+				else if (s[0] == 'o') // Offspring settings
+				{
+					ss >> junk >> Machine::Neuron::mutatePC >> Machine::Neuron::splicePC;
+				}
+				else if (s[0] == 'c') // Sets new values for layers and neurons to new car
+				{
+					networkWeights.push_back({});
+					networkBiases.push_back({});
+				}
+				else if (s[0] == 'l') // Sets new values for neurons to new layer
+				{
+					networkWeights.back().push_back({});
+					networkBiases.back().push_back({});
+				}
+				else if (s[0] == 'n') // Sets values for a single neuron index equal inline with number created between this one and the last 'l'
+				{
+					std::vector<double> weights;
+					double bias;
+
+					std::string val;
+					for (auto i = s.begin() + 2; i < s.end(); i++)
+					{
+						std::string c{ *i };
+						if (c == " ")
+						{
+							weights.push_back(std::stod(val));
+							val.clear();
+						}
+						else
+						{
+							val.append(c);
+						}
+					}
+					if (val != "" && val != " ")
+					{
+						bias = std::stod(val);
+					}
+					else
+					{
+						bias = weights.back();
+						weights.pop_back();
+					}
+
+					networkWeights.back().back().push_back(weights);
+					networkBiases.back().back().push_back(bias);
+				}
+			}
+		}
+
+		Simulation::SetIteration(m_iteration);
+		Simulation::SetSeedText(seed);
+
+		Machine::Car::CreateRays(sizes[0], raySize, width, height);
+
+
+		for (unsigned int i = 0; i < m_aliveSize; i++)
+		{
+			m_cars.push_back(new Machine::Car{ width, height, sizes, networkWeights[i], networkBiases[i] });
+			m_cars.back()->GetNeuralNetwork().CreateNetworkDiagram();
+		}
+
+		Window::GetWindow().setFramerateLimit(Simulation::SIMULATION_FRAMERATE);
 	}
 
 	void ResetCars()
