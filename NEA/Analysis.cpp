@@ -67,7 +67,7 @@ namespace Evolution::Analysis
 
 		m_saveBtn = UI::Button{ "Save Cars", m_analysisView };
 		m_saveBtn.SetCentreText(true);
-		m_saveBtn.GetMouseClickedEvent().AddCallback([]() { std::cout << "SAVE CLICKED\n"; });
+		m_saveBtn.GetMouseClickedEvent().AddCallback([]() { EvolutionManager::SaveGeneration("TestCars"); std::cout << "Saved" << std::endl; });
 		m_saveBtn.setPosition(xPos, yPos1);
 		m_menuBtn = UI::Button{ "Menu", m_analysisView };
 		m_menuBtn.SetCentreText(true);
@@ -118,6 +118,61 @@ namespace Evolution::Analysis
 		m_next10QuickBtn.SetActive(false);
 		m_saveBtn.SetActive(false);
 		m_menuBtn.SetActive(false);
+	}
+
+	void SetGraph(std::vector<float> positions)
+	{
+		m_size = positions.size() / 3;
+
+		m_fitnessMax.clear();
+		m_fitnessAvg.clear(); 
+		m_fitnessMin.clear();
+
+		for (unsigned int i = 0; i < m_size; i++)
+		{
+			if (positions[i + (m_size * 2)] < m_graphMin)
+			{
+				m_graphMin = positions[i + (m_size * 2)];
+				m_graphGuideLines[1][0].position.y = m_graphMin;
+			}
+			if (positions[i] > m_graphMax)
+			{
+				m_graphMax = positions[i];
+				m_graphGuideLines[1][1].position.y = m_graphMax;
+			}
+
+			m_fitnessMax.push_back(sf::Vertex{ sf::Vector2f{(float)i, positions[i]}, sf::Color::Cyan });
+			m_fitnessAvg.push_back(sf::Vertex{ sf::Vector2f{(float)i, positions[i + m_size]}, sf::Color::Yellow });
+			m_fitnessMin.push_back(sf::Vertex{ sf::Vector2f{(float)i, positions[i + (m_size * 2)]}, sf::Color::Red });
+		}
+
+		std::array<std::array<sf::Vertex, 2>, 2> baseLines = { m_graphGuideLines[0], m_graphGuideLines[1] };
+		m_graphGuideLines.clear();
+		m_graphGuideLines.push_back(baseLines[0]);
+		m_graphGuideLines.push_back(baseLines[1]);
+
+		float height = abs(m_graphMax) + abs(m_graphMin);
+
+		while (m_graphGuideSeperation * 10.f < height)
+		{
+			m_graphGuideSeperation += 100.f;
+		}
+
+		std::array<sf::Vertex, 2> line = { sf::Vertex{sf::Vector2f{0.f, 0.f}, sf::Color::White}, sf::Vertex{sf::Vector2f{(float)m_size, 0.f}, sf::Color::White} };
+
+		for (int i = m_graphMin < 0 ? ceilf(m_graphMin / m_graphGuideSeperation) : floorf(m_graphMin / m_graphGuideSeperation); i < ceilf(m_graphMax / m_graphGuideSeperation); i++)
+		{
+			if (i == 0)
+				continue;
+
+			line[0].position.y = i * m_graphGuideSeperation;
+			line[1].position.y = i * m_graphGuideSeperation;
+			m_graphGuideLines.push_back(line);
+		}
+
+
+		m_graphView.setSize(sf::Vector2f{ (float)m_size, -abs(m_graphMax) - abs(m_graphMin) });
+		m_graphView.setCenter(sf::Vector2f{ (float)m_size / 2.f, (m_graphMax + m_graphMin) / 2.f });
 	}
 
 	void UpdateGraph(float fitnessMax, float fitnessAvg, float fitnessMin)
@@ -179,5 +234,23 @@ namespace Evolution::Analysis
 
 		m_graphView.setSize(sf::Vector2f{ (float)m_size, -abs(m_graphMax) - abs(m_graphMin) });
 		m_graphView.setCenter(sf::Vector2f{ (float)m_size / 2.f, (m_graphMax + m_graphMin) / 2.f });
+	}
+
+	void SaveGraph(std::ofstream& file)
+	{
+		file << 'g';
+		for (auto point : m_fitnessMax)
+		{
+			file << " " << point.position.y;
+		}
+		for (auto point : m_fitnessAvg)
+		{
+			file << " " << point.position.y;
+		}
+		for (auto point : m_fitnessMin)
+		{
+			file << " " << point.position.y;
+		}
+		file << std::endl;
 	}
 }

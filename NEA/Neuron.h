@@ -1,7 +1,7 @@
 #pragma once
 
 #include <vector>
-
+#include <fstream>
 
 namespace Machine
 {
@@ -22,6 +22,8 @@ namespace Machine
 		Neuron(std::vector<double> weights, double bias);
 		Neuron(unsigned int prevLayerSize);
 		Neuron(const Neuron& neuron);
+
+		friend std::ostream& operator<<(std::ostream& stream, const Neuron& neuron);
 
 		double GetOutput(std::vector<double> inputs);
 		void Mutate();

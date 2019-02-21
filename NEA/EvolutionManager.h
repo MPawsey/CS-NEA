@@ -19,6 +19,8 @@ namespace Evolution
 		
 		void StartNextGeneration(int cycleCount, bool draw);
 
+		void SaveGeneration(std::string filename);
+
 		std::mt19937& GetRandomEngine();
 
 	}

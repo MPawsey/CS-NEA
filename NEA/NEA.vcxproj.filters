@@ -43,6 +43,12 @@
     <Filter Include="Source Files\Menu">
       <UniqueIdentifier>{591f08f1-beb7-45f0-a487-6feb19fd8e34}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\Tracks">
+      <UniqueIdentifier>{24b818a6-3493-49a3-9b9e-b0b47ce9fc91}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Cars">
+      <UniqueIdentifier>{156f53f2-c079-4edd-b0aa-f79b8adb2651}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -108,6 +114,9 @@
     <ClCompile Include="Analysis.cpp">
       <Filter>Source Files\Evolution</Filter>
     </ClCompile>
+    <ClCompile Include="CarSelectMenu.cpp">
+      <Filter>Source Files\Menu</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="sfml-window-d-2.dll">
@@ -142,6 +151,12 @@
     </None>
     <None Include="openal32.dll">
       <Filter>Libraries</Filter>
+    </None>
+    <None Include="Tracks\Track1.track">
+      <Filter>Resource Files\Tracks</Filter>
+    </None>
+    <None Include="Cars\Generation3Win.cars">
+      <Filter>Resource Files\Cars</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -180,9 +195,6 @@
     <ClInclude Include="MainMenu.h">
       <Filter>Header Files\Menu</Filter>
     </ClInclude>
-    <ClInclude Include="SettingsMenu.h">
-      <Filter>Header Files\Menu</Filter>
-    </ClInclude>
     <ClInclude Include="MapSelectMenu.h">
       <Filter>Header Files\Menu</Filter>
     </ClInclude>
@@ -218,6 +230,12 @@
     </ClInclude>
     <ClInclude Include="RNG.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CarSelectMenu.h">
+      <Filter>Header Files\Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="SettingsMenu.h">
+      <Filter>Header Files\UI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

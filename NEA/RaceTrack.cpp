@@ -21,7 +21,7 @@ namespace RaceTrack
 	std::vector<std::array<sf::Vertex, 2>> m_walls;
 	std::vector<Checkpoint> m_checkpoints;
 	std::vector<float> m_checkpointDistances;
-
+	std::string m_trackName;
 	sf::Vector2f m_startPos;
 	float m_startRot;
 
@@ -129,6 +129,8 @@ namespace RaceTrack
 	// Public
 	void LoadFromFile(std::string filename)
 	{
+		m_trackName = filename;
+		m_trackName = m_trackName.substr(m_trackName.find_first_of('\\')+1, m_trackName.find_last_of('.') - (m_trackName.find_first_of('\\') + 1));
 		std::ifstream file{ filename };
 		std::vector<sf::Vector2f> points;
 
@@ -278,5 +280,11 @@ namespace RaceTrack
 			return m_checkpointDistances.back() + Magnitude(pos, m_checkpoints.back().pos);
 		}
 		return m_checkpointDistances[nextCheckpoint] - Magnitude(pos, m_checkpoints[nextCheckpoint].pos);
+	}
+
+
+	std::string GetTrackName()
+	{
+		return m_trackName;
 	}
 }

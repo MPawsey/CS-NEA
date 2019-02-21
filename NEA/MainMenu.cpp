@@ -13,22 +13,6 @@ namespace Menu::MainMenu
 	UI::Button m_startSavedBtn;
 	UI::Button m_mapEditorBtn;
 
-	void StartNewGeneration()
-	{
-		std::cout << "New Gen Clicked" << std::endl;
-		Menu::GoToState(Menu::MenuState::StartConfig);
-	}
-
-	void StartExistingGeneration()
-	{
-		std::cout << "Old Gen Clicked" << std::endl;
-	}
-
-	void LaunchMapEditor()
-	{
-		std::cout << "Map Editor Clicked" << std::endl;
-	}
-
 	void OnWindowClosed()
 	{
 		m_startConfigBtn.UninitialiseEvents();
@@ -52,21 +36,21 @@ namespace Menu::MainMenu
 		m_startConfigBtn = UI::Button{ "Start with new generation", m_mainMenuView, { 5.f, 7.f, 2.f, 2.f } };
 		m_startConfigBtn.setPosition(xPos, yPos);
 		m_startConfigBtn.SetBackgroundSize(sf::Vector2f{ 500.f, m_startConfigBtn.GetClickBounds().height });
-		m_startConfigBtn.GetMouseClickedEvent().AddCallback(StartNewGeneration);
+		m_startConfigBtn.GetMouseClickedEvent().AddCallback([]() { Menu::GoToState(Menu::MenuState::StartConfig); });
 
 		yPos += yGap;
 
 		m_startSavedBtn = UI::Button{ "Start with existing generation", m_mainMenuView, { 5.f, 7.f, 2.f, 2.f } };
 		m_startSavedBtn.setPosition(xPos, yPos);
 		m_startSavedBtn.SetBackgroundSize(sf::Vector2f{ 500.f, m_startSavedBtn.GetClickBounds().height });
-		m_startSavedBtn.GetMouseClickedEvent().AddCallback(StartExistingGeneration);
+		m_startSavedBtn.GetMouseClickedEvent().AddCallback([]() { Menu::GoToState(Menu::MenuState::StartCar); });
 
 		yPos += yGap;
 
 		m_mapEditorBtn = UI::Button{ "Launch map editor", m_mainMenuView, { 5.f, 7.f, 2.f, 2.f } };
 		m_mapEditorBtn.setPosition(xPos, yPos);
 		m_mapEditorBtn.SetBackgroundSize(sf::Vector2f{ 500.f, m_mapEditorBtn.GetClickBounds().height });
-		m_mapEditorBtn.GetMouseClickedEvent().AddCallback(LaunchMapEditor);
+		m_mapEditorBtn.GetMouseClickedEvent().AddCallback([]() { std::cout << "Editor clicked\n"; });
 	}
 
 	void Update()

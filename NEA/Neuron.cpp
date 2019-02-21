@@ -38,6 +38,18 @@ namespace Machine
 		m_bias = neuron.m_bias;
 	}
 
+	std::ostream& operator<<(std::ostream& stream, const Neuron& neuron)
+	{
+		stream << "n ";
+		for (double weight : neuron.m_weights)
+		{
+			stream << weight << ' ';
+		}
+		stream << neuron.m_bias;
+
+		return stream;
+	}
+
 	void Neuron::SpliceNeurons(Neuron& n1, Neuron& n2)
 	{
 		auto pc = std::bind(std::uniform_real_distribution{}, std::ref(Evolution::EvolutionManager::GetRandomEngine()));

@@ -46,6 +46,13 @@ namespace Machine
 		m_rays = car.m_rays;
 	}
 
+	std::ostream& operator<<(std::ostream& stream, const Car& car)
+	{
+		stream << 'c' << std::endl << car.m_network;
+
+		return stream;
+	}
+
 	void Car::SpliceCars(Car& c1, Car& c2)
 	{
 		NeuralNetwork::SpliceNeuralNetworks(c1.m_network, c2.m_network);

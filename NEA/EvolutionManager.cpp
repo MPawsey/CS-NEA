@@ -19,6 +19,9 @@ namespace Evolution::EvolutionManager
 	unsigned int m_aliveSize, m_iteration, m_saveSize = 0, m_killSize = 22;
 	sf::View m_evolutionView;
 	RNG::Random m_randomEngine;
+	std::string m_track;
+	float m_carWidth, m_carHeight, m_carRaySize;
+	std::vector<unsigned int> m_carSizes;
 	//std::mt19937 m_randomEngine;
 
 	int m_cycleCount = 1;
@@ -141,6 +144,11 @@ namespace Evolution::EvolutionManager
 
 	void CreateGenerationFromSettings(float width, float height, unsigned int rayCount, float raySize, unsigned int popSize, float enginePow, float rotPow, double mutPC, double splicePC, unsigned int seed)
 	{
+		m_carWidth = width;
+		m_carHeight = height;
+		m_carRaySize = raySize;
+		m_carSizes = { rayCount, 4, 3, 2};
+
 		m_iteration = 0;
 		Simulation::SetIteration(m_iteration);
 		Simulation::SetSeedText(seed);
@@ -152,17 +160,15 @@ namespace Evolution::EvolutionManager
 		Machine::Neuron::mutatePC = mutPC;
 		Machine::Neuron::splicePC = splicePC;
 
-		m_randomEngine.seed(seed);
+		m_randomEngine.SetSeed(seed);
 
 		Machine::Car::CreateRays(rayCount, raySize, width, height);
 
 		for (unsigned int i = 0; i < popSize; i++)
 		{
-			m_cars.push_back(new Machine::Car{ width, height, { rayCount, 4, 3, 2 } });
+			m_cars.push_back(new Machine::Car{ width, height, m_carSizes });
 			m_cars.back()->GetNeuralNetwork().CreateNetworkDiagram();
 		}
-
-		Window::GetWindow().setFramerateLimit(Simulation::SIMULATION_FRAMERATE);
 	}
 
 	void CreateGenerationFromFile(std::string filename)
@@ -171,8 +177,6 @@ namespace Evolution::EvolutionManager
 
 		std::string track;
 		unsigned int seed;
-		float width, height, raySize;
-		std::vector<unsigned int> sizes;
 		std::vector<std::vector<std::vector<std::vector<double>>>> networkWeights;
 		std::vector<std::vector<std::vector<double>>> networkBiases;
 
@@ -194,15 +198,16 @@ namespace Evolution::EvolutionManager
 				{
 					unsigned int count;
 					ss >> junk >> track >> seed >> count >> m_iteration;
-					m_randomEngine.seed(seed);
+					m_randomEngine.SetSeed(seed);
 					m_randomEngine.discard(count);
 				}
 				else if (s[0] == 'd') // Dimensions
 				{
-					ss >> junk >> width >> height;
+					ss >> junk >> m_carWidth >> m_carHeight;
 				}
 				else if (s[0] == 's') // Sizes
 				{
+					m_carSizes.clear();
 					std::vector<std::string> parts;
 					parts.push_back("");
 					for (char c : s)
@@ -220,12 +225,12 @@ namespace Evolution::EvolutionManager
 					{
 						if (parts[i] == "")
 							continue;
-						sizes.push_back(std::stoi(parts[i]));
+						m_carSizes.push_back(std::stoi(parts[i]));
 					}
 				}
 				else if (s[0] == 'r') // Ray Size
 				{
-					ss >> junk >> raySize;
+					ss >> junk >> m_carRaySize;
 				}
 				else if (s[0] == 'p') // Population Size
 				{
@@ -238,6 +243,35 @@ namespace Evolution::EvolutionManager
 				else if (s[0] == 'o') // Offspring settings
 				{
 					ss >> junk >> Machine::Neuron::mutatePC >> Machine::Neuron::splicePC;
+				}
+				else if (s[0] == 'g')
+				{
+					std::vector<float> positions;
+
+					std::string val;
+					for (auto i = s.begin() + 2; i < s.end(); i++)
+					{
+						std::string c{ *i };
+						if (c == " ")
+						{
+							if (val.size() > 0)
+							{
+								positions.push_back(std::stod(val));
+								val.clear();
+							}
+						}
+						else
+						{
+							val.append(c);
+						}
+					}
+
+					if (val != "" && val != " ")
+					{
+						positions.push_back(std::stod(val));
+					}
+
+					Analysis::SetGraph(positions);
 				}
 				else if (s[0] == 'c') // Sets new values for layers and neurons to new car
 				{
@@ -260,8 +294,11 @@ namespace Evolution::EvolutionManager
 						std::string c{ *i };
 						if (c == " ")
 						{
-							weights.push_back(std::stod(val));
-							val.clear();
+							if (val.size() > 0)
+							{
+								weights.push_back(std::stod(val));
+								val.clear();
+							}
 						}
 						else
 						{
@@ -287,16 +324,13 @@ namespace Evolution::EvolutionManager
 		Simulation::SetIteration(m_iteration);
 		Simulation::SetSeedText(seed);
 
-		Machine::Car::CreateRays(sizes[0], raySize, width, height);
-
+		Machine::Car::CreateRays(m_carSizes[0], m_carRaySize, m_carWidth, m_carHeight);
 
 		for (unsigned int i = 0; i < m_aliveSize; i++)
 		{
-			m_cars.push_back(new Machine::Car{ width, height, sizes, networkWeights[i], networkBiases[i] });
+			m_cars.push_back(new Machine::Car{ m_carWidth, m_carHeight, m_carSizes, networkWeights[i], networkBiases[i] });
 			m_cars.back()->GetNeuralNetwork().CreateNetworkDiagram();
 		}
-
-		Window::GetWindow().setFramerateLimit(Simulation::SIMULATION_FRAMERATE);
 	}
 
 	void ResetCars()
@@ -321,6 +355,39 @@ namespace Evolution::EvolutionManager
 
 		m_analysis = false;
 		Analysis::Unload();
+	}
+
+	// Fold expression to write a line to a file
+	template <typename... Args>
+	void WriteLineToFile(std::ofstream& file, Args&&... args)
+	{
+		// Folds over the first comma seperated expression resulting in a trailing space (should not matter)
+		((file << args << " "), ...) << std::endl;
+	}
+	
+	void SaveGeneration(std::string filename)
+	{
+		std::string filepath = "Cars/" + filename + ".cars";
+
+
+		std::ofstream file = std::ofstream{ filepath };
+
+		// Saving the settings of the cars
+		WriteLineToFile(file, 't', RaceTrack::GetTrackName(), m_randomEngine.GetSeed(), m_randomEngine.GetCalls(), m_iteration);
+		WriteLineToFile(file, 'd', m_carWidth, m_carHeight);
+		std::string sizeStr = std::accumulate(m_carSizes.begin(), m_carSizes.end(), std::string{ "" }, [](std::string val, unsigned int cur) { return val.append(std::to_string(cur) + " "); });
+		WriteLineToFile(file, 's', (sizeStr.erase(sizeStr.end() - 1), sizeStr));
+		WriteLineToFile(file, 'r', m_carRaySize);
+		WriteLineToFile(file, 'p', m_cars.size());
+		WriteLineToFile(file, 'e', Machine::Car::enginePower, Machine::Car::rotationPower);
+		WriteLineToFile(file, 'o', Machine::Neuron::mutatePC, Machine::Neuron::splicePC);
+		Analysis::SaveGraph(file);
+
+		for (Machine::Car* car : m_cars)
+		{
+			WriteLineToFile(file, *car);
+		}
+
 	}
 
 	std::mt19937& GetRandomEngine()

@@ -4,6 +4,7 @@
 #include "Neuron.h"
 #include <sfml/Graphics.hpp>
 #include "LineShape.h"
+#include <fstream>
 
 namespace Machine
 {
@@ -29,6 +30,8 @@ namespace Machine
 		NeuralNetwork(std::vector<unsigned int> sizes);
 		NeuralNetwork(const NeuralNetwork& n);
 		~NeuralNetwork();
+
+		friend std::ostream& operator<<(std::ostream& stream, const NeuralNetwork& nn);
 
 		std::vector<double> GetOutput(std::vector<double> inputs, unsigned int layer = 0);
 		void Mutate();

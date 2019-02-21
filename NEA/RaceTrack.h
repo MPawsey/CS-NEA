@@ -19,7 +19,7 @@ namespace RaceTrack
 
 	float CalcFitness(sf::Vector2f pos, unsigned int nextCheckpoint);
 
-
+	std::string GetTrackName();
 
 
 

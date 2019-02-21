@@ -3,6 +3,7 @@
 #include "MainMenu.h"
 #include "SettingsMenu.h"
 #include "MapSelectMenu.h"
+#include "CarSelectMenu.h"
 #include "Event.h"
 
 namespace Menu
@@ -16,6 +17,7 @@ namespace Menu
 		MainMenu::Init();
 		SettingsMenu::Init();
 		MapSelectMenu::Init();
+		CarSelectMenu::Init();
 
 		MainMenu::Load();
 	}
@@ -32,6 +34,9 @@ namespace Menu
 			break;
 		case MenuState::StartMap:
 			MapSelectMenu::Update();
+			break;
+		case MenuState::StartCar:
+			CarSelectMenu::Update();
 			break;
 		}
 	}
@@ -50,6 +55,9 @@ namespace Menu
 		case MenuState::StartMap:
 			MapSelectMenu::Unload();
 			break;
+		case MenuState::StartCar:
+			CarSelectMenu::Unload();
+			break;
 		}
 
 		// Load new state
@@ -63,6 +71,9 @@ namespace Menu
 			break;
 		case MenuState::StartMap:
 			MapSelectMenu::Load();
+			break;
+		case MenuState::StartCar:
+			CarSelectMenu::Load();
 			break;
 		}
 	}

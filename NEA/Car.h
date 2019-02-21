@@ -2,6 +2,7 @@
 
 #include <sfml/Graphics.hpp>
 #include "NeuralNetwork.h"
+#include <fstream>
 
 namespace Machine
 {
@@ -36,6 +37,8 @@ namespace Machine
 		Car(float width, float height, std::vector<unsigned int> sizes, std::vector<std::vector<std::vector<double>>> networkWeights, std::vector<std::vector<double>> networkBiases);
 		Car(float width, float height, std::vector<unsigned int> sizes);
 		Car(const Car& car);
+
+		friend std::ostream& operator<<(std::ostream& stream, const Car& car);
 
 		bool Update();
 		void Reset();

@@ -56,9 +56,11 @@ public:
 	{
 		if (!id.m_valid) return;
 		int pos = id.m_ID;
-		std::for_each(m_removedPositions.begin() + id.m_startPos, m_removedPositions.end(), [&](unsigned int i) { if (pos > i) --pos; });
+		if (m_removedPositions.size() > 0)
+			std::for_each(m_removedPositions.begin() + id.m_startPos, m_removedPositions.end(), [&](unsigned int i) { if (pos > i) --pos; });
 		m_removedPositions.push_back(pos);
-		m_callbacks.erase(m_callbacks.begin() + pos);
+		if (pos < m_callbacks.size()) // Just to stop errors
+			m_callbacks.erase(m_callbacks.begin() + pos);
 	}
 
 	void Call(T... t)

@@ -83,6 +83,21 @@ namespace Machine
 		delete[] m_nodes;
 	}
 
+	std::ostream& operator<<(std::ostream& stream, const NeuralNetwork& nn)
+	{
+		for (auto layer : nn.m_network)
+		{
+			stream << 'l' << std::endl;
+
+			for (Neuron* n : layer)
+			{
+				stream << *n << std::endl;
+			}
+		}
+
+		return stream;
+	}
+
 	void NeuralNetwork::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	{
 		for (size_t i = 0; i < m_connectionCount; i++)
