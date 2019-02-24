@@ -20,4 +20,14 @@ namespace UI
 		return m_font;
 	}
 
+
+
+	UIElement::UIElement(sf::View& view)
+		: m_containerView{ &view }
+	{}
+
+	UIElement::UIElement(sf::View* view)
+		: m_containerView{ view }
+	{}
+
 }

@@ -1,9 +1,10 @@
 #include "SettingsMenu.h"
-#include "UI.h"
 #include "Window.h"
 #include <algorithm>
 #include "Menu.h"
 #include "EvolutionManager.h"
+#include "Button.h"
+#include "TextField.h"
 
 namespace Menu::SettingsMenu
 {

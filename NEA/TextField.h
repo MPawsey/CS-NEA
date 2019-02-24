@@ -8,7 +8,7 @@
 namespace UI
 {
 
-	class TextField : public Clickable, public sf::Drawable
+	class TextField : public Clickable
 	{
 	public:
 		enum FieldType
@@ -30,6 +30,8 @@ namespace UI
 		Event<> m_lostFocusEvent;
 		Tooltip m_tooltip;
 
+		EventID m_leftClickedID, m_textEnteredID;
+
 		void OnMouseLeftClick();
 		void OnTextEntered(char input);
 
@@ -47,6 +49,7 @@ namespace UI
 		TextField() {}
 		TextField(const TextField& textField);
 		TextField(float width, FieldType type, sf::View& view, UI::Padding padding = { 2.f, 2.f, 2.f, 2.f });
+		~TextField();
 
 		TextField& operator=(const TextField& textField);
 

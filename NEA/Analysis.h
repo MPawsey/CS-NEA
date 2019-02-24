@@ -13,6 +13,7 @@ namespace Evolution
 
 		void Load();
 		void Unload();
+		void Reset();
 
 		void SetGraph(std::vector<float> positions);
 		void UpdateGraph(float fitnessMax, float fitnessAvg, float fitnessMin);

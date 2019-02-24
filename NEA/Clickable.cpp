@@ -13,7 +13,7 @@ namespace UI
 	}
 
 	Clickable::Clickable(const Clickable& clickable)
-		: m_containerView{ clickable.m_containerView }, m_clickBounds{ clickable.m_clickBounds }
+		: UIElement{ clickable.m_containerView }, m_clickBounds{ clickable.m_clickBounds }
 	{
 		dynamic_cast<sf::Transformable&>(*this) = clickable;
 
@@ -21,13 +21,13 @@ namespace UI
 	}
 
 	Clickable::Clickable(sf::FloatRect bounds, sf::View* view)
-		: m_clickBounds{ bounds }, m_containerView{ view }
+		: m_clickBounds{ bounds }, UIElement{ view }
 	{
 		InitialiseEvents();
 	}
 
 	Clickable::Clickable(sf::FloatRect bounds, sf::View& view)
-		: m_clickBounds{ bounds }, m_containerView{ &view }
+		: m_clickBounds{ bounds }, UIElement{ &view }
 	{
 		InitialiseEvents();
 	}

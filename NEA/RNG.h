@@ -31,6 +31,7 @@ namespace RNG
 
 		void SetSeed(unsigned int s)
 		{
+			m_calls = 0;
 			m_seed = s;
 			seed(s);
 		}

@@ -7,13 +7,13 @@ namespace UI
 	Slider::Slider() {}
 
 	Slider::Slider(const Slider& slider)
+		: UIElement{ slider.m_containerView }
 	{
 		m_sliderUpdateEvent = slider.m_sliderUpdateEvent;
 		m_sliderVal = m_sliderVal; // Between 0-1
 		m_sliderLine = sf::RectangleShape{slider.m_sliderLine};
 		m_sliderGrab = sf::CircleShape{slider.m_sliderGrab};
 		m_clickBounds = sf::FloatRect{ slider.m_clickBounds };
-		m_containerView = slider.m_containerView;
 
 		InputManager::GetMousePressedEvent(sf::Mouse::Left).AddCallback(&Slider::OnMouseLeftPressed, *this);
 		InputManager::GetMouseReleasedEvent(sf::Mouse::Left).AddCallback(&Slider::OnMouseLeftReleased, *this);
@@ -21,11 +21,10 @@ namespace UI
 	}
 
 	Slider::Slider(sf::Vector2f posTop, sf::View& view, float height, float sliderWidth)
-		: m_sliderLine{ sf::Vector2f{ sliderWidth, height } }, m_sliderGrab {sliderWidth * 2.f}
+		: m_sliderLine{ sf::Vector2f{ sliderWidth, height } }, m_sliderGrab {sliderWidth * 2.f}, UIElement{ view }
 	{
 		m_sliderLine.setPosition(posTop);
 		m_sliderLine.setFillColor(sf::Color{ 50, 50, 50 });
-		m_containerView = view;
 
 		m_sliderGrab.setOrigin(sliderWidth * 2.f, sliderWidth * 2.f);
 		m_sliderGrab.setPosition(sf::Vector2f{posTop.x + (sliderWidth / 2.f), posTop.y});
@@ -62,7 +61,7 @@ namespace UI
 		if (!m_active) return;
 
 		sf::Vector2f pos;
-		if (InputManager::IsMouseInView(m_containerView, pos) && m_clickBounds.contains(pos))
+		if (InputManager::IsMouseInView(*m_containerView, pos) && m_clickBounds.contains(pos))
 		{
 			m_hasFocus = true;
 
@@ -83,7 +82,7 @@ namespace UI
 
 		if (m_hasFocus)
 		{
-			CalcSliderVal(InputManager::GetMousePosInView(m_containerView, mousePos));
+			CalcSliderVal(InputManager::GetMousePosInView(*m_containerView, mousePos));
 			m_sliderUpdateEvent.Call(m_sliderVal);
 		}
 	}

@@ -29,6 +29,14 @@ namespace Evolution::EvolutionManager
 
 	std::vector<Machine::Car*> m_cars;
 
+	void Reset()
+	{
+		m_cars.clear();
+		Analysis::Reset();
+		m_cycleCount = 1;
+		m_display = true;
+	}
+
 	void OnWindowClosed()
 	{
 		for (Machine::Car* car : m_cars)
@@ -144,6 +152,9 @@ namespace Evolution::EvolutionManager
 
 	void CreateGenerationFromSettings(float width, float height, unsigned int rayCount, float raySize, unsigned int popSize, float enginePow, float rotPow, double mutPC, double splicePC, unsigned int seed)
 	{
+		Reset();
+		m_analysis = false;
+
 		m_carWidth = width;
 		m_carHeight = height;
 		m_carRaySize = raySize;
@@ -173,6 +184,10 @@ namespace Evolution::EvolutionManager
 
 	void CreateGenerationFromFile(std::string filename)
 	{
+		Reset();
+		m_analysis = true;
+		Analysis::Load();
+
 		std::ifstream file{ filename };
 
 		std::string track;

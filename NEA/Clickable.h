@@ -3,11 +3,12 @@
 #include <sfml/Graphics.hpp>
 #include "Logger.h"
 #include "Event.h"
+#include "UI.h"
 
 namespace UI
 {
 
-	class Clickable : public sf::Transformable
+	class Clickable : public sf::Transformable, public UIElement
 	{
 	private:
 		static inline Logger logger{ "Clickable" };
@@ -42,7 +43,6 @@ namespace UI
 
 	protected:
 
-		sf::View* m_containerView;
 		sf::FloatRect m_clickBounds;
 
 	public:
@@ -60,7 +60,7 @@ namespace UI
 		const sf::FloatRect GetClickBounds() const;
 		const sf::View& GetContainerView() const;
 
-		void SetActive(bool isActive);
+		virtual void SetActive(bool isActive);
 
 	};
 

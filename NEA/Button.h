@@ -9,7 +9,7 @@
 namespace UI
 {
 
-	class Button : public Clickable, public sf::Drawable
+	class Button : public Clickable
 	{
 	private:
 		static inline const sf::Color BACK_COLOUR{ 40, 46, 71, 255 };

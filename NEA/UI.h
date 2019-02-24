@@ -1,6 +1,8 @@
 #pragma once
 
 #include <sfml/Graphics/Font.hpp>
+#include <sfml/Graphics/View.hpp>
+#include <sfml/Graphics/Drawable.hpp>
 
 namespace UI
 {
@@ -13,12 +15,23 @@ namespace UI
 
 	const sf::Font& GetFont();
 
+	class UIElement : public sf::Drawable
+	{
+	private:
+
+	protected:
+		sf::View* m_containerView;
+
+		UIElement() {}
+		UIElement(sf::View& view);
+		UIElement(sf::View* view);
+
+
+	public:
+
+		virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const {}
+		virtual void SetActive(bool isActive) = 0;
+
+	};
+
 }
-
-
-// Ensures the header files are included after the above has been defined
-#include "Clickable.h"
-#include "Button.h"
-#include "TextField.h"
-#include "Slider.h"
-#include "Tooltip.h"

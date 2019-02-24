@@ -1,12 +1,13 @@
 #include "MapSelectMenu.h"
 
 #include "Window.h"
-#include "UI.h"
 #include <filesystem>
 #include "Menu.h"
 #include "InputManager.h"
 #include "RaceTrack.h"
 #include "Simulation.h"
+#include "Slider.h"
+#include "Button.h"
 
 namespace Menu::MapSelectMenu
 {

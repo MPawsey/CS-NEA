@@ -260,3 +260,5 @@ paket-files/
 __pycache__/
 *.pyc
 /NEA/Tracks
+/NEA/Cars/Cars_.cars
+/NEA/Cars/NewCarTest.cars

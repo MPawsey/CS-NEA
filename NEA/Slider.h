@@ -2,15 +2,15 @@
 
 #include <sfml/Graphics.hpp>
 #include "Event.h"
+#include "UI.h"
 
 namespace UI
 {
 
-	class Slider : public sf::Drawable
+	class Slider : public UIElement
 	{
 	private:
 
-		sf::View m_containerView;
 		Event<float> m_sliderUpdateEvent;
 		float m_sliderVal = 0; // Between 0-1
 		sf::RectangleShape m_sliderLine;
@@ -38,7 +38,7 @@ namespace UI
 		float GetSliderVal();
 		const Event<float>& GetSliderUpdateEvent();
 
-		void SetActive(bool isActive);
+		virtual void SetActive(bool isActive);
 		void Move(float percentage);
 	};
 

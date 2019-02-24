@@ -131,6 +131,7 @@
     <ClCompile Include="CarSelectMenu.cpp" />
     <ClCompile Include="Clickable.cpp" />
     <ClCompile Include="LineShape.cpp" />
+    <ClCompile Include="Popup.cpp" />
     <ClCompile Include="Simulation.cpp" />
     <ClCompile Include="EvolutionManager.cpp" />
     <ClCompile Include="InputManager.cpp" />
@@ -182,6 +183,7 @@
     <ClInclude Include="Menu.h" />
     <ClInclude Include="NeuralNetwork.h" />
     <ClInclude Include="Neuron.h" />
+    <ClInclude Include="Popup.h" />
     <ClInclude Include="RaceTrack.h" />
     <ClInclude Include="RNG.h" />
     <ClInclude Include="SettingsMenu.h" />

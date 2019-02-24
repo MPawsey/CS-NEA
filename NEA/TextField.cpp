@@ -12,6 +12,9 @@ namespace UI
 		m_text = textField.m_text;
 		m_rawText = textField.m_rawText;
 		m_tooltip = textField.m_tooltip;
+
+		m_leftClickedID = InputManager::GetMousePressedEvent(sf::Mouse::Left).AddCallback(&TextField::OnMouseLeftClick, *this);
+		m_textEnteredID = InputManager::GetTextEnteredEvent().AddCallback(&TextField::OnTextEntered, *this);
 	}
 
 	TextField::TextField(float width, FieldType type, sf::View& view, UI::Padding padding)
@@ -26,6 +29,15 @@ namespace UI
 		m_textContainer.setFillColor(UNACTIVE_COLOUR);
 		m_textContainer.setOutlineColor(sf::Color::White);
 		m_textContainer.setOutlineThickness(1.f);
+
+		m_leftClickedID = InputManager::GetMousePressedEvent(sf::Mouse::Left).AddCallback(&TextField::OnMouseLeftClick, *this);
+		m_textEnteredID = InputManager::GetTextEnteredEvent().AddCallback(&TextField::OnTextEntered, *this);
+	}
+
+	TextField::~TextField()
+	{
+		InputManager::GetMousePressedEvent(sf::Mouse::Left).RemoveCallback(m_leftClickedID);
+		InputManager::GetTextEnteredEvent().RemoveCallback(m_textEnteredID);
 	}
 
 	TextField& TextField::operator=(const TextField& textField)
@@ -39,8 +51,8 @@ namespace UI
 		m_rawText = sf::String{ textField.m_rawText };
 		m_tooltip = textField.m_tooltip;
 
-		InputManager::GetMousePressedEvent(sf::Mouse::Left).AddCallback(&TextField::OnMouseLeftClick, *this);
-		InputManager::GetTextEnteredEvent().AddCallback(&TextField::OnTextEntered, *this);
+		m_leftClickedID = InputManager::GetMousePressedEvent(sf::Mouse::Left).AddCallback(&TextField::OnMouseLeftClick, *this);
+		m_textEnteredID = InputManager::GetTextEnteredEvent().AddCallback(&TextField::OnTextEntered, *this);
 
 		return *this;
 	}

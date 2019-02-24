@@ -1,10 +1,13 @@
 #include "Analysis.h"
 #include <vector>
-#include "UI.h"
 #include "Window.h"
 #include "EvolutionManager.h"
 #include <array>
 #include "LineShape.h"
+#include "Button.h"
+#include "Popup.h"
+#include "TextField.h"
+#include "Menu.h"
 
 namespace Evolution::Analysis
 {
@@ -12,6 +15,7 @@ namespace Evolution::Analysis
 	std::vector<sf::Vertex> m_fitnessMax, m_fitnessAvg, m_fitnessMin;
 	std::vector<std::array<sf::Vertex, 2>> m_graphGuideLines;
 	UI::Button m_nextBtn, m_next10Btn, m_nextQuickBtn, m_next10QuickBtn, m_saveBtn, m_menuBtn;
+	UI::Popup m_savePopup;
 	size_t m_size = 0;
 	sf::View m_analysisView, m_graphView;
 	float m_graphMin = 0.f, m_graphMax = 0.f;
@@ -25,6 +29,17 @@ namespace Evolution::Analysis
 		m_next10QuickBtn.UninitialiseEvents();
 		m_saveBtn.UninitialiseEvents();
 		m_menuBtn.UninitialiseEvents();
+		m_savePopup.~Popup();
+	}
+
+	void SetAnalysisActive(bool isActive)
+	{
+		m_nextBtn.SetActive(isActive);
+		m_next10Btn.SetActive(isActive);
+		m_nextQuickBtn.SetActive(isActive);
+		m_next10QuickBtn.SetActive(isActive);
+		m_saveBtn.SetActive(isActive);
+		m_menuBtn.SetActive(isActive);
 	}
 
 	// Public
@@ -35,6 +50,26 @@ namespace Evolution::Analysis
 
 		m_graphView.setViewport(sf::FloatRect{ 0.05f, 0.45f, 0.75f, 0.5f });
 		m_analysisView = Window::GetDefaultWindowView();
+
+		m_savePopup = UI::Popup{ m_analysisView };
+		m_savePopup.SetViewportTransform({0.25f, 0.25f, 0.5f, 0.5f});
+		m_savePopup.SetViewSize((sf::Vector2f)Window::GetWindowSize() * 0.5f);
+
+		UI::TextField* nameTF = new UI::TextField{ 300, UI::TextField::FieldType::Text, m_savePopup.GetView() };
+		nameTF->SetTooltipText("The name of the save file.");
+		nameTF->SetRawText("Cars");
+		nameTF->setPosition((m_savePopup.GetView().getSize().x - nameTF->GetBounds().width) / 2.f, 50.f);
+		m_savePopup.AddElement(nameTF); // No deleting of retBtn as m_savePopup destructor deletes it
+
+		UI::Button* retBtn = new UI::Button{ "Cancel", m_savePopup.GetView() };
+		retBtn->setPosition(5.f, m_savePopup.GetView().getSize().y - retBtn->GetBounds().height - 5.f);
+		retBtn->GetMouseClickedEvent().AddCallback([&]() { m_savePopup.SetActive(false); SetAnalysisActive(true); });
+		m_savePopup.AddElement(retBtn); 
+
+		UI::Button* saveBtn = new UI::Button{ "Save", m_savePopup.GetView() };
+		saveBtn->setPosition(m_savePopup.GetView().getSize().x - retBtn->GetBounds().width - 5.f, m_savePopup.GetView().getSize().y - retBtn->GetBounds().height - 5.f);
+		saveBtn->GetMouseClickedEvent().AddCallback([&, nameTF]() { EvolutionManager::SaveGeneration(nameTF->GetRawText()); m_savePopup.SetActive(false); SetAnalysisActive(true); });
+		m_savePopup.AddElement(saveBtn);
 
 		std::array<sf::Vertex, 2> base = { sf::Vertex{ sf::Vector2f{0.01f, 0.01f}, sf::Color::Magenta }, sf::Vertex{sf::Vector2f{0.01f, 0.01f}, sf::Color::Magenta} };
 		m_graphGuideLines.push_back(base);
@@ -67,11 +102,11 @@ namespace Evolution::Analysis
 
 		m_saveBtn = UI::Button{ "Save Cars", m_analysisView };
 		m_saveBtn.SetCentreText(true);
-		m_saveBtn.GetMouseClickedEvent().AddCallback([]() { EvolutionManager::SaveGeneration("TestCars"); std::cout << "Saved" << std::endl; });
+		m_saveBtn.GetMouseClickedEvent().AddCallback([&]() { m_savePopup.SetActive(true); SetAnalysisActive(false); });
 		m_saveBtn.setPosition(xPos, yPos1);
 		m_menuBtn = UI::Button{ "Menu", m_analysisView };
 		m_menuBtn.SetCentreText(true);
-		m_menuBtn.GetMouseClickedEvent().AddCallback([]() { std::cout << "MENU CLICKED\n"; });
+		m_menuBtn.GetMouseClickedEvent().AddCallback([]() { Window::SetWindowState(Window::Menu); Menu::GoToState(Menu::MenuState::MainMenu); });
 		m_menuBtn.setPosition(xPos, yPos2);
 	}
 
@@ -96,37 +131,38 @@ namespace Evolution::Analysis
 		{
 			window.draw(line.data(), 2, sf::LinesStrip);
 		}
+
+		window.draw(m_savePopup);
 	}
 
 	void Load()
 	{
 		Window::GetWindow().setFramerateLimit(Window::MENU_FRAMERATE);
 
-		m_nextBtn.SetActive(true);
-		m_nextQuickBtn.SetActive(true);
-		m_next10Btn.SetActive(true);
-		m_next10QuickBtn.SetActive(true);
-		m_saveBtn.SetActive(true);
-		m_menuBtn.SetActive(true);
+		SetAnalysisActive(true);
 	}
 
 	void Unload()
 	{
-		m_nextBtn.SetActive(false);
-		m_nextQuickBtn.SetActive(false);
-		m_next10Btn.SetActive(false);
-		m_next10QuickBtn.SetActive(false);
-		m_saveBtn.SetActive(false);
-		m_menuBtn.SetActive(false);
+		SetAnalysisActive(false);
+	}
+
+	void Reset()
+	{
+		m_fitnessMax.clear();
+		m_fitnessAvg.clear();
+		m_fitnessMin.clear();
+
+		m_size = 0;
+		m_graphMin = 0.f; 
+		m_graphMax = 0.f;
+		m_graphGuideSeperation = 100.f;
 	}
 
 	void SetGraph(std::vector<float> positions)
 	{
+		Reset();
 		m_size = positions.size() / 3;
-
-		m_fitnessMax.clear();
-		m_fitnessAvg.clear(); 
-		m_fitnessMin.clear();
 
 		for (unsigned int i = 0; i < m_size; i++)
 		{
@@ -150,6 +186,7 @@ namespace Evolution::Analysis
 		m_graphGuideLines.clear();
 		m_graphGuideLines.push_back(baseLines[0]);
 		m_graphGuideLines.push_back(baseLines[1]);
+		m_graphGuideLines[0][1].position.x = m_size;
 
 		float height = abs(m_graphMax) + abs(m_graphMin);
 

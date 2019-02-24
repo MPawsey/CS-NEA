@@ -1,11 +1,12 @@
 #include "CarSelectMenu.h"
 
 #include "Window.h"
-#include "UI.h"
 #include <filesystem>
 #include "Menu.h"
 #include "InputManager.h"
 #include "EvolutionManager.h"
+#include "Slider.h"
+#include "Button.h"
 
 
 namespace Menu::CarSelectMenu
