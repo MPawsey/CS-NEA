@@ -177,7 +177,6 @@
     <ClInclude Include="EvolutionManager.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="LineShape.h" />
-    <ClInclude Include="Logger.h" />
     <ClInclude Include="MainMenu.h" />
     <ClInclude Include="MapSelectMenu.h" />
     <ClInclude Include="Menu.h" />

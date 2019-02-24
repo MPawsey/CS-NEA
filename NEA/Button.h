@@ -4,7 +4,6 @@
 #include "Clickable.h"
 #include "Event.h"
 #include <string>
-#include "Logger.h"
 
 namespace UI
 {

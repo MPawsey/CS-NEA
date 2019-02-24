@@ -2,7 +2,6 @@
 
 #include "UI.h"
 #include "Clickable.h"
-#include "Logger.h"
 #include "Tooltip.h"
 
 namespace UI

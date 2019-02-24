@@ -1,7 +1,6 @@
 #pragma once
 
 #include <sfml/Graphics.hpp>
-#include "Logger.h"
 #include "Event.h"
 #include "UI.h"
 
@@ -11,7 +10,6 @@ namespace UI
 	class Clickable : public sf::Transformable, public UIElement
 	{
 	private:
-		static inline Logger logger{ "Clickable" };
 
 		bool m_mousePressed = false;
 		bool m_mouseHovered = false;

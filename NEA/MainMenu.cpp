@@ -49,7 +49,7 @@ namespace Menu::MainMenu
 		m_mapEditorBtn = UI::Button{ "Launch map editor", m_mainMenuView, { 5.f, 7.f, 2.f, 2.f } };
 		m_mapEditorBtn.setPosition(xPos, yPos);
 		m_mapEditorBtn.SetBackgroundSize(sf::Vector2f{ 500.f, m_mapEditorBtn.GetClickBounds().height });
-		m_mapEditorBtn.GetMouseClickedEvent().AddCallback([]() { std::cout << "Editor clicked\n"; });
+		m_mapEditorBtn.GetMouseClickedEvent().AddCallback([]() {  });
 	}
 
 	void Update()

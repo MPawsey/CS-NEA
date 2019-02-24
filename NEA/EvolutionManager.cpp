@@ -2,7 +2,6 @@
 #include <vector>
 #include "Car.h"
 #include <numeric>
-#include "Logger.h"
 #include "Window.h"
 #include "RaceTrack.h"
 #include "Simulation.h"
@@ -13,8 +12,6 @@
 
 namespace Evolution::EvolutionManager
 {
-	Logger logger{ "EvolutionManager" };
-
 	bool m_analysis = false, m_canMultiReproduce = true;
 	unsigned int m_aliveSize, m_iteration, m_saveSize = 0, m_killSize = 22;
 	sf::View m_evolutionView;

@@ -97,7 +97,7 @@ namespace Evolution::Simulation
 
 	void SetIteration(unsigned int iteration)
 	{
-		m_iterationText.setString("Generation: " + std::to_string(iteration + 1));
+		m_iterationText.setString("Generation: " + std::to_string(iteration));
 		m_simulationView.setCenter(RaceTrack::GetStartPos());
 	}
 }

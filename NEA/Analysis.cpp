@@ -8,18 +8,22 @@
 #include "Popup.h"
 #include "TextField.h"
 #include "Menu.h"
+#include "InputManager.h"
 
 namespace Evolution::Analysis
 {
 	// Private
 	std::vector<sf::Vertex> m_fitnessMax, m_fitnessAvg, m_fitnessMin;
 	std::vector<std::array<sf::Vertex, 2>> m_graphGuideLines;
+	sf::VertexArray m_viewLine;
 	UI::Button m_nextBtn, m_next10Btn, m_nextQuickBtn, m_next10QuickBtn, m_saveBtn, m_menuBtn;
 	UI::Popup m_savePopup;
 	size_t m_size = 0;
 	sf::View m_analysisView, m_graphView;
 	float m_graphMin = 0.f, m_graphMax = 0.f;
 	float m_graphGuideSeperation = 100.f;
+	sf::Text m_iterText, m_scaleText, m_fitnessText, m_bestText, m_avgText, m_worstText;
+	bool m_isMouseDown = false;
 
 	void OnWindowClose()
 	{
@@ -42,14 +46,59 @@ namespace Evolution::Analysis
 		m_menuBtn.SetActive(isActive);
 	}
 
+	void OnMousePressed()
+	{
+		if (InputManager::IsMouseInView(m_graphView))
+		{
+			m_isMouseDown = true;
+		}
+	}
+
+	void OnMouseReleased()
+	{
+		m_isMouseDown = false;
+	}
+
 	// Public
 
 	void Init()
 	{
 		Window::GetWindowClosedEvent().AddCallback(OnWindowClose);
 
-		m_graphView.setViewport(sf::FloatRect{ 0.05f, 0.45f, 0.75f, 0.5f });
+		InputManager::GetMousePressedEvent(sf::Mouse::Left).AddCallback(OnMousePressed);
+		InputManager::GetMouseReleasedEvent(sf::Mouse::Left).AddCallback(OnMouseReleased);
+
+		m_graphView.setViewport(sf::FloatRect{ 0.05f, 0.45f, 0.7f, 0.5f });
 		m_analysisView = Window::GetDefaultWindowView();
+
+		const sf::Font& font = UI::GetFont();
+
+		m_scaleText.setFont(font);
+		m_scaleText.setPosition((Window::GetWindowSize().x * 0.75f) + 5.f, 250.f);
+
+		m_iterText.setFont(font);
+		m_iterText.setPosition((Window::GetWindowSize().x * 0.75f) + 5.f, 280.f);
+
+		m_fitnessText.setFont(font);
+		m_fitnessText.setPosition((Window::GetWindowSize().x * 0.75f) + 5.f, 330.f);
+		m_fitnessText.setString("Fitness");
+
+		m_bestText.setFont(font);
+		m_bestText.setPosition((Window::GetWindowSize().x * 0.75f) + 5.f, 360.f);
+		m_bestText.setFillColor(sf::Color::Cyan);
+
+		m_avgText.setFont(font);
+		m_avgText.setPosition((Window::GetWindowSize().x * 0.75f) + 5.f, 390.f);
+		m_avgText.setFillColor(sf::Color::Yellow);
+
+		m_worstText.setFont(font);
+		m_worstText.setPosition((Window::GetWindowSize().x * 0.75f) + 5.f, 420.f);
+		m_worstText.setFillColor(sf::Color::Red);
+
+		m_viewLine.resize(2);
+		m_viewLine.setPrimitiveType(sf::PrimitiveType::LineStrip);
+		m_viewLine[0] = sf::Vertex{ sf::Vector2f{0.f, 0.f}, sf::Color::Green };
+		m_viewLine[1] = sf::Vertex{ sf::Vector2f{0.f, 0.f}, sf::Color::Green };
 
 		m_savePopup = UI::Popup{ m_analysisView };
 		m_savePopup.SetViewportTransform({0.25f, 0.25f, 0.5f, 0.5f});
@@ -61,14 +110,16 @@ namespace Evolution::Analysis
 		nameTF->setPosition((m_savePopup.GetView().getSize().x - nameTF->GetBounds().width) / 2.f, 50.f);
 		m_savePopup.AddElement(nameTF); // No deleting of retBtn as m_savePopup destructor deletes it
 
-		UI::Button* retBtn = new UI::Button{ "Cancel", m_savePopup.GetView() };
+		UI::Button* retBtn = new UI::Button{ "Cancel", m_savePopup.GetView(), UI::Padding{2.5f, 5.f, 0.f, 0.f} };
 		retBtn->setPosition(5.f, m_savePopup.GetView().getSize().y - retBtn->GetBounds().height - 5.f);
 		retBtn->GetMouseClickedEvent().AddCallback([&]() { m_savePopup.SetActive(false); SetAnalysisActive(true); });
+		retBtn->SetCentreText(true);
 		m_savePopup.AddElement(retBtn); 
 
-		UI::Button* saveBtn = new UI::Button{ "Save", m_savePopup.GetView() };
+		UI::Button* saveBtn = new UI::Button{ "Save", m_savePopup.GetView(), UI::Padding{2.5f, 5.f, 0.f, 0.f} };
 		saveBtn->setPosition(m_savePopup.GetView().getSize().x - retBtn->GetBounds().width - 5.f, m_savePopup.GetView().getSize().y - retBtn->GetBounds().height - 5.f);
 		saveBtn->GetMouseClickedEvent().AddCallback([&, nameTF]() { EvolutionManager::SaveGeneration(nameTF->GetRawText()); m_savePopup.SetActive(false); SetAnalysisActive(true); });
+		saveBtn->SetCentreText(true);
 		m_savePopup.AddElement(saveBtn);
 
 		std::array<sf::Vertex, 2> base = { sf::Vertex{ sf::Vector2f{0.01f, 0.01f}, sf::Color::Magenta }, sf::Vertex{sf::Vector2f{0.01f, 0.01f}, sf::Color::Magenta} };
@@ -82,29 +133,29 @@ namespace Evolution::Analysis
 		m_nextBtn.SetCentreText(true);
 		m_nextBtn.GetMouseClickedEvent().AddCallback([]() { EvolutionManager::StartNextGeneration(1, true); });
 		m_nextBtn.setPosition(xPos, yPos1);
-		m_nextQuickBtn = UI::Button{ "Next Quick", m_analysisView };
+		m_nextQuickBtn = UI::Button{ "Next Quick", m_analysisView, UI::Padding{2.5f, 5.f, 0.f, 0.f} };
 		m_nextQuickBtn.SetCentreText(true);
 		m_nextQuickBtn.GetMouseClickedEvent().AddCallback([]() { EvolutionManager::StartNextGeneration(1, false); });
 		m_nextQuickBtn.setPosition(xPos, yPos2);
 
 		xPos += xGap;
 
-		m_next10Btn = UI::Button{ "Next 10", m_analysisView };
+		m_next10Btn = UI::Button{ "Next 10", m_analysisView, UI::Padding{2.5f, 5.f, 0.f, 0.f} };
 		m_next10Btn.SetCentreText(true);
 		m_next10Btn.GetMouseClickedEvent().AddCallback([]() { EvolutionManager::StartNextGeneration(10, true); });
 		m_next10Btn.setPosition(xPos, yPos1);
-		m_next10QuickBtn = UI::Button{ "Next 10 Quick", m_analysisView };
+		m_next10QuickBtn = UI::Button{ "Next 10 Quick", m_analysisView, UI::Padding{2.5f, 5.f, 0.f, 0.f} };
 		m_next10QuickBtn.SetCentreText(true);
 		m_next10QuickBtn.GetMouseClickedEvent().AddCallback([]() { EvolutionManager::StartNextGeneration(10, false); });
 		m_next10QuickBtn.setPosition(xPos, yPos2);
 
 		xPos += xGap;
 
-		m_saveBtn = UI::Button{ "Save Cars", m_analysisView };
+		m_saveBtn = UI::Button{ "Save Cars", m_analysisView, UI::Padding{2.5f, 5.f, 0.f, 0.f} };
 		m_saveBtn.SetCentreText(true);
 		m_saveBtn.GetMouseClickedEvent().AddCallback([&]() { m_savePopup.SetActive(true); SetAnalysisActive(false); });
 		m_saveBtn.setPosition(xPos, yPos1);
-		m_menuBtn = UI::Button{ "Menu", m_analysisView };
+		m_menuBtn = UI::Button{ "Menu", m_analysisView, UI::Padding{2.5f, 5.f, 0.f, 0.f} };
 		m_menuBtn.SetCentreText(true);
 		m_menuBtn.GetMouseClickedEvent().AddCallback([]() { Window::SetWindowState(Window::Menu); Menu::GoToState(Menu::MenuState::MainMenu); });
 		m_menuBtn.setPosition(xPos, yPos2);
@@ -114,6 +165,32 @@ namespace Evolution::Analysis
 	{
 		sf::RenderWindow& window = Window::GetWindow();
 
+
+		if (m_isMouseDown)
+		{
+			int generation = (int)std::round(std::clamp(std::round(InputManager::GetMousePosInView(m_graphView).x), 0.f, (float)m_size - 1));
+			if (generation != m_viewLine[0].position.x)
+			{
+				if (generation == 0)
+				{
+					m_viewLine[0].position.x = 0.01f;
+					m_viewLine[1].position.x = 0.01f;
+				}
+				else
+				{
+					m_viewLine[0].position.x = generation;
+					m_viewLine[1].position.x = generation;
+				}
+
+				m_iterText.setString("Gen: " + std::to_string(generation));
+
+				m_bestText.setString("Best: " + std::to_string((int)std::roundf(m_fitnessMax[generation].position.y)));
+				m_avgText.setString("Avg: " + std::to_string((int)std::roundf(m_fitnessAvg[generation].position.y)));
+				m_worstText.setString("Worst: " + std::to_string((int)std::roundf(m_fitnessMin[generation].position.y)));
+			}
+		}
+
+
 		window.setView(m_analysisView);
 		window.draw(m_nextBtn);
 		window.draw(m_next10Btn);
@@ -121,6 +198,11 @@ namespace Evolution::Analysis
 		window.draw(m_next10QuickBtn);
 		window.draw(m_saveBtn);
 		window.draw(m_menuBtn);
+		window.draw(m_iterText);
+		window.draw(m_scaleText);
+		window.draw(m_bestText);
+		window.draw(m_avgText);
+		window.draw(m_worstText);
 
 		window.setView(m_graphView);
 		window.draw(m_fitnessMin.data(), m_size, sf::LineStrip);
@@ -131,6 +213,8 @@ namespace Evolution::Analysis
 		{
 			window.draw(line.data(), 2, sf::LinesStrip);
 		}
+
+		window.draw(m_viewLine);
 
 		window.draw(m_savePopup);
 	}
@@ -210,6 +294,16 @@ namespace Evolution::Analysis
 
 		m_graphView.setSize(sf::Vector2f{ (float)m_size, -abs(m_graphMax) - abs(m_graphMin) });
 		m_graphView.setCenter(sf::Vector2f{ (float)m_size / 2.f, (m_graphMax + m_graphMin) / 2.f });
+
+		m_iterText.setString("Gen: " + std::to_string(m_size - 1));
+		m_scaleText.setString("Y Scale: " + std::to_string((int)std::round(m_graphGuideSeperation)));
+
+		m_bestText.setString("Best: " + std::to_string((int)std::roundf(m_fitnessMax.back().position.y)));
+		m_avgText.setString("Avg: " + std::to_string((int)std::roundf(m_fitnessAvg.back().position.y)));
+		m_worstText.setString("Worst: " + std::to_string((int)std::roundf(m_fitnessMin.back().position.y)));
+
+		m_viewLine[0].position = sf::Vector2f{ (float)m_size - 1, m_graphMax };
+		m_viewLine[1].position = sf::Vector2f{ (float)m_size - 1, m_graphMin };
 	}
 
 	void UpdateGraph(float fitnessMax, float fitnessAvg, float fitnessMin)
@@ -271,6 +365,16 @@ namespace Evolution::Analysis
 
 		m_graphView.setSize(sf::Vector2f{ (float)m_size, -abs(m_graphMax) - abs(m_graphMin) });
 		m_graphView.setCenter(sf::Vector2f{ (float)m_size / 2.f, (m_graphMax + m_graphMin) / 2.f });
+
+		m_iterText.setString("Gen: " + std::to_string(m_size - 1));
+		m_scaleText.setString("Y Scale: " + std::to_string((int)std::round(m_graphGuideSeperation)));
+
+		m_bestText.setString("Best: " + std::to_string((int)std::roundf(m_fitnessMax.back().position.y)));
+		m_avgText.setString("Avg: " + std::to_string((int)std::roundf(m_fitnessAvg.back().position.y)));
+		m_worstText.setString("Worst: " + std::to_string((int)std::roundf(m_fitnessMin.back().position.y)));
+
+		m_viewLine[0].position = sf::Vector2f{ (float)m_size - 1, m_graphMax };
+		m_viewLine[1].position = sf::Vector2f{ (float)m_size - 1, m_graphMin };
 	}
 
 	void SaveGraph(std::ofstream& file)

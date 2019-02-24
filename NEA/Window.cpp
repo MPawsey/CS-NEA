@@ -1,5 +1,4 @@
 #include "Window.h"
-#include "Logger.h"
 #include "InputManager.h"
 #include "Menu.h"
 #include "UI.h"
@@ -16,9 +15,6 @@ namespace Window
 	
 	Event m_windowClosedEvent;
 	Event<sf::Vector2u> m_windowResizedEvent;
-
-	Logger m_logger{ "Window" };
-
 
 	void PollWindowEvents()
 	{
@@ -79,10 +75,6 @@ namespace Window
 
 			initComplete = true;
 		}
-		else
-		{
-			m_logger.Error("Init attempted after completion.");
-		}
 	}
 
 	void Run()
@@ -116,10 +108,6 @@ namespace Window
 			}
 
 			m_windowClosedEvent.Call();
-		}
-		else
-		{
-			m_logger.Error("Run attempted after program started running.");
 		}
 	}
 

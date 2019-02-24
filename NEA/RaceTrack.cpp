@@ -129,6 +129,10 @@ namespace RaceTrack
 	// Public
 	void LoadFromFile(std::string filename)
 	{
+		m_walls.clear();
+		m_checkpoints.clear();
+		m_checkpointDistances.clear();
+
 		m_trackName = filename;
 		m_trackName = m_trackName.substr(m_trackName.find_first_of('\\')+1, m_trackName.find_last_of('.') - (m_trackName.find_first_of('\\') + 1));
 		std::ifstream file{ filename };
