@@ -15,19 +15,19 @@ namespace InputManager
 
 	void TextEntered(sf::Uint32 character);
 
-	const Event<>& GetKeyPressedEvent(sf::Keyboard::Key key);
-	const Event<>& GetKeyReleasedEvent(sf::Keyboard::Key key);
-	const Event<sf::Keyboard::Key>& GetGenericKeyPressedEvent();
-	const Event<sf::Keyboard::Key>& GetGenericKeyReleasedEvent();
+	Event<>& GetKeyPressedEvent(sf::Keyboard::Key key);
+	Event<>& GetKeyReleasedEvent(sf::Keyboard::Key key);
+	Event<sf::Keyboard::Key>& GetGenericKeyPressedEvent();
+	Event<sf::Keyboard::Key>& GetGenericKeyReleasedEvent();
 
-	const Event<>& GetMousePressedEvent(sf::Mouse::Button btn);
-	const Event<>& GetMouseReleasedEvent(sf::Mouse::Button btn);
-	const Event<sf::Mouse::Button>& GetGenericMousePressedEvent();
-	const Event<sf::Mouse::Button>& GetGenericMouseReleasedEvent();
-	const Event<int>& GetMouseScrolledEvent();
+	Event<>& GetMousePressedEvent(sf::Mouse::Button btn);
+	Event<>& GetMouseReleasedEvent(sf::Mouse::Button btn);
+	Event<sf::Mouse::Button>& GetGenericMousePressedEvent();
+	Event<sf::Mouse::Button>& GetGenericMouseReleasedEvent();
+	Event<int>& GetMouseScrolledEvent();
 
-	const Event<sf::Vector2i>& GetMouseMovedEvent();
-	const Event<char>& GetTextEnteredEvent();
+	Event<sf::Vector2i>& GetMouseMovedEvent();
+	Event<char>& GetTextEnteredEvent();
 
 	bool IsKeyDown(sf::Keyboard::Key key);
 	bool IsMouseDown(sf::Mouse::Button btn);

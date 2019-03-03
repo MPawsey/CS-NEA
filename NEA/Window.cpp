@@ -136,12 +136,12 @@ namespace Window
 		return m_defaultView;
 	}
 
-	const Event<>& GetWindowClosedEvent()
+	Event<>& GetWindowClosedEvent()
 	{
 		return m_windowClosedEvent;
 	}
 
-	const Event<sf::Vector2u>& GetWindowResizedEvent()
+	Event<sf::Vector2u>& GetWindowResizedEvent()
 	{
 		return m_windowResizedEvent;
 	}

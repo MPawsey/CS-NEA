@@ -23,8 +23,8 @@ namespace Window
 	const sf::Vector2u GetWindowSize();
 	const sf::View& GetDefaultWindowView();
 	
-	const Event<>& GetWindowClosedEvent();
-	const Event<sf::Vector2u>& GetWindowResizedEvent();
+	Event<>& GetWindowClosedEvent();
+	Event<sf::Vector2u>& GetWindowResizedEvent();
 
 	void AddToLateDraw(sf::Drawable& drawable);
 	void RemoveFromLateDraw(sf::Drawable& drawable);

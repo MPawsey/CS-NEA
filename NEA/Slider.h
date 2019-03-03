@@ -36,7 +36,7 @@ namespace UI
 		Slider& operator=(const Slider& slider);
 
 		float GetSliderVal();
-		const Event<float>& GetSliderUpdateEvent();
+		Event<float>& GetSliderUpdateEvent();
 
 		virtual void SetActive(bool isActive);
 		void Move(float percentage);

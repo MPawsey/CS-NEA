@@ -92,7 +92,7 @@ namespace UI
 		return m_sliderVal;
 	}
 
-	const Event<float>& Slider::GetSliderUpdateEvent()
+	Event<float>& Slider::GetSliderUpdateEvent()
 	{
 		return m_sliderUpdateEvent;
 	}

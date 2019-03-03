@@ -52,7 +52,7 @@ namespace UI
 
 		TextField& operator=(const TextField& textField);
 
-		const Event<>& GetLostFocusEvent();
+		Event<>& GetLostFocusEvent();
 		const sf::FloatRect& GetBounds() const;
 
 		const sf::String& GetRawText() const;

@@ -29,7 +29,7 @@ namespace Menu::CarSelectMenu
 	void OnMouseScrolled(int delta)
 	{
 		if (m_isActive)
-			m_slider.Move(-delta * (yGap / m_sliderMax));
+			m_slider.Move(delta * (yGap / m_sliderMax));
 	}
 
 	void LoadCar(std::string filename)
@@ -47,6 +47,35 @@ namespace Menu::CarSelectMenu
 		{
 			button.UninitialiseEvents();
 		}
+	}
+
+	void LoadMenu()
+	{
+		// Just don't delete a file and it works for some reason
+		m_buttons.clear();
+
+		std::string path = "Cars";
+
+		int pos = 0;
+		float startOffset = 10.f;
+		yGap = UI::GetFont().getLineSpacing(30) + 20.f;
+
+		for (const auto& entry : std::filesystem::directory_iterator(path))
+		{
+			if (entry.path().extension() != ".cars")
+				continue;
+
+			UI::Button b{ entry.path().filename().replace_extension().u8string(), m_carButtonView, { 5.f } };
+			b.setPosition(10.f, startOffset + (pos++ * yGap));
+			b.SetBackgroundSize(sf::Vector2f{ m_carButtonView.getSize().x - 20.f, b.GetClickBounds().height });
+			b.GetMouseClickedEvent().AddCallback([=]() { LoadCar(entry.path().u8string()); });
+			m_buttons.push_back(b);
+		}
+
+		m_sliderMax = (startOffset + ((pos)* yGap)) - m_carButtonView.getSize().y;
+
+		if (m_sliderMax > 0)
+			m_slider.GetSliderUpdateEvent().AddCallback([&](float val) { m_carButtonView.setCenter(m_carButtonView.getSize().x / 2.f, (m_carButtonView.getSize().y / 2.f) + (m_sliderMax * val)); });
 	}
 
 	// Public
@@ -71,33 +100,10 @@ namespace Menu::CarSelectMenu
 
 		m_slider = UI::Slider{ sf::Vector2f{ 775.f, 50.f }, m_carSelectView, 500.f };
 
-		std::string path = "Cars";
-
-		int pos = 0;
-		float startOffset = 10.f;
-		yGap = UI::GetFont().getLineSpacing(30) + 20.f;
-
 		m_backBtn = UI::Button{ "Back", m_carSelectView, { 5.f, 5.f, 0.f, 0.f } };
 		m_backBtn.setPosition(50.f, window.getSize().y - UI::GetFont().getLineSpacing(30) - 5.f);
 		m_backBtn.SetCentreText(true);
 		m_backBtn.GetMouseClickedEvent().AddCallback([&]() { Menu::GoToState(Menu::MenuState::MainMenu); });
-
-		for (const auto& entry : std::filesystem::directory_iterator(path))
-		{
-			if (entry.path().extension() != ".cars")
-				continue;
-
-			UI::Button b{ entry.path().filename().replace_extension().u8string(), m_carButtonView, { 5.f } };
-			b.setPosition(10.f, startOffset + (pos++ * yGap));
-			b.SetBackgroundSize(sf::Vector2f{ m_carButtonView.getSize().x - 20.f, b.GetClickBounds().height });
-			b.GetMouseClickedEvent().AddCallback([=]() { LoadCar(entry.path().u8string()); });
-			m_buttons.push_back(b);
-		}
-
-		m_sliderMax = (startOffset + ((pos)* yGap)) - m_carButtonView.getSize().y;
-
-		if (m_sliderMax > 0)
-			m_slider.GetSliderUpdateEvent().AddCallback([&](float val) { m_carButtonView.setCenter(m_carButtonView.getSize().x / 2.f, (m_carButtonView.getSize().y / 2.f) + (m_sliderMax * val)); });
 	}
 
 	void Update()
@@ -119,6 +125,8 @@ namespace Menu::CarSelectMenu
 	void Load()
 	{
 		m_isActive = true;
+
+		LoadMenu();
 
 		m_slider.SetActive(true);
 		m_backBtn.SetActive(true);

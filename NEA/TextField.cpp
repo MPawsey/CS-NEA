@@ -165,7 +165,7 @@ namespace UI
 	}
 
 
-	const Event<>& TextField::GetLostFocusEvent()
+	Event<>& TextField::GetLostFocusEvent()
 	{
 		return m_lostFocusEvent;
 	}

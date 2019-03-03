@@ -14,8 +14,9 @@ template <class... T>
 class Event
 {
 private:
-	mutable std::vector<std::function<void(T...)>> m_callbacks;
-	mutable std::vector<unsigned int> m_removedPositions;
+	std::vector<std::function<void(T...)>> m_callbacks;
+	std::vector<unsigned int> m_removedPositions;
+	
 
 public:
 	
@@ -37,7 +38,7 @@ public:
 
 	// Returns the ID of the event
 	template <typename C>
-	EventID AddCallback(void(C::* function)(T...), C& c) const
+	EventID AddCallback(void(C::* function)(T...), C& c)
 	{
 		// I hate this piece of code. Had to copy the function pointer, not reference it as reference is destroyed.
 		m_callbacks.push_back([&, function](T... t) { std::invoke(function, c, t...); });
@@ -45,14 +46,14 @@ public:
 	}
 
 	// Returns the ID of the event
-	EventID AddCallback(const std::function<void(T...)>& f) const
+	EventID AddCallback(const std::function<void(T...)>& f)
 	{
 		m_callbacks.push_back(f);
 		return { m_callbacks.size() - 1, m_removedPositions.size(), true };
 	}
 
 	// Takes an ID and removes the callback from the event
-	void RemoveCallback(EventID id) const
+	void RemoveCallback(EventID id)
 	{
 		if (!id.m_valid) return;
 		int pos = id.m_ID;
@@ -65,6 +66,10 @@ public:
 
 	void Call(T... t)
 	{
-		std::for_each(m_callbacks.begin(), m_callbacks.end(), [t...](std::function<void(T...)> f) { f(t...); });
+		// Using this method so if a callback is removed during the calling of callbacks an error doesn't arise
+		for (auto it = m_callbacks.begin(); it != m_callbacks.end(); ++it)
+		{
+			(*it)(t...);
+		}
 	}
 };
