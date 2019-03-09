@@ -120,6 +120,12 @@
     <ClCompile Include="Popup.cpp">
       <Filter>Source Files\UI</Filter>
     </ClCompile>
+    <ClCompile Include="AdvancedSettingsMenu.cpp">
+      <Filter>Source Files\Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="CheckBox.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="sfml-window-d-2.dll">
@@ -239,6 +245,12 @@
     </ClInclude>
     <ClInclude Include="SettingsMenu.h">
       <Filter>Header Files\Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="AdvancedSettingsMenu.h">
+      <Filter>Header Files\Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Checkbox.h">
+      <Filter>Header Files\UI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

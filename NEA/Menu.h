@@ -8,6 +8,7 @@ namespace Menu
 	{
 		MainMenu,
 		StartConfig,
+		AdvancedConfig,
 		StartCar,
 		StartMap,
 		None

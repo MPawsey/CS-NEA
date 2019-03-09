@@ -88,7 +88,7 @@ namespace Menu::SettingsMenu
 	sf::Text m_seedLabel;
 	UI::TextField m_seedTF;
 
-	UI::Button m_backBtn, m_nextBtn;
+	UI::Button m_backBtn, m_nextBtn, m_advSettingsBtn;
 
 	std::string DoubleToString(double d)
 	{
@@ -157,6 +157,11 @@ namespace Menu::SettingsMenu
 		m_splicePCPlusBtn.UninitialiseEvents();
 		m_splicePCMinusBtn.UninitialiseEvents();
 		m_splicePCTF.UninitialiseEvents();
+
+		
+		m_backBtn.UninitialiseEvents();
+		m_nextBtn.UninitialiseEvents();
+		m_advSettingsBtn.UninitialiseEvents();
 	}
 
 	// Public
@@ -376,6 +381,11 @@ namespace Menu::SettingsMenu
 		m_nextBtn.SetCentreText(true);
 		m_nextBtn.GetMouseClickedEvent().AddCallback([&]() { GoToState(MenuState::StartMap); });
 
+		m_advSettingsBtn = UI::Button{ "Advanced", m_settingsView, { 5.f, 5.f, 0.f, 0.f } };
+		m_advSettingsBtn.setPosition(xPos2, window.getSize().y - yLineSpace);
+		m_advSettingsBtn.SetCentreText(true);
+		m_advSettingsBtn.GetMouseClickedEvent().AddCallback([&]() { GoToState(MenuState::AdvancedConfig); });
+
 
 		// DEFAULT VALUES
 		m_widthTF.SetRawText("15");
@@ -446,6 +456,7 @@ namespace Menu::SettingsMenu
 		
 		window.draw(m_backBtn);
 		window.draw(m_nextBtn);
+		window.draw(m_advSettingsBtn);
 	}
 
 	void Load()
@@ -492,6 +503,7 @@ namespace Menu::SettingsMenu
 
 		m_backBtn.SetActive(true);
 		m_nextBtn.SetActive(true);
+		m_advSettingsBtn.SetActive(true);
 	}
 
 	void Unload()
@@ -539,5 +551,6 @@ namespace Menu::SettingsMenu
 
 		m_backBtn.SetActive(false);
 		m_nextBtn.SetActive(false);
+		m_advSettingsBtn.SetActive(false);
 	}
 }

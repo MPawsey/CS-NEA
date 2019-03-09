@@ -106,6 +106,7 @@ namespace UI
 	{
 		m_tooltip.SetActive(true);
 	}
+
 	void TextField::OnMouseUnhover()
 	{
 		m_tooltip.SetActive(false);
