@@ -14,6 +14,15 @@ namespace Menu
 		None
 	};
 
+	class Menu
+	{
+	public:
+		virtual void Init() = 0;
+		virtual void Update() = 0;
+		virtual void Load() = 0;
+		virtual void Unload() = 0;
+	};
+
 	void Init();
 	void Update();
 

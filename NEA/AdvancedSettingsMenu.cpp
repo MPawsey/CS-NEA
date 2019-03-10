@@ -1,29 +1,16 @@
 #include "AdvancedSettingsMenu.h"
 #include <sfml/Graphics.hpp>
-#include "Button.h"
-#include "TextField.h"
 #include "Window.h"
-#include "CheckBox.h"
 
 
-namespace Menu::AdvancedSettingsMenu
+namespace Menu
 {
-	sf::View m_advSettingsView;
 
-	// Single Reproduce Stuff
-	UI::CheckBox m_onlyPairOnceCB;
-	sf::Text m_onlyPairOnceText;
-
-	void OnWindowClosed()
-	{
-		m_onlyPairOnceCB.UninitialiseEvents();
-	}
 
 	// Public
 
-	void Init()
+	void AdvancedSettingsMenu::Init()
 	{
-		Window::GetWindowClosedEvent().AddCallback(OnWindowClosed);
 		m_advSettingsView = Window::GetDefaultWindowView();
 
 
@@ -35,7 +22,7 @@ namespace Menu::AdvancedSettingsMenu
 		m_onlyPairOnceText.setString("Only Pair Once");
 	}
 	
-	void Update()
+	void AdvancedSettingsMenu::Update()
 	{
 		sf::RenderWindow& window = Window::GetWindow();
 
@@ -43,12 +30,12 @@ namespace Menu::AdvancedSettingsMenu
 		window.draw(m_onlyPairOnceCB);
 	}
 	
-	void Load()
+	void AdvancedSettingsMenu::Load()
 	{
 		m_onlyPairOnceCB.SetActive(true);
 	}
 	
-	void Unload()
+	void AdvancedSettingsMenu::Unload()
 	{
 		m_onlyPairOnceCB.SetActive(false);
 	}

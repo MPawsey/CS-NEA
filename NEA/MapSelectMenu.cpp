@@ -2,57 +2,28 @@
 
 #include "Window.h"
 #include <filesystem>
-#include "Menu.h"
 #include "InputManager.h"
 #include "RaceTrack.h"
 #include "Simulation.h"
-#include "Slider.h"
-#include "Button.h"
 
-namespace Menu::MapSelectMenu
+namespace Menu
 {
-	// Private
-	sf::View m_mapSelectView;
-	sf::View m_mapButtonView;
 
-	bool m_isActive = false;
-
-	UI::Slider m_slider;
-	float m_sliderMax;
-	float yGap;
-
-	UI::Button m_backBtn;
-
-	sf::RectangleShape m_buttonBackground;
-	std::vector<UI::Button> m_buttons;
-
-	void OnMouseScrolled(int delta)
+	void MapSelectMenu::OnMouseScrolled(int delta)
 	{
 		if (m_isActive)
 			m_slider.Move(-delta * (yGap / m_sliderMax));
 	}
 
-	void LoadMap(std::string filename)
+	void MapSelectMenu::LoadMap(std::string filename)
 	{
 		RaceTrack::LoadFromFile(filename);
-		Menu::GoToState(Menu::MenuState::None); // Unloads map select menu
+		GoToState(MenuState::None); // Unloads map select menu
 		Window::GetWindow().setFramerateLimit(Evolution::Simulation::SIMULATION_FRAMERATE);
 		Window::SetWindowState(Window::Evolution);
 	}
 
-	void OnWindowClosed()
-	{
-		m_backBtn.UninitialiseEvents();
-		m_slider.~Slider();
-
-		for (auto& button : m_buttons)
-		{
-			button.UninitialiseEvents();
-		}
-	}
-
-
-	void LoadMenu()
+	void MapSelectMenu::LoadMenu()
 	{
 		// Just don't delete a file and it works for some reason
 		m_buttons.clear();
@@ -83,13 +54,11 @@ namespace Menu::MapSelectMenu
 
 	// Public
 
-	void Init()
+	void MapSelectMenu::Init()
 	{
 		sf::RenderWindow& window = Window::GetWindow();
 		m_mapSelectView = window.getDefaultView();
 		m_mapButtonView = window.getDefaultView();
-
-		Window::GetWindowClosedEvent().AddCallback(OnWindowClosed);
 
 		m_mapButtonView.setViewport({0.1f, 0.1f, 0.8f, 0.8f});
 		m_mapButtonView.setSize(m_mapButtonView.getSize() * 0.8f);
@@ -99,17 +68,17 @@ namespace Menu::MapSelectMenu
 		m_buttonBackground.setSize(m_mapButtonView.getSize());
 		m_buttonBackground.setFillColor(sf::Color{ 42, 50, 125 });
 
-		InputManager::GetMouseScrolledEvent().AddCallback(OnMouseScrolled);
+		InputManager::GetMouseScrolledEvent().AddCallback(&MapSelectMenu::OnMouseScrolled, *this);
 
 		m_slider = UI::Slider{ sf::Vector2f{ 775.f, 50.f }, m_mapSelectView, 500.f };
 
 		m_backBtn = UI::Button{ "Back", m_mapSelectView, { 5.f, 5.f, 0.f, 0.f } };
 		m_backBtn.setPosition(50.f, window.getSize().y - UI::GetFont().getLineSpacing(30) - 5.f);
 		m_backBtn.SetCentreText(true);
-		m_backBtn.GetMouseClickedEvent().AddCallback([&]() { Menu::GoToState(Menu::MenuState::StartConfig); });
+		m_backBtn.GetMouseClickedEvent().AddCallback([&]() { GoToState(MenuState::StartConfig); });
 	}
 
-	void Update()
+	void MapSelectMenu::Update()
 	{
 		sf::RenderWindow& window = Window::GetWindow();
 
@@ -125,7 +94,7 @@ namespace Menu::MapSelectMenu
 		}
 	}
 
-	void Load()
+	void MapSelectMenu::Load()
 	{
 		LoadMenu();
 
@@ -140,7 +109,7 @@ namespace Menu::MapSelectMenu
 		}
 	}
 
-	void Unload()
+	void MapSelectMenu::Unload()
 	{
 		m_isActive = false;
 

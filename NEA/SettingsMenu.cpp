@@ -1,94 +1,10 @@
 #include "SettingsMenu.h"
 #include "Window.h"
 #include <algorithm>
-#include "Menu.h"
 #include "EvolutionManager.h"
-#include "Button.h"
-#include "TextField.h"
 
-namespace Menu::SettingsMenu
+namespace Menu
 {
-	// Private
-	sf::View m_settingsView;
-
-	// WIDTH
-	constexpr double m_widthMinVal = 15.0;
-	constexpr double m_widthMaxVal = 25.0;
-	sf::Text m_widthLabel;
-	UI::Button m_widthPlusBtn;
-	UI::Button m_widthMinusBtn;
-	UI::TextField m_widthTF;
-
-	// HEIGHT
-	constexpr double m_heightMinVal = 15.0;
-	constexpr double m_heightMaxVal = 25.0;
-	sf::Text m_heightLabel;
-	UI::Button m_heightPlusBtn;
-	UI::Button m_heightMinusBtn;
-	UI::TextField m_heightTF;
-
-	// RAY COUNT
-	constexpr int m_rayCountMinVal = 3;
-	constexpr int m_rayCountMaxVal = 7;
-	sf::Text m_rayCountLabel;
-	UI::Button m_rayCountPlusBtn;
-	UI::Button m_rayCountMinusBtn;
-	UI::TextField m_rayCountTF;
-
-	// RAY SIZE
-	constexpr double m_raySizeMinVal = 100.0;
-	constexpr double m_raySizeMaxVal = 250.0;
-	sf::Text m_raySizeLabel;
-	UI::Button m_raySizePlusBtn;
-	UI::Button m_raySizeMinusBtn;
-	UI::TextField m_raySizeTF;
-
-
-	// POPULATION SIZE
-	constexpr int m_popSizeMinVal = 15;
-	constexpr int m_popSizeMaxVal = 35;
-	sf::Text m_popSizeLabel;
-	UI::Button m_popSizePlusBtn;
-	UI::Button m_popSizeMinusBtn;
-	UI::TextField m_popSizeTF;
-
-	// ENGINE POWER
-	constexpr double m_enginePowMinVal = 5.0;
-	constexpr double m_enginePowMaxVal = 15.0;
-	sf::Text m_enginePowLabel;
-	UI::Button m_enginePowPlusBtn;
-	UI::Button m_enginePowMinusBtn;
-	UI::TextField m_enginePowTF;
-
-	// ROTATION POWER
-	constexpr double m_rotPowMinVal = 0.5;
-	constexpr double m_rotPowMaxVal = 2.5;
-	sf::Text m_rotPowLabel;
-	UI::Button m_rotPowPlusBtn;
-	UI::Button m_rotPowMinusBtn;
-	UI::TextField m_rotPowTF;
-
-	// MUTATE PERCENTAGE
-	constexpr double m_mutPCMinVal = 0.0;
-	constexpr double m_mutPCMaxVal = 100.0;
-	sf::Text m_mutPCLabel;
-	UI::Button m_mutPCPlusBtn;
-	UI::Button m_mutPCMinusBtn;
-	UI::TextField m_mutPCTF;
-
-	// SPLICE PERCENTAGE
-	constexpr double m_splicePCMinVal = 0.0;
-	constexpr double m_splicePCMaxVal = 100.0;
-	sf::Text m_splicePCLabel;
-	UI::Button m_splicePCPlusBtn;
-	UI::Button m_splicePCMinusBtn;
-	UI::TextField m_splicePCTF;
-
-	// SPLICE PERCENTAGE
-	sf::Text m_seedLabel;
-	UI::TextField m_seedTF;
-
-	UI::Button m_backBtn, m_nextBtn, m_advSettingsBtn;
 
 	std::string DoubleToString(double d)
 	{
@@ -110,69 +26,15 @@ namespace Menu::SettingsMenu
 		text.SetRawText(DoubleToString(std::clamp(std::stoi(text.GetRawText().toAnsiString()), boundLower, boundUpper)));
 	}
 
-	void OnWindowClosed()
-	{
-		// WIDTH
-		m_widthPlusBtn.UninitialiseEvents();
-		m_widthMinusBtn.UninitialiseEvents();
-		m_widthTF.UninitialiseEvents();
-
-		// HEIGHT
-		m_heightPlusBtn.UninitialiseEvents();
-		m_heightMinusBtn.UninitialiseEvents();
-		m_heightTF.UninitialiseEvents();
-
-		// RAY COUNT
-		m_rayCountPlusBtn.UninitialiseEvents();
-		m_rayCountMinusBtn.UninitialiseEvents();
-		m_rayCountTF.UninitialiseEvents();
-
-		// RAY SIZE
-		m_raySizePlusBtn.UninitialiseEvents();
-		m_raySizeMinusBtn.UninitialiseEvents();
-		m_raySizeTF.UninitialiseEvents();
-
-
-		// POPULATION SIZE
-		m_popSizePlusBtn.UninitialiseEvents();
-		m_popSizeMinusBtn.UninitialiseEvents();
-		m_popSizeTF.UninitialiseEvents();
-
-		// ENGINE POWER
-		m_enginePowPlusBtn.UninitialiseEvents();
-		m_enginePowMinusBtn.UninitialiseEvents();
-		m_enginePowTF.UninitialiseEvents();
-
-		// ROTATION POWER
-		m_rotPowPlusBtn.UninitialiseEvents();
-		m_rotPowMinusBtn.UninitialiseEvents();
-		m_rotPowTF.UninitialiseEvents();
-
-		// MUTATE PERCENTAGE
-		m_mutPCPlusBtn.UninitialiseEvents();
-		m_mutPCMinusBtn.UninitialiseEvents();
-		m_mutPCTF.UninitialiseEvents();
-
-		// SPLICE PERCENTAGE
-		m_splicePCPlusBtn.UninitialiseEvents();
-		m_splicePCMinusBtn.UninitialiseEvents();
-		m_splicePCTF.UninitialiseEvents();
-
-		
-		m_backBtn.UninitialiseEvents();
-		m_nextBtn.UninitialiseEvents();
-		m_advSettingsBtn.UninitialiseEvents();
-	}
-
 	// Public
 
-	void Init()
+	void SettingsMenu::Init()
 	{
 		sf::RenderWindow& window = Window::GetWindow();
 		m_settingsView = window.getDefaultView();
 		const sf::Font& font = UI::GetFont();
 
-		Window::GetWindowClosedEvent().AddCallback(OnWindowClosed);
+		//Window::GetWindowClosedEvent().AddCallback(OnWindowClosed);
 
 		float xPos1 = 50.f;
 		float xPos2 = 300.f;
@@ -401,7 +263,7 @@ namespace Menu::SettingsMenu
 
 	}
 
-	void Update()
+	void SettingsMenu::Update()
 	{
 		sf::RenderWindow& window = Window::GetWindow();
 
@@ -459,7 +321,7 @@ namespace Menu::SettingsMenu
 		window.draw(m_advSettingsBtn);
 	}
 
-	void Load()
+	void SettingsMenu::Load()
 	{
 		Window::GetWindow().setView(m_settingsView);
 
@@ -506,7 +368,7 @@ namespace Menu::SettingsMenu
 		m_advSettingsBtn.SetActive(true);
 	}
 
-	void Unload()
+	void SettingsMenu::Unload()
 	{
 		Evolution::EvolutionManager::CreateGenerationFromSettings(m_widthTF.GetFloatValue(), m_heightTF.GetFloatValue(), m_rayCountTF.GetUIntegerValue(), m_raySizeTF.GetFloatValue(),
 			m_popSizeTF.GetUIntegerValue(), m_enginePowTF.GetFloatValue(), m_rotPowTF.GetFloatValue(), m_mutPCTF.GetDoubleValue() / 100.0, m_splicePCTF.GetDoubleValue() / 100.0, m_seedTF.GetRawText() == "" ? std::random_device{}() : m_seedTF.GetUIntegerValue());

@@ -5,6 +5,9 @@
 
 namespace Evolution
 {
+
+	class Analysis;
+
 	namespace EvolutionManager
 	{
 

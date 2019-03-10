@@ -3,23 +3,17 @@
 #include "UI.h"
 #include "RaceTrack.h"
 
-namespace Evolution::Simulation
+namespace Evolution
 {
-	sf::View m_uiView;
-	sf::View m_networkView;
-	sf::View m_simulationView;
-	sf::Text m_seedText;
-	sf::Text m_iterationText;
-	Machine::Car* m_prevBestCar;
 
-	void OnWindowResized(sf::Vector2u size)
+	void Simulation::OnWindowResized(sf::Vector2u size)
 	{
 		m_simulationView.setSize((sf::Vector2f)size);
 		m_uiView.setSize((sf::Vector2f)size);
 		m_uiView.setCenter((sf::Vector2f)size / 2.f);
 	}
 
-	void Init()
+	void Simulation::Init()
 	{
 		const sf::Font& font = UI::GetFont();
 
@@ -42,10 +36,10 @@ namespace Evolution::Simulation
 		m_iterationText.setPosition(10.f, 10.f + font.getLineSpacing(32));
 		
 
-		Window::GetWindowResizedEvent().AddCallback(OnWindowResized);
+		Window::GetWindowResizedEvent().AddCallback(&Simulation::OnWindowResized, *this);
 	}
 
-	void Update(std::vector<Machine::Car*>& cars, unsigned int& aliveCount, bool draw)
+	void Simulation::Update(std::vector<Machine::Car*>& cars, unsigned int& aliveCount, bool draw)
 	{
 		sf::RenderWindow& window = Window::GetWindow();
 		window.setView(m_simulationView);
@@ -90,12 +84,12 @@ namespace Evolution::Simulation
 	}
 
 
-	void SetSeedText(unsigned int seed)
+	void Simulation::SetSeedText(unsigned int seed)
 	{
 		m_seedText.setString("Seed: " + std::to_string(seed));
 	}
 
-	void SetIteration(unsigned int iteration)
+	void Simulation::SetIteration(unsigned int iteration)
 	{
 		m_iterationText.setString("Generation: " + std::to_string(iteration));
 		m_simulationView.setCenter(RaceTrack::GetStartPos());
