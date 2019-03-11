@@ -3,6 +3,7 @@
 #include <sfml/Graphics/Font.hpp>
 #include <sfml/Graphics/View.hpp>
 #include <sfml/Graphics/Drawable.hpp>
+#include <sfml/Graphics/Transformable.hpp>
 
 namespace UI
 {
@@ -15,7 +16,7 @@ namespace UI
 
 	const sf::Font& GetFont();
 
-	class UIElement : public sf::Drawable
+	class UIElement : public sf::Drawable, public sf::Transformable
 	{
 	private:
 
@@ -25,6 +26,8 @@ namespace UI
 		UIElement() {}
 		UIElement(sf::View& view);
 		UIElement(sf::View* view);
+
+		UIElement& operator=(const UIElement& uiElement);
 
 
 	public:

@@ -27,12 +27,12 @@ namespace Evolution::Analysis
 
 	void OnWindowClose()
 	{
-		m_nextBtn.UninitialiseEvents();
-		m_next10Btn.UninitialiseEvents();
-		m_nextQuickBtn.UninitialiseEvents();
-		m_next10QuickBtn.UninitialiseEvents();
-		m_saveBtn.UninitialiseEvents();
-		m_menuBtn.UninitialiseEvents();
+		m_nextBtn.~Button();
+		m_next10Btn.~Button();
+		m_nextQuickBtn.~Button();
+		m_next10QuickBtn.~Button();
+		m_saveBtn.~Button();
+		m_menuBtn.~Button();
 		m_savePopup.~Popup();
 	}
 

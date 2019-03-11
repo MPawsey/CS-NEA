@@ -2,19 +2,20 @@
 
 #include <sfml/Graphics.hpp>
 #include "Event.h"
+#include "UI.h"
 
 namespace UI
 {
 
 
-	class Tooltip : public sf::Drawable, public sf::Transformable
+	class Tooltip : public UIElement
 	{
 	private:
 
 		sf::RectangleShape m_background;
 		sf::Text m_text;
 		bool m_isActive = false;
-		const sf::View* m_view;
+		const sf::View* m_defaultView;
 		EventID m_onMouseMoveID;
 
 		void Create();

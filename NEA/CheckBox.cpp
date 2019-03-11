@@ -16,6 +16,7 @@ namespace UI
 		m_background = checkBox.m_background;
 		m_checkedText = checkBox.m_checkedText;
 		m_isChecked = checkBox.m_isChecked;
+		m_tooltip = checkBox.m_tooltip;
 	}
 	
 	CheckBox::CheckBox(sf::View& view)
@@ -44,6 +45,7 @@ namespace UI
 		m_background = checkBox.m_background;
 		m_checkedText = checkBox.m_checkedText;
 		m_isChecked = checkBox.m_isChecked;
+		m_tooltip = checkBox.m_tooltip;
 
 		return *this;
 	}

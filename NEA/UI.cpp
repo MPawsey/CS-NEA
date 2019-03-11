@@ -30,4 +30,13 @@ namespace UI
 		: m_containerView{ view }
 	{}
 
+
+	UIElement& UIElement::operator=(const UIElement& uiElement)
+	{
+		Transformable::operator=(uiElement);
+
+		m_containerView = uiElement.m_containerView;
+
+		return *this;
+	}
 }

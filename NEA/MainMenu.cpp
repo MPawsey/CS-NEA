@@ -14,9 +14,9 @@ namespace Menu::MainMenu
 
 	void OnWindowClosed()
 	{
-		m_startConfigBtn.UninitialiseEvents();
-		m_startSavedBtn.UninitialiseEvents();
-		m_mapEditorBtn.UninitialiseEvents();
+		m_startConfigBtn.~Button();
+		m_startSavedBtn.~Button();
+		m_mapEditorBtn.~Button();
 	}
 
 	// Public

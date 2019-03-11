@@ -148,7 +148,8 @@ namespace Window
 
 	void AddToLateDraw(sf::Drawable& drawable)
 	{
-		m_lateDraws.push_back(&drawable);
+		if (auto i = std::find(m_lateDraws.begin(), m_lateDraws.end(), &drawable); i == m_lateDraws.end())
+			m_lateDraws.push_back(&drawable);
 	}
 
 	void RemoveFromLateDraw(sf::Drawable& drawable)

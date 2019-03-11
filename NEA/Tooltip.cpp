@@ -20,20 +20,20 @@ namespace UI
 	}
 
 	Tooltip::Tooltip()
-		: m_view{ &Window::GetDefaultWindowView() }
+		: m_defaultView{ &Window::GetDefaultWindowView() }
 	{
 		Create();
 	}
 
 	Tooltip::Tooltip(std::string content)
-		: m_view{ &Window::GetDefaultWindowView() }
+		: m_defaultView{ &Window::GetDefaultWindowView() }
 	{
 		Create();
 		SetText(content);
 	}
 
 	Tooltip::Tooltip(sf::Text content)
-		: m_view{ &Window::GetDefaultWindowView() }
+		: m_defaultView{ &Window::GetDefaultWindowView() }
 	{
 		Create();
 		SetText(content);
@@ -43,7 +43,7 @@ namespace UI
 	{
 		m_background = tooltip.m_background;
 		m_text = tooltip.m_text;
-		m_view = tooltip.m_view;
+		m_defaultView = tooltip.m_defaultView;
 	}
 
 	Tooltip::~Tooltip()
@@ -53,9 +53,11 @@ namespace UI
 
 	Tooltip& Tooltip::operator=(const Tooltip& tooltip)
 	{
+		UIElement::operator=(tooltip);
+
 		m_background = tooltip.m_background;
 		m_text = tooltip.m_text;
-		m_view = tooltip.m_view;
+		m_defaultView = tooltip.m_defaultView;
 
 		return *this;
 	}
@@ -64,7 +66,7 @@ namespace UI
 	{
 		if (m_isActive)
 		{
-			sf::Vector2f transformedPos = InputManager::GetMousePosInView(*m_view, mousePos);
+			sf::Vector2f transformedPos = InputManager::GetMousePosInView(*m_defaultView, mousePos);
 
 			// Need to bound tooltip to screen
 			// LEFT-RIGHT
@@ -72,9 +74,9 @@ namespace UI
 			{
 				transformedPos.x = 0;
 			}
-			else if (transformedPos.x + m_background.getGlobalBounds().width > m_view->getSize().x)
+			else if (transformedPos.x + m_background.getGlobalBounds().width > m_defaultView->getSize().x)
 			{
-				transformedPos.x = m_view->getSize().x - m_background.getGlobalBounds().width;
+				transformedPos.x = m_defaultView->getSize().x - m_background.getGlobalBounds().width;
 			}
 
 			// TOP-BOTTOM
@@ -82,9 +84,9 @@ namespace UI
 			{
 				transformedPos.y = m_background.getGlobalBounds().height;
 			}
-			else if (transformedPos.y > m_view->getSize().y)
+			else if (transformedPos.y > m_defaultView->getSize().y)
 			{
-				transformedPos.y = m_view->getSize().y;
+				transformedPos.y = m_defaultView->getSize().y;
 			}
 
 			setPosition(transformedPos);
@@ -118,7 +120,7 @@ namespace UI
 		m_text.setPosition(sf::Vector2f{0, 0});
 		m_text.setString(text);
 		m_background.setSize(sf::Vector2f{ m_text.getGlobalBounds().width + 5.f, m_text.getGlobalBounds().height + 10.f });
-		setOrigin(sf::Vector2f{0, m_background.getGlobalBounds().height});
+		//setOrigin(sf::Vector2f{0, m_background.getGlobalBounds().height});
 	}
 
 
@@ -126,9 +128,9 @@ namespace UI
 	{
 		if (m_isActive)
 		{
-			target.setView(*m_view);
+			target.setView(*m_defaultView);
 
-			states.transform = getTransform();
+			states.transform *= getTransform();
 
 			target.draw(m_background, states);
 			target.draw(m_text, states);

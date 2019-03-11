@@ -113,55 +113,55 @@ namespace Menu::SettingsMenu
 	void OnWindowClosed()
 	{
 		// WIDTH
-		m_widthPlusBtn.UninitialiseEvents();
-		m_widthMinusBtn.UninitialiseEvents();
-		m_widthTF.UninitialiseEvents();
+		m_widthPlusBtn.~Button();
+		m_widthMinusBtn.~Button();
+		m_widthTF.~TextField();
 
 		// HEIGHT
-		m_heightPlusBtn.UninitialiseEvents();
-		m_heightMinusBtn.UninitialiseEvents();
-		m_heightTF.UninitialiseEvents();
+		m_heightPlusBtn.~Button();
+		m_heightMinusBtn.~Button();
+		m_heightTF.~TextField();
 
 		// RAY COUNT
-		m_rayCountPlusBtn.UninitialiseEvents();
-		m_rayCountMinusBtn.UninitialiseEvents();
-		m_rayCountTF.UninitialiseEvents();
+		m_rayCountPlusBtn.~Button();
+		m_rayCountMinusBtn.~Button();
+		m_rayCountTF.~TextField();
 
 		// RAY SIZE
-		m_raySizePlusBtn.UninitialiseEvents();
-		m_raySizeMinusBtn.UninitialiseEvents();
-		m_raySizeTF.UninitialiseEvents();
+		m_raySizePlusBtn.~Button();
+		m_raySizeMinusBtn.~Button();
+		m_raySizeTF.~TextField();
 
 
 		// POPULATION SIZE
-		m_popSizePlusBtn.UninitialiseEvents();
-		m_popSizeMinusBtn.UninitialiseEvents();
-		m_popSizeTF.UninitialiseEvents();
+		m_popSizePlusBtn.~Button();
+		m_popSizeMinusBtn.~Button();
+		m_popSizeTF.~TextField();
 
 		// ENGINE POWER
-		m_enginePowPlusBtn.UninitialiseEvents();
-		m_enginePowMinusBtn.UninitialiseEvents();
-		m_enginePowTF.UninitialiseEvents();
+		m_enginePowPlusBtn.~Button();
+		m_enginePowMinusBtn.~Button();
+		m_enginePowTF.~TextField();
 
 		// ROTATION POWER
-		m_rotPowPlusBtn.UninitialiseEvents();
-		m_rotPowMinusBtn.UninitialiseEvents();
-		m_rotPowTF.UninitialiseEvents();
+		m_rotPowPlusBtn.~Button();
+		m_rotPowMinusBtn.~Button();
+		m_rotPowTF.~TextField();
 
 		// MUTATE PERCENTAGE
-		m_mutPCPlusBtn.UninitialiseEvents();
-		m_mutPCMinusBtn.UninitialiseEvents();
-		m_mutPCTF.UninitialiseEvents();
+		m_mutPCPlusBtn.~Button();
+		m_mutPCMinusBtn.~Button();
+		m_mutPCTF.~TextField();
 
 		// SPLICE PERCENTAGE
-		m_splicePCPlusBtn.UninitialiseEvents();
-		m_splicePCMinusBtn.UninitialiseEvents();
-		m_splicePCTF.UninitialiseEvents();
+		m_splicePCPlusBtn.~Button();
+		m_splicePCMinusBtn.~Button();
+		m_splicePCTF.~TextField();
 
 		
-		m_backBtn.UninitialiseEvents();
-		m_nextBtn.UninitialiseEvents();
-		m_advSettingsBtn.UninitialiseEvents();
+		m_backBtn.~Button();
+		m_nextBtn.~Button();
+		m_advSettingsBtn.~Button();
 	}
 
 	// Public

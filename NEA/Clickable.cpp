@@ -39,7 +39,7 @@ namespace UI
 
 	Clickable& Clickable::operator=(const Clickable& clickable)
 	{
-		Transformable::operator=(clickable);
+		UIElement::operator=(clickable);
 
 		m_containerView = clickable.m_containerView;
 		m_clickBounds = clickable.m_clickBounds;
@@ -76,10 +76,12 @@ namespace UI
 		sf::Vector2f viewPos;
 		if (InputManager::IsPointInView(*m_containerView, mousePos, viewPos) && getTransform().transformRect(m_clickBounds).contains(viewPos))
 		{
+			m_mouseHovered = true;
 			OnMouseHover();
 		}
-		else if (!m_mousePressed)
+		else if (m_mouseHovered)
 		{
+			m_mouseHovered = false;
 			OnMouseUnhover();
 		}
 	}

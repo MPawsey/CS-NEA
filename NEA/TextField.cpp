@@ -171,7 +171,7 @@ namespace UI
 		return m_lostFocusEvent;
 	}
 
-	const sf::FloatRect& TextField::GetBounds() const
+	sf::FloatRect TextField::GetBounds() const
 	{
 		return m_textContainer.getGlobalBounds();
 	}

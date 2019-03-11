@@ -1,6 +1,6 @@
 #pragma once
 
-#include <sfml/Graphics.hpp>
+#include "test.h"
 
 
 class LineShape : public sf::Drawable

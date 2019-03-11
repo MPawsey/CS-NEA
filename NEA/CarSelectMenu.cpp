@@ -40,12 +40,12 @@ namespace Menu::CarSelectMenu
 
 	void OnWindowClosed()
 	{
-		m_backBtn.UninitialiseEvents();
+		m_backBtn.~Button();
 		m_slider.~Slider();
 
 		for (auto& button : m_buttons)
 		{
-			button.UninitialiseEvents();
+			button.~Button();
 		}
 	}
 

@@ -7,7 +7,7 @@
 namespace UI
 {
 
-	class Clickable : public sf::Transformable, public UIElement
+	class Clickable : public UIElement
 	{
 	private:
 
@@ -24,6 +24,7 @@ namespace UI
 		bool m_initialised = false;
 
 		void InitialiseEvents();
+		void UninitialiseEvents();
 
 		void OnMouseMoved(sf::Vector2i mousePos);
 		void OnMousePressed();
@@ -53,7 +54,6 @@ namespace UI
 
 		Clickable& operator=(const Clickable& clickable);
 
-		void UninitialiseEvents();
 		const bool IsActive() const;
 		const sf::FloatRect GetClickBounds() const;
 		const sf::View& GetContainerView() const;

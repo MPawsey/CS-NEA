@@ -53,7 +53,7 @@ namespace UI
 		TextField& operator=(const TextField& textField);
 
 		Event<>& GetLostFocusEvent();
-		const sf::FloatRect& GetBounds() const;
+		sf::FloatRect GetBounds() const;
 
 		const sf::String& GetRawText() const;
 		void SetRawText(sf::String s);
