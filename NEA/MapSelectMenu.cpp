@@ -5,7 +5,7 @@
 #include "InputManager.h"
 #include "RaceTrack.h"
 #include "Simulation.h"
-#include "Menu.h"
+#include "MenuManager.h"
 
 namespace Menu
 {

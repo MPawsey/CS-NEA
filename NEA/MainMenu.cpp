@@ -1,6 +1,6 @@
 #include "MainMenu.h"
 #include "Window.h"
-#include "Menu.h"
+#include "MenuManager.h"
 
 namespace Menu
 {
