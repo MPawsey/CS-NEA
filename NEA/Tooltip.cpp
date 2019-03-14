@@ -59,6 +59,10 @@ namespace UI
 		m_text = tooltip.m_text;
 		m_defaultView = tooltip.m_defaultView;
 
+
+		InputManager::GetMouseMovedEvent().RemoveCallback(m_onMouseMoveID);
+		m_onMouseMoveID = InputManager::GetMouseMovedEvent().AddCallback(&Tooltip::OnMouseMoved, *this);
+
 		return *this;
 	}
 

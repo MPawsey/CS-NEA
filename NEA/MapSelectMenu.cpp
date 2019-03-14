@@ -57,7 +57,7 @@ namespace Menu::MapSelectMenu
 		// Just don't delete a file and it works for some reason
 		m_buttons.clear();
 
-		std::string path = "Cars";
+		std::string path = "Tracks";
 
 		int pos = 0;
 		float startOffset = 10.f;
@@ -65,7 +65,7 @@ namespace Menu::MapSelectMenu
 
 		for (const auto& entry : std::filesystem::directory_iterator(path))
 		{
-			if (entry.path().extension() != ".cars")
+			if (entry.path().extension() != ".track")
 				continue;
 
 			UI::Button b{ entry.path().filename().replace_extension().u8string(), m_mapButtonView, { 5.f } };
