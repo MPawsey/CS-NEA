@@ -1,6 +1,10 @@
 #pragma once
 
-
+#include "MainMenu.h"
+#include "SettingsMenu.h"
+#include "MapSelectMenu.h"
+#include "CarSelectMenu.h"
+#include "AdvancedSettingsMenu.h"
 
 namespace Menu
 {
@@ -14,18 +18,23 @@ namespace Menu
 		None
 	};
 
-	class Menu
+	class MenuManager
 	{
+	private:
+
+		MenuState m_menuState;
+		MainMenu m_mainMenu;
+		SettingsMenu m_settingsMenu;
+		MapSelectMenu m_mapSelectMenu;
+		CarSelectMenu m_carSelectMenu;
+		AdvancedSettingsMenu m_advSettingsMenu;
+
 	public:
-		virtual void Init() = 0;
-		virtual void Update() = 0;
-		virtual void Load() = 0;
-		virtual void Unload() = 0;
+		static MenuManager& GetMenuManager();
+
+		void Init();
+		void Update();
+
+		void GoToState(MenuState newState);
 	};
-
-	void Init();
-	void Update();
-
-	void GoToState(MenuState newState);
-
 }

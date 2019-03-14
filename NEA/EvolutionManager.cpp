@@ -4,34 +4,23 @@
 #include <numeric>
 #include "Window.h"
 #include "RaceTrack.h"
-#include "Simulation.h"
 #include "Analysis.h"
 #include <sstream>
 #include <fstream>
-#include "RNG.h"
 
 
-namespace Evolution::EvolutionManager
+namespace Evolution
 {
 	
 
-	bool m_analysis = false, m_canMultiReproduce = true;
-	unsigned int m_aliveSize, m_iteration, m_saveSize = 0, m_killSize = 22;
-	sf::View m_evolutionView;
-	RNG::Random m_randomEngine;
-	std::string m_track;
-	float m_carWidth, m_carHeight, m_carRaySize;
-	std::vector<unsigned int> m_carSizes;
+	EvolutionManager& EvolutionManager::GetEvolutionManager()
+	{
+		static EvolutionManager evolutionManager{};
+		return evolutionManager;
+	}
+	
 
-	Analysis m_analysisScreen;
-	Simulation m_simulationScreen;
-
-	int m_cycleCount = 1;
-	bool m_display = true;
-
-	std::vector<Machine::Car*> m_cars;
-
-	void Reset()
+	void EvolutionManager::Reset()
 	{
 		m_cars.clear();
 		m_analysisScreen.Reset();
@@ -39,13 +28,13 @@ namespace Evolution::EvolutionManager
 		m_display = true;
 	}
 
-	void OnWindowClosed()
+	EvolutionManager::~EvolutionManager()
 	{
 		for (Machine::Car* car : m_cars)
 			delete car;
 	}
 
-	void Init()
+	void EvolutionManager::Init()
 	{
 		m_simulationScreen.Init();
 
@@ -53,12 +42,10 @@ namespace Evolution::EvolutionManager
 		m_evolutionView.setSize((sf::Vector2f)Window::GetWindowSize());
 		m_evolutionView.setCenter(0.f, 0.f);
 
-		Window::GetWindowClosedEvent().AddCallback(OnWindowClosed);
-
 		m_analysisScreen.Init();
 	}
 
-	void Update()
+	void EvolutionManager::Update()
 	{
 		sf::RenderWindow& window = Window::GetWindow();
 
@@ -152,7 +139,7 @@ namespace Evolution::EvolutionManager
 	}
 
 
-	void CreateGenerationFromSettings(float width, float height, unsigned int rayCount, float raySize, unsigned int popSize, float enginePow, float rotPow, double mutPC, double splicePC, unsigned int seed)
+	void EvolutionManager::CreateGenerationFromSettings(float width, float height, unsigned int rayCount, float raySize, unsigned int popSize, float enginePow, float rotPow, double mutPC, double splicePC, unsigned int seed)
 	{
 		Reset();
 		m_analysis = false;
@@ -184,7 +171,7 @@ namespace Evolution::EvolutionManager
 		}
 	}
 
-	void CreateGenerationFromFile(std::string filename)
+	void EvolutionManager::CreateGenerationFromFile(std::string filename)
 	{
 		Reset();
 		m_analysis = true;
@@ -350,14 +337,14 @@ namespace Evolution::EvolutionManager
 		}
 	}
 
-	void ResetCars()
+	void EvolutionManager::ResetCars()
 	{
 		m_simulationScreen.SetIteration(m_iteration);
 		for (auto* car : m_cars)
 			car->Reset();
 	}
 
-	void StartNextGeneration(int cycleCount, bool draw)
+	void EvolutionManager::StartNextGeneration(int cycleCount, bool draw)
 	{
 		m_cycleCount = cycleCount;
 		
@@ -382,7 +369,7 @@ namespace Evolution::EvolutionManager
 		((file << args << " "), ...) << std::endl;
 	}
 	
-	void SaveGeneration(std::string filename)
+	void EvolutionManager::SaveGeneration(std::string filename)
 	{
 		std::string filepath = "Cars/" + filename + ".cars";
 
@@ -407,7 +394,7 @@ namespace Evolution::EvolutionManager
 
 	}
 
-	std::mt19937& GetRandomEngine()
+	std::mt19937& EvolutionManager::GetRandomEngine()
 	{
 		return m_randomEngine;
 	}

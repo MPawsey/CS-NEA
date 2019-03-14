@@ -1,22 +1,16 @@
 #include "Menu.h"
 
-#include "MainMenu.h"
-#include "SettingsMenu.h"
-#include "MapSelectMenu.h"
-#include "CarSelectMenu.h"
-#include "AdvancedSettingsMenu.h"
 #include "Event.h"
 
 namespace Menu
 {
-	MenuState m_menuState;
-	MainMenu m_mainMenu;
-	SettingsMenu m_settingsMenu;
-	MapSelectMenu m_mapSelectMenu;
-	CarSelectMenu m_carSelectMenu;
-	AdvancedSettingsMenu m_advSettingsMenu;
+	MenuManager& MenuManager::GetMenuManager()
+	{
+		static MenuManager menuManager{};
+		return menuManager;
+	}
 
-	void Init()
+	void MenuManager::Init()
 	{
 		m_menuState = MenuState::MainMenu;
 
@@ -29,7 +23,7 @@ namespace Menu
 		m_mainMenu.Load();
 	}
 
-	void Update()
+	void MenuManager::Update()
 	{
 		switch (m_menuState)
 		{
@@ -51,7 +45,7 @@ namespace Menu
 		}
 	}
 
-	void GoToState(MenuState newState)
+	void MenuManager::GoToState(MenuState newState)
 	{
 		// Unload previous state
 		switch (m_menuState)

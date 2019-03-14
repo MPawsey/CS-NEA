@@ -1,5 +1,6 @@
 #include "MainMenu.h"
 #include "Window.h"
+#include "Menu.h"
 
 namespace Menu
 {
@@ -17,14 +18,14 @@ namespace Menu
 		m_startConfigBtn = UI::Button{ "Start with new generation", m_mainMenuView, { 5.f, 7.f, 2.f, 2.f } };
 		m_startConfigBtn.setPosition(xPos, yPos);
 		m_startConfigBtn.SetBackgroundSize(sf::Vector2f{ 500.f, m_startConfigBtn.GetClickBounds().height });
-		m_startConfigBtn.GetMouseClickedEvent().AddCallback([]() { GoToState(MenuState::StartConfig); });
+		m_startConfigBtn.GetMouseClickedEvent().AddCallback([]() { MenuManager::GetMenuManager().GoToState(MenuState::StartConfig); });
 
 		yPos += yGap;
 
 		m_startSavedBtn = UI::Button{ "Start with existing generation", m_mainMenuView, { 5.f, 7.f, 2.f, 2.f } };
 		m_startSavedBtn.setPosition(xPos, yPos);
 		m_startSavedBtn.SetBackgroundSize(sf::Vector2f{ 500.f, m_startSavedBtn.GetClickBounds().height });
-		m_startSavedBtn.GetMouseClickedEvent().AddCallback([]() { GoToState(MenuState::StartCar); });
+		m_startSavedBtn.GetMouseClickedEvent().AddCallback([]() { MenuManager::GetMenuManager().GoToState(MenuState::StartCar); });
 
 		yPos += yGap;
 

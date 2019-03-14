@@ -5,6 +5,7 @@
 #include "InputManager.h"
 #include "RaceTrack.h"
 #include "Simulation.h"
+#include "Menu.h"
 
 namespace Menu
 {
@@ -18,7 +19,7 @@ namespace Menu
 	void MapSelectMenu::LoadMap(std::string filename)
 	{
 		RaceTrack::LoadFromFile(filename);
-		GoToState(MenuState::None); // Unloads map select menu
+		MenuManager::GetMenuManager().GoToState(MenuState::None); // Unloads map select menu
 		Window::GetWindow().setFramerateLimit(Evolution::Simulation::SIMULATION_FRAMERATE);
 		Window::SetWindowState(Window::Evolution);
 	}
@@ -75,7 +76,7 @@ namespace Menu
 		m_backBtn = UI::Button{ "Back", m_mapSelectView, { 5.f, 5.f, 0.f, 0.f } };
 		m_backBtn.setPosition(50.f, window.getSize().y - UI::GetFont().getLineSpacing(30) - 5.f);
 		m_backBtn.SetCentreText(true);
-		m_backBtn.GetMouseClickedEvent().AddCallback([&]() { GoToState(MenuState::StartConfig); });
+		m_backBtn.GetMouseClickedEvent().AddCallback([&]() { MenuManager::GetMenuManager().GoToState(MenuState::StartConfig); });
 	}
 
 	void MapSelectMenu::Update()

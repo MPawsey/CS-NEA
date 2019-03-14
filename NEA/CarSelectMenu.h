@@ -1,12 +1,11 @@
 #pragma once
 
-#include "Menu.h"
 #include "Slider.h"
 #include "Button.h"
 
 namespace Menu
 {
-	class CarSelectMenu : public Menu
+	class CarSelectMenu
 	{
 	private:
 		// Private

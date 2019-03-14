@@ -1,13 +1,12 @@
 #pragma once
 
-#include "Menu.h"
 #include "Button.h"
 #include "CheckBox.h"
 #include "TextField.h"
 
 namespace Menu
 {
-	class AdvancedSettingsMenu : public Menu
+	class AdvancedSettingsMenu
 	{
 	private:
 		sf::View m_advSettingsView;

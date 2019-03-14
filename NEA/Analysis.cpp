@@ -103,7 +103,7 @@ namespace Evolution
 
 		UI::Button* saveBtn = new UI::Button{ "Save", m_savePopup.GetView(), UI::Padding{2.5f, 5.f, 0.f, 0.f} };
 		saveBtn->setPosition(m_savePopup.GetView().getSize().x - retBtn->GetBounds().width - 5.f, m_savePopup.GetView().getSize().y - retBtn->GetBounds().height - 5.f);
-		saveBtn->GetMouseClickedEvent().AddCallback([&, nameTF]() { EvolutionManager::SaveGeneration(nameTF->GetRawText()); m_savePopup.SetActive(false); SetAnalysisActive(true); });
+		saveBtn->GetMouseClickedEvent().AddCallback([&, nameTF]() { EvolutionManager::GetEvolutionManager().SaveGeneration(nameTF->GetRawText()); m_savePopup.SetActive(false); SetAnalysisActive(true); });
 		saveBtn->SetCentreText(true);
 		m_savePopup.AddElement(saveBtn);
 
@@ -116,22 +116,22 @@ namespace Evolution
 
 		m_nextBtn = UI::Button{ "Next", m_analysisView, UI::Padding{2.5f, 5.f, 0.f, 0.f} };
 		m_nextBtn.SetCentreText(true);
-		m_nextBtn.GetMouseClickedEvent().AddCallback([]() { EvolutionManager::StartNextGeneration(1, true); });
+		m_nextBtn.GetMouseClickedEvent().AddCallback([]() { EvolutionManager::GetEvolutionManager().StartNextGeneration(1, true); });
 		m_nextBtn.setPosition(xPos, yPos1);
 		m_nextQuickBtn = UI::Button{ "Next Quick", m_analysisView, UI::Padding{2.5f, 5.f, 0.f, 0.f} };
 		m_nextQuickBtn.SetCentreText(true);
-		m_nextQuickBtn.GetMouseClickedEvent().AddCallback([]() { EvolutionManager::StartNextGeneration(1, false); });
+		m_nextQuickBtn.GetMouseClickedEvent().AddCallback([]() { EvolutionManager::GetEvolutionManager().StartNextGeneration(1, false); });
 		m_nextQuickBtn.setPosition(xPos, yPos2);
 
 		xPos += xGap;
 
 		m_next10Btn = UI::Button{ "Next 10", m_analysisView, UI::Padding{2.5f, 5.f, 0.f, 0.f} };
 		m_next10Btn.SetCentreText(true);
-		m_next10Btn.GetMouseClickedEvent().AddCallback([]() { EvolutionManager::StartNextGeneration(10, true); });
+		m_next10Btn.GetMouseClickedEvent().AddCallback([]() { EvolutionManager::GetEvolutionManager().StartNextGeneration(10, true); });
 		m_next10Btn.setPosition(xPos, yPos1);
 		m_next10QuickBtn = UI::Button{ "Next 10 Quick", m_analysisView, UI::Padding{2.5f, 5.f, 0.f, 0.f} };
 		m_next10QuickBtn.SetCentreText(true);
-		m_next10QuickBtn.GetMouseClickedEvent().AddCallback([]() { EvolutionManager::StartNextGeneration(10, false); });
+		m_next10QuickBtn.GetMouseClickedEvent().AddCallback([]() { EvolutionManager::GetEvolutionManager().StartNextGeneration(10, false); });
 		m_next10QuickBtn.setPosition(xPos, yPos2);
 
 		xPos += xGap;
@@ -142,7 +142,7 @@ namespace Evolution
 		m_saveBtn.setPosition(xPos, yPos1);
 		m_menuBtn = UI::Button{ "Menu", m_analysisView, UI::Padding{2.5f, 5.f, 0.f, 0.f} };
 		m_menuBtn.SetCentreText(true);
-		m_menuBtn.GetMouseClickedEvent().AddCallback([]() { Window::SetWindowState(Window::Menu); Menu::GoToState(Menu::MenuState::MainMenu); });
+		m_menuBtn.GetMouseClickedEvent().AddCallback([]() { Window::SetWindowState(Window::Menu); Menu::MenuManager::GetMenuManager().GoToState(Menu::MenuState::MainMenu); });
 		m_menuBtn.setPosition(xPos, yPos2);
 	}
 

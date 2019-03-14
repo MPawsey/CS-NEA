@@ -1,12 +1,11 @@
 #pragma once
 
-#include "Menu.h"
 #include "Button.h"
 #include "TextField.h"
 
 namespace Menu
 {
-	class SettingsMenu : public Menu
+	class SettingsMenu
 	{
 	private:
 

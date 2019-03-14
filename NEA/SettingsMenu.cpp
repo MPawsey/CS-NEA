@@ -2,6 +2,7 @@
 #include "Window.h"
 #include <algorithm>
 #include "EvolutionManager.h"
+#include "Menu.h"
 
 namespace Menu
 {
@@ -236,17 +237,17 @@ namespace Menu
 		m_backBtn = UI::Button{ "Back", m_settingsView, { 5.f, 5.f, 0.f, 0.f } };
 		m_backBtn.setPosition(xPos1, window.getSize().y - yLineSpace);
 		m_backBtn.SetCentreText(true);
-		m_backBtn.GetMouseClickedEvent().AddCallback([&]() { GoToState(MenuState::MainMenu); });
+		m_backBtn.GetMouseClickedEvent().AddCallback([&]() { MenuManager::GetMenuManager().GoToState(MenuState::MainMenu); });
 
 		m_nextBtn = UI::Button{ "Next", m_settingsView, { 5.f, 5.f, 0.f, 0.f } };
 		m_nextBtn.setPosition(675.f, window.getSize().y - yLineSpace);
 		m_nextBtn.SetCentreText(true);
-		m_nextBtn.GetMouseClickedEvent().AddCallback([&]() { GoToState(MenuState::StartMap); });
+		m_nextBtn.GetMouseClickedEvent().AddCallback([&]() { MenuManager::GetMenuManager().GoToState(MenuState::StartMap); });
 
 		m_advSettingsBtn = UI::Button{ "Advanced", m_settingsView, { 5.f, 5.f, 0.f, 0.f } };
 		m_advSettingsBtn.setPosition(xPos2, window.getSize().y - yLineSpace);
 		m_advSettingsBtn.SetCentreText(true);
-		m_advSettingsBtn.GetMouseClickedEvent().AddCallback([&]() { GoToState(MenuState::AdvancedConfig); });
+		m_advSettingsBtn.GetMouseClickedEvent().AddCallback([&]() { MenuManager::GetMenuManager().GoToState(MenuState::AdvancedConfig); });
 
 
 		// DEFAULT VALUES
@@ -370,7 +371,7 @@ namespace Menu
 
 	void SettingsMenu::Unload()
 	{
-		Evolution::EvolutionManager::CreateGenerationFromSettings(m_widthTF.GetFloatValue(), m_heightTF.GetFloatValue(), m_rayCountTF.GetUIntegerValue(), m_raySizeTF.GetFloatValue(),
+		Evolution::EvolutionManager::GetEvolutionManager().CreateGenerationFromSettings(m_widthTF.GetFloatValue(), m_heightTF.GetFloatValue(), m_rayCountTF.GetUIntegerValue(), m_raySizeTF.GetFloatValue(),
 			m_popSizeTF.GetUIntegerValue(), m_enginePowTF.GetFloatValue(), m_rotPowTF.GetFloatValue(), m_mutPCTF.GetDoubleValue() / 100.0, m_splicePCTF.GetDoubleValue() / 100.0, m_seedTF.GetRawText() == "" ? std::random_device{}() : m_seedTF.GetUIntegerValue());
 
 		m_widthPlusBtn.SetActive(false);

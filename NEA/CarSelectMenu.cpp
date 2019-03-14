@@ -4,7 +4,7 @@
 #include <filesystem>
 #include "InputManager.h"
 #include "EvolutionManager.h"
-
+#include "Menu.h"
 
 namespace Menu
 {
@@ -17,8 +17,8 @@ namespace Menu
 
 	void CarSelectMenu::LoadCar(std::string filename)
 	{
-		Evolution::EvolutionManager::CreateGenerationFromFile(filename);
-		GoToState(MenuState::StartMap);
+		Evolution::EvolutionManager::GetEvolutionManager().CreateGenerationFromFile(filename);
+		MenuManager::GetMenuManager().GoToState(MenuState::StartMap);
 	}
 
 	void CarSelectMenu::LoadMenu()
@@ -73,7 +73,7 @@ namespace Menu
 		m_backBtn = UI::Button{ "Back", m_carSelectView, { 5.f, 5.f, 0.f, 0.f } };
 		m_backBtn.setPosition(50.f, window.getSize().y - UI::GetFont().getLineSpacing(30) - 5.f);
 		m_backBtn.SetCentreText(true);
-		m_backBtn.GetMouseClickedEvent().AddCallback([&]() { GoToState(MenuState::MainMenu); });
+		m_backBtn.GetMouseClickedEvent().AddCallback([&]() { MenuManager::GetMenuManager().GoToState(MenuState::MainMenu); });
 	}
 
 	void CarSelectMenu::Update()
