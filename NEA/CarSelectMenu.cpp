@@ -2,54 +2,26 @@
 
 #include "Window.h"
 #include <filesystem>
-#include "Menu.h"
 #include "InputManager.h"
 #include "EvolutionManager.h"
-#include "Slider.h"
-#include "Button.h"
+#include "Menu.h"
 
-
-namespace Menu::CarSelectMenu
+namespace Menu
 {
-	// Private
-	sf::View m_carSelectView;
-	sf::View m_carButtonView;
 
-	bool m_isActive = false;
-
-	UI::Slider m_slider;
-	float m_sliderMax;
-	float yGap;
-
-	UI::Button m_backBtn;
-
-	sf::RectangleShape m_buttonBackground;
-	std::vector<UI::Button> m_buttons;
-
-	void OnMouseScrolled(int delta)
+	void CarSelectMenu::OnMouseScrolled(int delta)
 	{
 		if (m_isActive)
 			m_slider.Move(delta * (yGap / m_sliderMax));
 	}
 
-	void LoadCar(std::string filename)
+	void CarSelectMenu::LoadCar(std::string filename)
 	{
-		Evolution::EvolutionManager::CreateGenerationFromFile(filename);
-		Menu::GoToState(Menu::MenuState::StartMap);
+		Evolution::EvolutionManager::GetEvolutionManager().CreateGenerationFromFile(filename);
+		MenuManager::GetMenuManager().GoToState(MenuState::StartMap);
 	}
 
-	void OnWindowClosed()
-	{
-		m_backBtn.~Button();
-		m_slider.~Slider();
-
-		for (auto& button : m_buttons)
-		{
-			button.~Button();
-		}
-	}
-
-	void LoadMenu()
+	void CarSelectMenu::LoadMenu()
 	{
 		// Just don't delete a file and it works for some reason
 		m_buttons.clear();
@@ -80,13 +52,11 @@ namespace Menu::CarSelectMenu
 
 	// Public
 
-	void Init()
+	void CarSelectMenu::Init()
 	{
 		sf::RenderWindow& window = Window::GetWindow();
 		m_carSelectView = window.getDefaultView();
 		m_carButtonView = window.getDefaultView();
-
-		Window::GetWindowClosedEvent().AddCallback(OnWindowClosed);
 
 		m_carButtonView.setViewport({ 0.1f, 0.1f, 0.8f, 0.8f });
 		m_carButtonView.setSize(m_carButtonView.getSize() * 0.8f);
@@ -96,17 +66,17 @@ namespace Menu::CarSelectMenu
 		m_buttonBackground.setSize(m_carButtonView.getSize());
 		m_buttonBackground.setFillColor(sf::Color{ 42, 50, 125 });
 
-		InputManager::GetMouseScrolledEvent().AddCallback(OnMouseScrolled);
+		InputManager::GetMouseScrolledEvent().AddCallback(&CarSelectMenu::OnMouseScrolled, *this);
 
 		m_slider = UI::Slider{ sf::Vector2f{ 775.f, 50.f }, m_carSelectView, 500.f };
 
 		m_backBtn = UI::Button{ "Back", m_carSelectView, { 5.f, 5.f, 0.f, 0.f } };
 		m_backBtn.setPosition(50.f, window.getSize().y - UI::GetFont().getLineSpacing(30) - 5.f);
 		m_backBtn.SetCentreText(true);
-		m_backBtn.GetMouseClickedEvent().AddCallback([&]() { Menu::GoToState(Menu::MenuState::MainMenu); });
+		m_backBtn.GetMouseClickedEvent().AddCallback([&]() { MenuManager::GetMenuManager().GoToState(MenuState::MainMenu); });
 	}
 
-	void Update()
+	void CarSelectMenu::Update()
 	{
 		sf::RenderWindow& window = Window::GetWindow();
 
@@ -122,7 +92,7 @@ namespace Menu::CarSelectMenu
 		}
 	}
 
-	void Load()
+	void CarSelectMenu::Load()
 	{
 		m_isActive = true;
 
@@ -137,7 +107,7 @@ namespace Menu::CarSelectMenu
 		}
 	}
 
-	void Unload()
+	void CarSelectMenu::Unload()
 	{
 		m_isActive = false;
 

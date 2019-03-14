@@ -1,32 +1,15 @@
 #include "MainMenu.h"
 #include "Window.h"
 #include "Menu.h"
-#include "Button.h"
 
-namespace Menu::MainMenu
+namespace Menu
 {
-	// Private
-	sf::View m_mainMenuView;
-
-	UI::Button m_startConfigBtn;
-	UI::Button m_startSavedBtn;
-	UI::Button m_mapEditorBtn;
-
-	void OnWindowClosed()
-	{
-		m_startConfigBtn.~Button();
-		m_startSavedBtn.~Button();
-		m_mapEditorBtn.~Button();
-	}
-
 	// Public
 
-	void Init()
+	void MainMenu::Init()
 	{
 		sf::RenderWindow& window = Window::GetWindow();
 		m_mainMenuView = window.getDefaultView();
-
-		Window::GetWindowClosedEvent().AddCallback(OnWindowClosed);
 
 		float xPos = 50.f;
 		float yPos = 50.f;
@@ -35,14 +18,14 @@ namespace Menu::MainMenu
 		m_startConfigBtn = UI::Button{ "Start with new generation", m_mainMenuView, { 5.f, 7.f, 2.f, 2.f } };
 		m_startConfigBtn.setPosition(xPos, yPos);
 		m_startConfigBtn.SetBackgroundSize(sf::Vector2f{ 500.f, m_startConfigBtn.GetClickBounds().height });
-		m_startConfigBtn.GetMouseClickedEvent().AddCallback([]() { Menu::GoToState(Menu::MenuState::StartConfig); });
+		m_startConfigBtn.GetMouseClickedEvent().AddCallback([]() { MenuManager::GetMenuManager().GoToState(MenuState::StartConfig); });
 
 		yPos += yGap;
 
 		m_startSavedBtn = UI::Button{ "Start with existing generation", m_mainMenuView, { 5.f, 7.f, 2.f, 2.f } };
 		m_startSavedBtn.setPosition(xPos, yPos);
 		m_startSavedBtn.SetBackgroundSize(sf::Vector2f{ 500.f, m_startSavedBtn.GetClickBounds().height });
-		m_startSavedBtn.GetMouseClickedEvent().AddCallback([]() { Menu::GoToState(Menu::MenuState::StartCar); });
+		m_startSavedBtn.GetMouseClickedEvent().AddCallback([]() { MenuManager::GetMenuManager().GoToState(MenuState::StartCar); });
 
 		yPos += yGap;
 
@@ -52,7 +35,7 @@ namespace Menu::MainMenu
 		m_mapEditorBtn.GetMouseClickedEvent().AddCallback([]() {  });
 	}
 
-	void Update()
+	void MainMenu::Update()
 	{
 		sf::RenderWindow& window = Window::GetWindow();
 
@@ -61,7 +44,7 @@ namespace Menu::MainMenu
 		window.draw(m_mapEditorBtn);
 	}
 
-	void Load()
+	void MainMenu::Load()
 	{
 		Window::GetWindow().setView(m_mainMenuView);
 
@@ -70,7 +53,7 @@ namespace Menu::MainMenu
 		m_mapEditorBtn.SetActive(true);
 	}
 
-	void Unload()
+	void MainMenu::Unload()
 	{
 		m_startConfigBtn.SetActive(false);
 		m_startSavedBtn.SetActive(false);

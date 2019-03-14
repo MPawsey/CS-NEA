@@ -4,67 +4,59 @@
 #include <numeric>
 #include "Window.h"
 #include "RaceTrack.h"
-#include "Simulation.h"
 #include "Analysis.h"
 #include <sstream>
 #include <fstream>
-#include "RNG.h"
 
-namespace Evolution::EvolutionManager
+
+namespace Evolution
 {
-	bool m_analysis = false, m_canMultiReproduce = true;
-	unsigned int m_aliveSize, m_iteration, m_saveSize = 0, m_killSize = 22;
-	sf::View m_evolutionView;
-	RNG::Random m_randomEngine;
-	std::string m_track;
-	float m_carWidth, m_carHeight, m_carRaySize;
-	std::vector<unsigned int> m_carSizes;
-	//std::mt19937 m_randomEngine;
+	
 
-	int m_cycleCount = 1;
-	bool m_display = true;
+	EvolutionManager& EvolutionManager::GetEvolutionManager()
+	{
+		static EvolutionManager evolutionManager{};
+		return evolutionManager;
+	}
+	
 
-	std::vector<Machine::Car*> m_cars;
-
-	void Reset()
+	void EvolutionManager::Reset()
 	{
 		m_cars.clear();
-		Analysis::Reset();
+		m_analysisScreen.Reset();
 		m_cycleCount = 1;
 		m_display = true;
 	}
 
-	void OnWindowClosed()
+	EvolutionManager::~EvolutionManager()
 	{
 		for (Machine::Car* car : m_cars)
 			delete car;
 	}
 
-	void Init()
+	void EvolutionManager::Init()
 	{
-		Simulation::Init();
+		m_simulationScreen.Init();
 
 		m_evolutionView = Window::GetWindow().getDefaultView();
 		m_evolutionView.setSize((sf::Vector2f)Window::GetWindowSize());
 		m_evolutionView.setCenter(0.f, 0.f);
 
-		Window::GetWindowClosedEvent().AddCallback(OnWindowClosed);
-
-		Analysis::Init();
+		m_analysisScreen.Init();
 	}
 
-	void Update()
+	void EvolutionManager::Update()
 	{
 		sf::RenderWindow& window = Window::GetWindow();
 
 		if (!m_analysis)
 		{
-			Simulation::Update(m_cars, m_aliveSize, m_display);
+			m_simulationScreen.Update(m_cars, m_aliveSize, m_display);
 
 			// If the generation is complete
 			if (m_aliveSize == 0)
 			{
-				Simulation::SetIteration(++m_iteration);
+				m_simulationScreen.SetIteration(++m_iteration);
 
 				m_aliveSize = m_cars.size();
 
@@ -75,7 +67,7 @@ namespace Evolution::EvolutionManager
 
 				float avgFitness = std::accumulate(m_cars.begin(), m_cars.end(), 0, [](float val, Machine::Car* car) { return val + car->GetFitness(); }) / m_aliveSize;
 
-				Analysis::UpdateGraph(m_cars.front()->GetFitness(), avgFitness, m_cars.back()->GetFitness());
+				m_analysisScreen.UpdateGraph(m_cars.front()->GetFitness(), avgFitness, m_cars.back()->GetFitness());
 
 				std::vector<Machine::Car*> newCars;
 				newCars.reserve(m_aliveSize);
@@ -130,24 +122,24 @@ namespace Evolution::EvolutionManager
 
 				if (--m_cycleCount == 0)
 				{
-					Analysis::Load();
+					m_analysisScreen.Load();
 					m_analysis = true;
 				}
 			}
 			
 			if (!m_display)
 			{
-				Analysis::Update();
+				m_analysisScreen.Update();
 			}
 		}
 		else
 		{
-			Analysis::Update();
+			m_analysisScreen.Update();
 		}
 	}
 
 
-	void CreateGenerationFromSettings(float width, float height, unsigned int rayCount, float raySize, unsigned int popSize, float enginePow, float rotPow, double mutPC, double splicePC, unsigned int seed)
+	void EvolutionManager::CreateGenerationFromSettings(float width, float height, unsigned int rayCount, float raySize, unsigned int popSize, float enginePow, float rotPow, double mutPC, double splicePC, unsigned int seed)
 	{
 		Reset();
 		m_analysis = false;
@@ -158,8 +150,8 @@ namespace Evolution::EvolutionManager
 		m_carSizes = { rayCount, 4, 3, 2};
 
 		m_iteration = 0;
-		Simulation::SetIteration(m_iteration);
-		Simulation::SetSeedText(seed);
+		m_simulationScreen.SetIteration(m_iteration);
+		m_simulationScreen.SetSeedText(seed);
 
 		m_aliveSize = popSize;
 
@@ -179,11 +171,11 @@ namespace Evolution::EvolutionManager
 		}
 	}
 
-	void CreateGenerationFromFile(std::string filename)
+	void EvolutionManager::CreateGenerationFromFile(std::string filename)
 	{
 		Reset();
 		m_analysis = true;
-		Analysis::Load();
+		m_analysisScreen.Load();
 
 		std::ifstream file{ filename };
 
@@ -283,7 +275,7 @@ namespace Evolution::EvolutionManager
 						positions.push_back(std::stod(val));
 					}
 
-					Analysis::SetGraph(positions);
+					m_analysisScreen.SetGraph(positions);
 				}
 				else if (s[0] == 'c') // Sets new values for layers and neurons to new car
 				{
@@ -333,8 +325,8 @@ namespace Evolution::EvolutionManager
 			}
 		}
 
-		Simulation::SetIteration(m_iteration);
-		Simulation::SetSeedText(seed);
+		m_simulationScreen.SetIteration(m_iteration);
+		m_simulationScreen.SetSeedText(seed);
 
 		Machine::Car::CreateRays(m_carSizes[0], m_carRaySize, m_carWidth, m_carHeight);
 
@@ -345,20 +337,20 @@ namespace Evolution::EvolutionManager
 		}
 	}
 
-	void ResetCars()
+	void EvolutionManager::ResetCars()
 	{
-		Simulation::SetIteration(m_iteration);
+		m_simulationScreen.SetIteration(m_iteration);
 		for (auto* car : m_cars)
 			car->Reset();
 	}
 
-	void StartNextGeneration(int cycleCount, bool draw)
+	void EvolutionManager::StartNextGeneration(int cycleCount, bool draw)
 	{
 		m_cycleCount = cycleCount;
 		
 		if (m_display = draw)
 		{
-			Window::GetWindow().setFramerateLimit(Simulation::SIMULATION_FRAMERATE);
+			Window::GetWindow().setFramerateLimit(m_simulationScreen.SIMULATION_FRAMERATE);
 		}
 		else
 		{
@@ -366,7 +358,7 @@ namespace Evolution::EvolutionManager
 		}
 
 		m_analysis = false;
-		Analysis::Unload();
+		m_analysisScreen.Unload();
 	}
 
 	// Fold expression to write a line to a file
@@ -377,7 +369,7 @@ namespace Evolution::EvolutionManager
 		((file << args << " "), ...) << std::endl;
 	}
 	
-	void SaveGeneration(std::string filename)
+	void EvolutionManager::SaveGeneration(std::string filename)
 	{
 		std::string filepath = "Cars/" + filename + ".cars";
 
@@ -393,7 +385,7 @@ namespace Evolution::EvolutionManager
 		WriteLineToFile(file, 'p', m_cars.size());
 		WriteLineToFile(file, 'e', Machine::Car::enginePower, Machine::Car::rotationPower);
 		WriteLineToFile(file, 'o', Machine::Neuron::mutatePC, Machine::Neuron::splicePC);
-		Analysis::SaveGraph(file);
+		m_analysisScreen.SaveGraph(file);
 
 		for (Machine::Car* car : m_cars)
 		{
@@ -402,7 +394,7 @@ namespace Evolution::EvolutionManager
 
 	}
 
-	std::mt19937& GetRandomEngine()
+	std::mt19937& EvolutionManager::GetRandomEngine()
 	{
 		return m_randomEngine;
 	}

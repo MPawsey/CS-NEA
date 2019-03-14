@@ -70,8 +70,8 @@ namespace Window
 			m_state = Menu;
 
 			UI::Init();
-			Menu::Init();
-			Evolution::EvolutionManager::Init();
+			Menu::MenuManager::GetMenuManager().Init();
+			Evolution::EvolutionManager::GetEvolutionManager().Init();
 
 			initComplete = true;
 		}
@@ -94,10 +94,10 @@ namespace Window
 				switch (m_state)
 				{
 				case Menu:
-					Menu::Update();
+					Menu::MenuManager::GetMenuManager().Update();
 					break;
 				case Evolution:
-					Evolution::EvolutionManager::Update();
+					Evolution::EvolutionManager::GetEvolutionManager().Update();
 					break;
 				}
 

@@ -183,7 +183,7 @@
     <ClInclude Include="LineShape.h" />
     <ClInclude Include="MainMenu.h" />
     <ClInclude Include="MapSelectMenu.h" />
-    <ClInclude Include="Menu.h" />
+    <ClInclude Include="MenuManager.h" />
     <ClInclude Include="NeuralNetwork.h" />
     <ClInclude Include="Neuron.h" />
     <ClInclude Include="Popup.h" />

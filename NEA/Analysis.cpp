@@ -2,30 +2,15 @@
 #include <vector>
 #include "Window.h"
 #include "EvolutionManager.h"
-#include <array>
 #include "LineShape.h"
-#include "Button.h"
-#include "Popup.h"
-#include "TextField.h"
 #include "Menu.h"
 #include "InputManager.h"
 
-namespace Evolution::Analysis
+namespace Evolution
 {
 	// Private
-	std::vector<sf::Vertex> m_fitnessMax, m_fitnessAvg, m_fitnessMin;
-	std::vector<std::array<sf::Vertex, 2>> m_graphGuideLines;
-	sf::VertexArray m_viewLine;
-	UI::Button m_nextBtn, m_next10Btn, m_nextQuickBtn, m_next10QuickBtn, m_saveBtn, m_menuBtn;
-	UI::Popup m_savePopup;
-	size_t m_size = 0;
-	sf::View m_analysisView, m_graphView;
-	float m_graphMin = 0.f, m_graphMax = 0.f;
-	float m_graphGuideSeperation = 100.f;
-	sf::Text m_iterText, m_scaleText, m_fitnessText, m_bestText, m_avgText, m_worstText;
-	bool m_isMouseDown = false;
 
-	void OnWindowClose()
+	/*void OnWindowClose()
 	{
 		m_nextBtn.~Button();
 		m_next10Btn.~Button();
@@ -34,9 +19,9 @@ namespace Evolution::Analysis
 		m_saveBtn.~Button();
 		m_menuBtn.~Button();
 		m_savePopup.~Popup();
-	}
+	}*/
 
-	void SetAnalysisActive(bool isActive)
+	void Analysis::SetAnalysisActive(bool isActive)
 	{
 		m_nextBtn.SetActive(isActive);
 		m_next10Btn.SetActive(isActive);
@@ -46,7 +31,7 @@ namespace Evolution::Analysis
 		m_menuBtn.SetActive(isActive);
 	}
 
-	void OnMousePressed()
+	void Analysis::OnMousePressed()
 	{
 		if (InputManager::IsMouseInView(m_graphView))
 		{
@@ -54,19 +39,19 @@ namespace Evolution::Analysis
 		}
 	}
 
-	void OnMouseReleased()
+	void Analysis::OnMouseReleased()
 	{
 		m_isMouseDown = false;
 	}
 
 	// Public
 
-	void Init()
+	void Analysis::Init()
 	{
-		Window::GetWindowClosedEvent().AddCallback(OnWindowClose);
+		//Window::GetWindowClosedEvent().AddCallback(OnWindowClose);
 
-		InputManager::GetMousePressedEvent(sf::Mouse::Left).AddCallback(OnMousePressed);
-		InputManager::GetMouseReleasedEvent(sf::Mouse::Left).AddCallback(OnMouseReleased);
+		InputManager::GetMousePressedEvent(sf::Mouse::Left).AddCallback(&Analysis::OnMousePressed, *this);
+		InputManager::GetMouseReleasedEvent(sf::Mouse::Left).AddCallback(&Analysis::OnMouseReleased, *this);
 
 		m_graphView.setViewport(sf::FloatRect{ 0.05f, 0.45f, 0.7f, 0.5f });
 		m_analysisView = Window::GetDefaultWindowView();
@@ -118,7 +103,7 @@ namespace Evolution::Analysis
 
 		UI::Button* saveBtn = new UI::Button{ "Save", m_savePopup.GetView(), UI::Padding{2.5f, 5.f, 0.f, 0.f} };
 		saveBtn->setPosition(m_savePopup.GetView().getSize().x - retBtn->GetBounds().width - 5.f, m_savePopup.GetView().getSize().y - retBtn->GetBounds().height - 5.f);
-		saveBtn->GetMouseClickedEvent().AddCallback([&, nameTF]() { EvolutionManager::SaveGeneration(nameTF->GetRawText()); m_savePopup.SetActive(false); SetAnalysisActive(true); });
+		saveBtn->GetMouseClickedEvent().AddCallback([&, nameTF]() { EvolutionManager::GetEvolutionManager().SaveGeneration(nameTF->GetRawText()); m_savePopup.SetActive(false); SetAnalysisActive(true); });
 		saveBtn->SetCentreText(true);
 		m_savePopup.AddElement(saveBtn);
 
@@ -131,22 +116,22 @@ namespace Evolution::Analysis
 
 		m_nextBtn = UI::Button{ "Next", m_analysisView, UI::Padding{2.5f, 5.f, 0.f, 0.f} };
 		m_nextBtn.SetCentreText(true);
-		m_nextBtn.GetMouseClickedEvent().AddCallback([]() { EvolutionManager::StartNextGeneration(1, true); });
+		m_nextBtn.GetMouseClickedEvent().AddCallback([]() { EvolutionManager::GetEvolutionManager().StartNextGeneration(1, true); });
 		m_nextBtn.setPosition(xPos, yPos1);
 		m_nextQuickBtn = UI::Button{ "Next Quick", m_analysisView, UI::Padding{2.5f, 5.f, 0.f, 0.f} };
 		m_nextQuickBtn.SetCentreText(true);
-		m_nextQuickBtn.GetMouseClickedEvent().AddCallback([]() { EvolutionManager::StartNextGeneration(1, false); });
+		m_nextQuickBtn.GetMouseClickedEvent().AddCallback([]() { EvolutionManager::GetEvolutionManager().StartNextGeneration(1, false); });
 		m_nextQuickBtn.setPosition(xPos, yPos2);
 
 		xPos += xGap;
 
 		m_next10Btn = UI::Button{ "Next 10", m_analysisView, UI::Padding{2.5f, 5.f, 0.f, 0.f} };
 		m_next10Btn.SetCentreText(true);
-		m_next10Btn.GetMouseClickedEvent().AddCallback([]() { EvolutionManager::StartNextGeneration(10, true); });
+		m_next10Btn.GetMouseClickedEvent().AddCallback([]() { EvolutionManager::GetEvolutionManager().StartNextGeneration(10, true); });
 		m_next10Btn.setPosition(xPos, yPos1);
 		m_next10QuickBtn = UI::Button{ "Next 10 Quick", m_analysisView, UI::Padding{2.5f, 5.f, 0.f, 0.f} };
 		m_next10QuickBtn.SetCentreText(true);
-		m_next10QuickBtn.GetMouseClickedEvent().AddCallback([]() { EvolutionManager::StartNextGeneration(10, false); });
+		m_next10QuickBtn.GetMouseClickedEvent().AddCallback([]() { EvolutionManager::GetEvolutionManager().StartNextGeneration(10, false); });
 		m_next10QuickBtn.setPosition(xPos, yPos2);
 
 		xPos += xGap;
@@ -157,11 +142,11 @@ namespace Evolution::Analysis
 		m_saveBtn.setPosition(xPos, yPos1);
 		m_menuBtn = UI::Button{ "Menu", m_analysisView, UI::Padding{2.5f, 5.f, 0.f, 0.f} };
 		m_menuBtn.SetCentreText(true);
-		m_menuBtn.GetMouseClickedEvent().AddCallback([]() { Window::SetWindowState(Window::Menu); Menu::GoToState(Menu::MenuState::MainMenu); });
+		m_menuBtn.GetMouseClickedEvent().AddCallback([]() { Window::SetWindowState(Window::Menu); Menu::MenuManager::GetMenuManager().GoToState(Menu::MenuState::MainMenu); });
 		m_menuBtn.setPosition(xPos, yPos2);
 	}
 
-	void Update()
+	void Analysis::Update()
 	{
 		sf::RenderWindow& window = Window::GetWindow();
 
@@ -219,19 +204,19 @@ namespace Evolution::Analysis
 		window.draw(m_savePopup);
 	}
 
-	void Load()
+	void Analysis::Load()
 	{
 		Window::GetWindow().setFramerateLimit(Window::MENU_FRAMERATE);
 
 		SetAnalysisActive(true);
 	}
 
-	void Unload()
+	void Analysis::Unload()
 	{
 		SetAnalysisActive(false);
 	}
 
-	void Reset()
+	void Analysis::Reset()
 	{
 		m_fitnessMax.clear();
 		m_fitnessAvg.clear();
@@ -243,7 +228,7 @@ namespace Evolution::Analysis
 		m_graphGuideSeperation = 100.f;
 	}
 
-	void SetGraph(std::vector<float> positions)
+	void Analysis::SetGraph(std::vector<float> positions)
 	{
 		Reset();
 		m_size = positions.size() / 3;
@@ -306,7 +291,7 @@ namespace Evolution::Analysis
 		m_viewLine[1].position = sf::Vector2f{ (float)m_size - 1, m_graphMin };
 	}
 
-	void UpdateGraph(float fitnessMax, float fitnessAvg, float fitnessMin)
+	void Analysis::UpdateGraph(float fitnessMax, float fitnessAvg, float fitnessMin)
 	{
 		bool updateGuideLines = false;
 		m_graphGuideLines[0][1].position.x = (float)++m_size;
@@ -377,7 +362,7 @@ namespace Evolution::Analysis
 		m_viewLine[1].position = sf::Vector2f{ (float)m_size - 1, m_graphMin };
 	}
 
-	void SaveGraph(std::ofstream& file)
+	void Analysis::SaveGraph(std::ofstream& file)
 	{
 		file << 'g';
 		for (auto point : m_fitnessMax)

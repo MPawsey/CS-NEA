@@ -1,70 +1,69 @@
 #include "Menu.h"
 
-#include "MainMenu.h"
-#include "SettingsMenu.h"
-#include "MapSelectMenu.h"
-#include "CarSelectMenu.h"
-#include "AdvancedSettingsMenu.h"
 #include "Event.h"
 
 namespace Menu
 {
-	MenuState m_menuState;
+	MenuManager& MenuManager::GetMenuManager()
+	{
+		static MenuManager menuManager{};
+		return menuManager;
+	}
 
-	void Init()
+	void MenuManager::Init()
 	{
 		m_menuState = MenuState::MainMenu;
 
-		MainMenu::Init();
-		SettingsMenu::Init();
-		MapSelectMenu::Init();
-		CarSelectMenu::Init();
-		AdvancedSettingsMenu::Init();
+		m_mainMenu.Init();
+		m_settingsMenu.Init();
+		m_mapSelectMenu.Init();
+		m_carSelectMenu.Init();
+		m_advSettingsMenu.Init();
 
-		MainMenu::Load();
+		m_mainMenu.Load();
 	}
 
-	void Update()
+	void MenuManager::Update()
 	{
 		switch (m_menuState)
 		{
 		case MenuState::MainMenu:
-			MainMenu::Update();
+			m_mainMenu.Update();
 			break;
 		case MenuState::StartConfig:
-			SettingsMenu::Update();
+			m_settingsMenu.Update();
 			break;
 		case MenuState::StartMap:
-			MapSelectMenu::Update();
+			m_mapSelectMenu.Update();
 			break;
 		case MenuState::StartCar:
-			CarSelectMenu::Update();
+			m_carSelectMenu.Update();
 			break;
 		case MenuState::AdvancedConfig:
-			AdvancedSettingsMenu::Update();
+			m_advSettingsMenu.Update();
 			break;
 		}
 	}
 
-	void GoToState(MenuState newState)
+	void MenuManager::GoToState(MenuState newState)
 	{
 		// Unload previous state
 		switch (m_menuState)
 		{
 		case MenuState::MainMenu:
-			MainMenu::Unload();
+			m_mainMenu.Unload();
 			break;
 		case MenuState::StartConfig:
-			SettingsMenu::Unload();
+			m_settingsMenu.Unload();
 			break;
 		case MenuState::StartMap:
-			MapSelectMenu::Unload();
+			m_mapSelectMenu.Unload();
 			break;
 		case MenuState::StartCar:
-			CarSelectMenu::Unload();
+			m_carSelectMenu.Unload();
 			break;
 		case MenuState::AdvancedConfig:
-			AdvancedSettingsMenu::Unload();
+			m_advSettingsMenu.Unload();
 			break;
 		}
 
@@ -72,19 +71,19 @@ namespace Menu
 		switch (m_menuState = newState)
 		{
 		case MenuState::MainMenu:
-			MainMenu::Load();
+			m_mainMenu.Load();
 			break;
 		case MenuState::StartConfig:
-			SettingsMenu::Load();
+			m_settingsMenu.Load();
 			break;
 		case MenuState::StartMap:
-			MapSelectMenu::Load();
+			m_mapSelectMenu.Load();
 			break;
 		case MenuState::StartCar:
-			CarSelectMenu::Load();
+			m_carSelectMenu.Load();
 			break;
 		case MenuState::AdvancedConfig:
-			AdvancedSettingsMenu::Load();
+			m_advSettingsMenu.Load();
 			break;
 		}
 	}
