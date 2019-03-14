@@ -29,7 +29,7 @@ namespace RaceTrack
 	// Finds collision between two segments
 	// out = point of collision
 	// returns true if segments intersect
-	bool Raycast(const sf::Vector2f& a1, const sf::Vector2f& a2, const sf::Vector2f& b1, const sf::Vector2f& b2, sf::Vector2f& out)
+	bool DoLinesIntersect(const sf::Vector2f& a1, const sf::Vector2f& a2, const sf::Vector2f& b1, const sf::Vector2f& b2, sf::Vector2f& out)
 	{
 		// Can they collide?
 		float maxAx = std::max(a1.x, a2.x);
@@ -238,7 +238,7 @@ namespace RaceTrack
 		{
 			for (int i = 1; i < wall.size(); i++)
 			{
-				if (Raycast(p1, p2, wall[i - 1].position, wall[i].position, out))
+				if (DoLinesIntersect(p1, p2, wall[i - 1].position, wall[i].position, out))
 				{
 					p2 = out;
 					collided = true;
@@ -257,10 +257,10 @@ namespace RaceTrack
 		{
 			for (unsigned int i = 1; i < wall.size(); i++)
 			{
-				if (Raycast(p1, p2, wall[i - 1].position, wall[i].position, out) ||
-					Raycast(p2, p3, wall[i - 1].position, wall[i].position, out) ||
-					Raycast(p3, p4, wall[i - 1].position, wall[i].position, out) ||
-					Raycast(p4, p1, wall[i - 1].position, wall[i].position, out))
+				if (DoLinesIntersect(p1, p2, wall[i - 1].position, wall[i].position, out) ||
+					DoLinesIntersect(p2, p3, wall[i - 1].position, wall[i].position, out) ||
+					DoLinesIntersect(p3, p4, wall[i - 1].position, wall[i].position, out) ||
+					DoLinesIntersect(p4, p1, wall[i - 1].position, wall[i].position, out))
 					return true;
 			}
 		}
