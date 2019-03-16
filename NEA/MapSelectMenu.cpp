@@ -29,7 +29,7 @@ namespace Menu
 		// Just don't delete a file and it works for some reason
 		m_buttons.clear();
 
-		std::string path = "Cars";
+		std::string path = "Tracks";
 
 		int pos = 0;
 		float startOffset = 10.f;
@@ -37,7 +37,7 @@ namespace Menu
 
 		for (const auto& entry : std::filesystem::directory_iterator(path))
 		{
-			if (entry.path().extension() != ".cars")
+			if (entry.path().extension() != ".track")
 				continue;
 
 			UI::Button b{ entry.path().filename().replace_extension().u8string(), m_mapButtonView, { 5.f } };
@@ -51,6 +51,11 @@ namespace Menu
 
 		if (m_sliderMax > 0)
 			m_slider.GetSliderUpdateEvent().AddCallback([&](float val) { m_mapButtonView.setCenter(m_mapButtonView.getSize().x / 2.f, (m_mapButtonView.getSize().y / 2.f) + (m_sliderMax * val)); });
+	}
+
+	void MapSelectMenu::BackPressed()
+	{
+		MenuManager::GetMenuManager().GoToState(m_prevState);
 	}
 
 	// Public
@@ -76,7 +81,7 @@ namespace Menu
 		m_backBtn = UI::Button{ "Back", m_mapSelectView, { 5.f, 5.f, 0.f, 0.f } };
 		m_backBtn.setPosition(50.f, window.getSize().y - UI::GetFont().getLineSpacing(30) - 5.f);
 		m_backBtn.SetCentreText(true);
-		m_backBtn.GetMouseClickedEvent().AddCallback([&]() { MenuManager::GetMenuManager().GoToState(MenuState::StartConfig); });
+		m_backBtn.GetMouseClickedEvent().AddCallback([&]() { this->BackPressed(); });
 	}
 
 	void MapSelectMenu::Update()
@@ -95,8 +100,10 @@ namespace Menu
 		}
 	}
 
-	void MapSelectMenu::Load()
+	void MapSelectMenu::Load(MenuState prevState)
 	{
+		m_prevState = prevState;
+
 		LoadMenu();
 
 		m_isActive = true;

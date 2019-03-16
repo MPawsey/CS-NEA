@@ -12,6 +12,7 @@ namespace UI
 	{
 	private:
 		static inline const sf::Color BACK_COLOUR{ 40, 46, 71, 255 };
+		static inline const sf::Color DISABLED_COLOUR{ 62, 65, 76, 255 };
 		static inline const sf::Color HOVER_COLOUR{ 60, 69, 106, 255 };
 		static inline const sf::Color PRESSED_COLOUR{ 29, 33, 52, 255 };
 
@@ -29,6 +30,9 @@ namespace UI
 		virtual void OnMouseHoverPress();
 		virtual void OnMouseRelease(); // Triggered if pressed but not clicked
 		virtual void OnMouseClick();
+
+		virtual void OnActivated();
+		virtual void OnDeactivated();
 
 		virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 

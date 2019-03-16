@@ -15,7 +15,7 @@ namespace Menu
 
 
 		m_onlyPairOnceCB = UI::CheckBox{ m_advSettingsView };
-		m_onlyPairOnceCB.setPosition(500.f, 500.f);
+		m_onlyPairOnceCB.setPosition(100.f, 100.f);
 		m_onlyPairOnceCB.SetTooltipText("If checked, the reproduction stage will\nonly allow each car to create 1 offspring\neach (two per pair).\nThis will prevent the ability to choose the\nnumber of saved and killed cars.");
 
 		m_onlyPairOnceText.setFont(UI::GetFont());

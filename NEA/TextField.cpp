@@ -130,12 +130,17 @@ namespace UI
 
 		}
 	}
+
+	void TextField::OnActivated()
+	{
+		m_textContainer.setFillColor(UNACTIVE_COLOUR);
+	}
 	
 	void TextField::OnDeactivated()
 	{
 		m_hasFocus = false;
 
-		m_textContainer.setFillColor(UNACTIVE_COLOUR);
+		m_textContainer.setFillColor(DISABLED_COLOUR);
 
 		if (m_rawText.getSize() > 0 && m_rawText.toAnsiString().back() == '_')
 			m_rawText.erase(m_rawText.getSize() - 1);

@@ -37,11 +37,14 @@ namespace UI
 		virtual void OnMouseHover();
 		virtual void OnMouseUnhover();
 		virtual void OnMouseHoverPress();
+
+		virtual void OnActivated();
 		virtual void OnDeactivated();
 
 		virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
 	public:
+		const static inline sf::Color DISABLED_COLOUR{ 33, 32, 32, 255 };
 		const static inline sf::Color UNACTIVE_COLOUR{ 50, 50, 50, 255 };
 		const static inline sf::Color ACTIVE_COLOUR{ 40, 46, 71, 255 };
 

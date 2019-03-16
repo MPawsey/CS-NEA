@@ -67,8 +67,9 @@ namespace Menu
 			break;
 		}
 
+
 		// Load new state
-		switch (m_menuState = newState)
+		switch (newState)
 		{
 		case MenuState::MainMenu:
 			m_mainMenu.Load();
@@ -77,7 +78,7 @@ namespace Menu
 			m_settingsMenu.Load();
 			break;
 		case MenuState::StartMap:
-			m_mapSelectMenu.Load();
+			m_mapSelectMenu.Load(m_menuState);
 			break;
 		case MenuState::StartCar:
 			m_carSelectMenu.Load();
@@ -86,6 +87,8 @@ namespace Menu
 			m_advSettingsMenu.Load();
 			break;
 		}
+
+		m_menuState = newState;
 	}
 
 }

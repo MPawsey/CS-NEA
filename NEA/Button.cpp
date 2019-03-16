@@ -24,7 +24,7 @@ namespace UI
 		m_clickBounds = sf::FloatRect{ sf::Vector2f{m_padding.left, m_padding.top}, sf::Vector2f{ m_label.getLocalBounds().width + m_padding.left + m_padding.right, GetFont().getLineSpacing(30) + m_padding.top + m_padding.bottom } };
 
 		m_background.setSize(sf::Vector2f{ GetClickBounds().width, GetClickBounds().height });
-		m_background.setFillColor(BACK_COLOUR);
+		m_background.setFillColor(DISABLED_COLOUR);
 		m_background.setOutlineColor(sf::Color::White);
 		m_background.setOutlineThickness(1.f);
 	}
@@ -89,6 +89,16 @@ namespace UI
 		states.transform *= getTransform();
 		target.draw(m_background, states);
 		target.draw(m_label, states);
+	}
+
+	void Button::OnActivated()
+	{
+		m_background.setFillColor(BACK_COLOUR);
+	}
+	
+	void Button::OnDeactivated()
+	{
+		m_background.setFillColor(DISABLED_COLOUR);
 	}
 
 	void Button::OnMouseHover()

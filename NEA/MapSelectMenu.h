@@ -6,12 +6,17 @@
 namespace Menu
 {
 
+	enum class MenuState;
+
+
 	class MapSelectMenu
 	{
 	private:
 		// Private
 		sf::View m_mapSelectView;
 		sf::View m_mapButtonView;
+
+		MenuState m_prevState;
 
 		bool m_isActive = false;
 
@@ -27,12 +32,14 @@ namespace Menu
 		void OnMouseScrolled(int delta);
 		void LoadMap(std::string filename);
 		void LoadMenu();
-
+		
 	public:
 		void Init();
 		void Update();
-		void Load();
+		void Load(MenuState prevState);
 		void Unload();
+
+		void BackPressed();
 	};
 
 }
