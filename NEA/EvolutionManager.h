@@ -13,7 +13,7 @@ namespace Evolution
 	{
 	private:
 		bool m_analysis = false, m_canMultiReproduce = true;
-		unsigned int m_aliveSize, m_iteration, m_saveSize = 0, m_killSize = 22;
+		unsigned int m_aliveSize, m_iteration, m_saveSize, m_killSize;
 		sf::View m_evolutionView;
 		RNG::Random m_randomEngine;
 		std::string m_track;
@@ -38,10 +38,12 @@ namespace Evolution
 		void Init();
 		void Update();
 
-
-		void CreateGenerationFromSettings(float width, float height, unsigned int rayCount, float raySize, unsigned int popSize, float enginePow, float rotPow, double mutPC, double splicePC, unsigned int seed);
+		void SetAdvancedSettings(unsigned int saveSize, unsigned int killSize, bool canMultiReproduce, std::vector<unsigned int> nnSizes);
+		void CreateGenerationFromSettings(float width, float height, unsigned int rayCount, float raySize, unsigned int popSize, float enginePow,
+			float rotPow, double mutPC, double splicePC, unsigned int seed);
 		void CreateGenerationFromFile(std::string filename);
 
+		unsigned int GetPopulationSize();
 		void ResetCars();
 		
 		void StartNextGeneration(int cycleCount, bool draw);

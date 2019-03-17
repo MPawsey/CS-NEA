@@ -24,6 +24,8 @@ namespace Menu
 	void CarSelectMenu::LoadMenu()
 	{
 		// Just don't delete a file and it works for some reason
+		for (auto b : m_buttons)
+			delete b;
 		m_buttons.clear();
 
 		std::string path = "Cars";
@@ -37,17 +39,15 @@ namespace Menu
 			if (entry.path().extension() != ".cars")
 				continue;
 
-			UI::Button b{ entry.path().filename().replace_extension().u8string(), m_carButtonView, { 5.f } };
-			b.setPosition(10.f, startOffset + (pos++ * yGap));
-			b.SetBackgroundSize(sf::Vector2f{ m_carButtonView.getSize().x - 20.f, b.GetClickBounds().height });
-			b.GetMouseClickedEvent().AddCallback([=]() { LoadCar(entry.path().u8string()); });
+			UI::Button* b = new UI::Button{ entry.path().filename().replace_extension().u8string(), m_carButtonView, { 5.f } };
+			b->setPosition(10.f, startOffset + (pos++ * yGap));
+			b->SetBackgroundSize(sf::Vector2f{ m_carButtonView.getSize().x - 20.f, b->GetClickBounds().height });
+			b->GetMouseClickedEvent().AddCallback([=]() { LoadCar(entry.path().u8string()); });
 			m_buttons.push_back(b);
 		}
 
 		m_sliderMax = (startOffset + ((pos)* yGap)) - m_carButtonView.getSize().y;
 
-		if (m_sliderMax > 0)
-			m_slider.GetSliderUpdateEvent().AddCallback([&](float val) { m_carButtonView.setCenter(m_carButtonView.getSize().x / 2.f, (m_carButtonView.getSize().y / 2.f) + (m_sliderMax * val)); });
 	}
 
 	// Public
@@ -69,6 +69,11 @@ namespace Menu
 		InputManager::GetMouseScrolledEvent().AddCallback(&CarSelectMenu::OnMouseScrolled, *this);
 
 		m_slider = UI::Slider{ sf::Vector2f{ 775.f, 50.f }, m_carSelectView, 500.f };
+		m_slider.GetSliderUpdateEvent().AddCallback([&](float val) 
+		{ 
+			if (m_sliderMax > 0)
+				m_carButtonView.setCenter(m_carButtonView.getSize().x / 2.f, (m_carButtonView.getSize().y / 2.f) + (m_sliderMax * val)); 
+		});
 
 		m_backBtn = UI::Button{ "Back", m_carSelectView, { 5.f, 5.f, 0.f, 0.f } };
 		m_backBtn.setPosition(50.f, window.getSize().y - UI::GetFont().getLineSpacing(30) - 5.f);
@@ -86,9 +91,9 @@ namespace Menu
 		window.draw(m_backBtn);
 
 		window.setView(m_carButtonView);
-		for (UI::Button& b : m_buttons)
+		for (UI::Button* b : m_buttons)
 		{
-			window.draw(b);
+			window.draw(*b);
 		}
 	}
 
@@ -101,9 +106,9 @@ namespace Menu
 		m_slider.SetActive(true);
 		m_backBtn.SetActive(true);
 
-		for (UI::Button& b : m_buttons)
+		for (UI::Button* b : m_buttons)
 		{
-			b.SetActive(true);
+			b->SetActive(true);
 		}
 	}
 
@@ -114,9 +119,9 @@ namespace Menu
 		m_slider.SetActive(false);
 		m_backBtn.SetActive(false);
 
-		for (UI::Button& b : m_buttons)
+		for (UI::Button* b : m_buttons)
 		{
-			b.SetActive(false);
+			b->SetActive(false);
 		}
 	}
 }

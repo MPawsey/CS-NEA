@@ -64,10 +64,10 @@ namespace UI
 		void SetTooltipText(sf::Text content);
 		void SetTooltipText(std::string content);
 
-		float GetFloatValue() const;
-		double GetDoubleValue() const;
-		int GetIntegerValue() const;
-		unsigned int GetUIntegerValue() const;
+		float GetFloatValue();
+		double GetDoubleValue();
+		int GetIntegerValue();
+		unsigned int GetUIntegerValue();
 
 	};
 

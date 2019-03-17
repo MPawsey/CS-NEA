@@ -16,7 +16,6 @@ namespace UI
 		sf::RectangleShape m_sliderLine;
 		sf::CircleShape m_sliderGrab;
 		bool m_hasFocus = false;
-		bool m_active = false;
 		sf::FloatRect m_clickBounds;
 
 		void CalcSliderVal(sf::Vector2f mousePos);

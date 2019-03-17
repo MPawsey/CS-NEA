@@ -124,7 +124,7 @@ namespace UI
 		m_text.setPosition(sf::Vector2f{0, 0});
 		m_text.setString(text);
 		m_background.setSize(sf::Vector2f{ m_text.getGlobalBounds().width + 5.f, m_text.getGlobalBounds().height + 10.f });
-		//setOrigin(sf::Vector2f{0, m_background.getGlobalBounds().height});
+		setOrigin(sf::Vector2f{0, m_background.getGlobalBounds().height});
 	}
 
 

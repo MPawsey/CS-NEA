@@ -43,6 +43,8 @@ namespace Evolution
 		m_evolutionView.setCenter(0.f, 0.f);
 
 		m_analysisScreen.Init();
+
+		m_carSizes = { 4, 3, 2 };
 	}
 
 	void EvolutionManager::Update()
@@ -138,6 +140,13 @@ namespace Evolution
 		}
 	}
 
+	void EvolutionManager::SetAdvancedSettings(unsigned int saveSize, unsigned int killSize, bool canMultiReproduce, std::vector<unsigned int> nnSizes)
+	{
+		m_carSizes = nnSizes;
+		m_killSize = killSize;
+		m_saveSize = saveSize;
+		m_canMultiReproduce = canMultiReproduce;
+	}
 
 	void EvolutionManager::CreateGenerationFromSettings(float width, float height, unsigned int rayCount, float raySize, unsigned int popSize, float enginePow, float rotPow, double mutPC, double splicePC, unsigned int seed)
 	{
@@ -147,7 +156,7 @@ namespace Evolution
 		m_carWidth = width;
 		m_carHeight = height;
 		m_carRaySize = raySize;
-		m_carSizes = { rayCount, 4, 3, 2};
+		m_carSizes.insert(m_carSizes.begin(), rayCount);
 
 		m_iteration = 0;
 		m_simulationScreen.SetIteration(m_iteration);
@@ -236,9 +245,9 @@ namespace Evolution
 				{
 					ss >> junk >> m_carRaySize;
 				}
-				else if (s[0] == 'p') // Population Size
+				else if (s[0] == 'p') // Population Size, save, kill and canMultiReprod
 				{
-					ss >> junk >> m_aliveSize;
+					ss >> junk >> m_aliveSize >> m_saveSize >> m_killSize >> m_canMultiReproduce;
 				}
 				else if (s[0] == 'e') // Engine & Rotation Power
 				{
@@ -337,6 +346,11 @@ namespace Evolution
 		}
 	}
 
+	unsigned int EvolutionManager::GetPopulationSize()
+	{
+		return m_cars.size();
+	}
+
 	void EvolutionManager::ResetCars()
 	{
 		m_simulationScreen.SetIteration(m_iteration);
@@ -382,7 +396,7 @@ namespace Evolution
 		std::string sizeStr = std::accumulate(m_carSizes.begin(), m_carSizes.end(), std::string{ "" }, [](std::string val, unsigned int cur) { return val.append(std::to_string(cur) + " "); });
 		WriteLineToFile(file, 's', (sizeStr.erase(sizeStr.end() - 1), sizeStr));
 		WriteLineToFile(file, 'r', m_carRaySize);
-		WriteLineToFile(file, 'p', m_cars.size());
+		WriteLineToFile(file, 'p', m_cars.size(), m_saveSize, m_killSize, m_canMultiReproduce);
 		WriteLineToFile(file, 'e', Machine::Car::enginePower, Machine::Car::rotationPower);
 		WriteLineToFile(file, 'o', Machine::Neuron::mutatePC, Machine::Neuron::splicePC);
 		m_analysisScreen.SaveGraph(file);

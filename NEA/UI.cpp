@@ -39,4 +39,10 @@ namespace UI
 
 		return *this;
 	}
+
+
+	const bool UIElement::IsActive() const
+	{
+		return m_isActive;
+	}
 }

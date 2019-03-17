@@ -61,6 +61,11 @@ namespace UI
 		m_tooltip.SetText(content);
 	}
 
+	bool CheckBox::IsChecked() const
+	{
+		return m_isChecked;
+	}
+
 	Event<bool>& CheckBox::GetCheckBoxUpdateEvent()
 	{
 		return m_checkBoxUpdateEvent;
@@ -68,7 +73,7 @@ namespace UI
 
 	void CheckBox::OnMouseClick()
 	{
-		m_isChecked = !m_isChecked;
+		m_checkBoxUpdateEvent.Call(m_isChecked = !m_isChecked);
 	}
 
 	void CheckBox::OnMouseHover()

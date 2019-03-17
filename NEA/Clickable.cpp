@@ -101,6 +101,9 @@ namespace UI
 
 	void Clickable::OnMouseReleased()
 	{
+		if (!m_isActive)
+			return;
+
 		sf::Vector2f mousePos;
 		if (m_mousePressed && InputManager::IsMouseInView(*m_containerView, mousePos) && getTransform().transformRect(m_clickBounds).contains(mousePos))
 		{
@@ -125,11 +128,6 @@ namespace UI
 		InputManager::GetMouseMovedEvent().RemoveCallback(m_mouseMovedID);
 		InputManager::GetMousePressedEvent(sf::Mouse::Left).RemoveCallback(m_mousePressedID);
 		InputManager::GetMouseReleasedEvent(sf::Mouse::Left).RemoveCallback(m_mouseReleasedID);
-	}
-
-	const bool Clickable::IsActive() const
-	{
-		return m_isActive;
 	}
 
 	void Clickable::SetActive(bool isActive)

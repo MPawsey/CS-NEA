@@ -22,6 +22,7 @@ namespace UI
 
 	protected:
 		sf::View* m_containerView;
+		bool m_isActive = false;
 
 		UIElement() {}
 		UIElement(sf::View& view);
@@ -31,6 +32,8 @@ namespace UI
 
 
 	public:
+
+		const bool IsActive() const;
 
 		virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const {}
 		virtual void SetActive(bool isActive) = 0;

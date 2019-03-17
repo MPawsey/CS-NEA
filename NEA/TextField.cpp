@@ -140,7 +140,11 @@ namespace UI
 	{
 		m_hasFocus = false;
 
-		m_textContainer.setFillColor(DISABLED_COLOUR);
+		if (!IsActive())
+			m_textContainer.setFillColor(DISABLED_COLOUR);
+		else
+			m_textContainer.setFillColor(UNACTIVE_COLOUR);
+
 
 		if (m_rawText.getSize() > 0 && m_rawText.toAnsiString().back() == '_')
 			m_rawText.erase(m_rawText.getSize() - 1);
@@ -159,7 +163,7 @@ namespace UI
 	void TextField::OnMouseLeftClick()
 	{
 		sf::Vector2f pos;
-		if (m_hasFocus && InputManager::IsMouseInView(GetContainerView(), pos) && !GetClickBounds().contains(pos))
+		if (m_hasFocus && (!InputManager::IsMouseInView(GetContainerView(), pos) || (InputManager::IsMouseInView(GetContainerView(), pos) && !GetClickBounds().contains(pos))))
 			OnDeactivated();
 	}
 
@@ -238,23 +242,31 @@ namespace UI
 		m_tooltip.SetText(content);
 	}
 
-	float TextField::GetFloatValue() const
+	float TextField::GetFloatValue()
 	{
+		if ((m_type == FieldType::Decimal || m_type == FieldType::Integer) && m_rawText.getSize() == 0)
+			SetRawText("0");
 		return std::stof(m_rawText.toAnsiString());
 	}
 
-	double TextField::GetDoubleValue() const
+	double TextField::GetDoubleValue()
 	{
+		if ((m_type == FieldType::Decimal || m_type == FieldType::Integer) && m_rawText.getSize() == 0)
+			SetRawText("0");
 		return std::stod(m_rawText.toAnsiString());
 	}
 
-	int TextField::GetIntegerValue() const
+	int TextField::GetIntegerValue()
 	{
+		if ((m_type == FieldType::Decimal || m_type == FieldType::Integer) && m_rawText.getSize() == 0)
+			SetRawText("0");
 		return std::stoi(m_rawText.toAnsiString());
 	}
 
-	unsigned int TextField::GetUIntegerValue() const
+	unsigned int TextField::GetUIntegerValue()
 	{
+		if ((m_type == FieldType::Decimal || m_type == FieldType::Integer) && m_rawText.getSize() == 0)
+			SetRawText("0");
 		return (unsigned int)std::stoul(m_rawText.toAnsiString());
 	}
 }

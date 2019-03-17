@@ -244,7 +244,7 @@ namespace Menu
 		m_nextBtn.SetCentreText(true);
 		m_nextBtn.GetMouseClickedEvent().AddCallback([&]() { MenuManager::GetMenuManager().GoToState(MenuState::StartMap); });
 
-		m_advSettingsBtn = UI::Button{ "Advanced", m_settingsView, { 5.f, 5.f, 0.f, 0.f } };
+		m_advSettingsBtn = UI::Button{ "Advanced", m_settingsView, { 2.f, 5.f, 0.f, 0.f } };
 		m_advSettingsBtn.setPosition(xPos2, window.getSize().y - yLineSpace);
 		m_advSettingsBtn.SetCentreText(true);
 		m_advSettingsBtn.GetMouseClickedEvent().AddCallback([&]() { MenuManager::GetMenuManager().GoToState(MenuState::AdvancedConfig); });

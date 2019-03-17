@@ -27,7 +27,7 @@ namespace Menu
 		UI::Button m_backBtn;
 
 		sf::RectangleShape m_buttonBackground;
-		std::vector<UI::Button> m_buttons;
+		std::vector<UI::Button*> m_buttons;
 
 		void OnMouseScrolled(int delta);
 		void LoadMap(std::string filename);

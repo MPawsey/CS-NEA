@@ -3,6 +3,7 @@
 #include "Button.h"
 #include "CheckBox.h"
 #include "TextField.h"
+#include "Slider.h"
 #include <vector>
 
 namespace Menu
@@ -18,6 +19,8 @@ namespace Menu
 	private:
 		sf::View m_advSettingsView;
 
+		UI::Button m_backBtn;
+
 		// Single Reproduce Stuff
 		UI::CheckBox m_onlyPairOnceCB;
 		sf::Text m_onlyPairOnceText;
@@ -26,8 +29,17 @@ namespace Menu
 		UI::TextField m_saveTF, m_killTF;
 
 		// Stuff for custom NN
-		std::vector<UI::TextField> m_layerSizes;
+		sf::Text m_layersText;
+		sf::View m_layerView;
+		sf::RectangleShape m_layersBackground;
+		std::vector<UI::TextField*> m_layerSizes;
 		UI::Button m_addLayer, m_removeLayer;
+		UI::Slider m_layerSlider;
+		float m_layerSliderMax = -1;
+
+		void OnPairCBUpdate(bool isChecked); 
+		void CheckTFValues(bool isSaveTF);
+		void OnMouseScrolled(int delta);
 
 	public:
 		void Init();

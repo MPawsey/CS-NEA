@@ -58,7 +58,7 @@ namespace UI
 
 	void Slider::OnMouseLeftPressed()
 	{
-		if (!m_active) return;
+		if (!m_isActive) return;
 
 		sf::Vector2f pos;
 		if (InputManager::IsMouseInView(*m_containerView, pos) && m_clickBounds.contains(pos))
@@ -72,13 +72,13 @@ namespace UI
 
 	void Slider::OnMouseLeftReleased()
 	{
-		if (m_active)
+		if (m_isActive)
 			m_hasFocus = false;
 	}
 
 	void Slider::OnMouseMoved(sf::Vector2i mousePos)
 	{
-		if (!m_active) return;
+		if (!m_isActive) return;
 
 		if (m_hasFocus)
 		{
@@ -99,7 +99,7 @@ namespace UI
 
 	void Slider::SetActive(bool isActive)
 	{
-		if (m_active = isActive)
+		if (m_isActive = isActive)
 		{
 			m_sliderVal = 0;
 			m_sliderGrab.setPosition(m_sliderGrab.getPosition().x, m_sliderLine.getPosition().y);

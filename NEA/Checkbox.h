@@ -33,6 +33,8 @@ namespace UI
 		void SetTooltipText(sf::Text content);
 		void SetTooltipText(std::string content);
 
+		bool IsChecked() const;
+
 		Event<bool>& GetCheckBoxUpdateEvent();
 	};
 
