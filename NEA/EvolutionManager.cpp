@@ -140,15 +140,17 @@ namespace Evolution
 		}
 	}
 
-	void EvolutionManager::SetAdvancedSettings(unsigned int saveSize, unsigned int killSize, bool canMultiReproduce, std::vector<unsigned int> nnSizes)
+	void EvolutionManager::SetAdvancedSettings(unsigned int popSize, unsigned int saveSize, unsigned int killSize, bool canMultiReproduce, std::vector<unsigned int> nnSizes)
 	{
+		m_aliveSize = popSize;
 		m_carSizes = nnSizes;
 		m_killSize = killSize;
 		m_saveSize = saveSize;
 		m_canMultiReproduce = canMultiReproduce;
 	}
 
-	void EvolutionManager::CreateGenerationFromSettings(float width, float height, unsigned int rayCount, float raySize, unsigned int popSize, float enginePow, float rotPow, double mutPC, double splicePC, unsigned int seed)
+	void EvolutionManager::CreateGenerationFromSettings(float width, float height, unsigned int rayCount, float raySize, double mutateSize, float enginePow, float rotPow,
+		double mutPC, double splicePC, unsigned int seed)
 	{
 		Reset();
 		m_analysis = false;
@@ -162,10 +164,10 @@ namespace Evolution
 		m_simulationScreen.SetIteration(m_iteration);
 		m_simulationScreen.SetSeedText(seed);
 
-		m_aliveSize = popSize;
 
 		Machine::Car::enginePower = enginePow;
 		Machine::Car::rotationPower = rotPow;
+		Machine::Neuron::mutateSize = mutateSize;
 		Machine::Neuron::mutatePC = mutPC;
 		Machine::Neuron::splicePC = splicePC;
 
@@ -173,7 +175,7 @@ namespace Evolution
 
 		Machine::Car::CreateRays(rayCount, raySize, width, height);
 
-		for (unsigned int i = 0; i < popSize; i++)
+		for (unsigned int i = 0; i < m_aliveSize; i++)
 		{
 			m_cars.push_back(new Machine::Car{ width, height, m_carSizes });
 			m_cars.back()->GetNeuralNetwork().CreateNetworkDiagram();

@@ -45,13 +45,13 @@ namespace Menu
 		UI::TextField m_raySizeTF;
 
 
-		// POPULATION SIZE
-		const int m_popSizeMinVal = 15;
-		const int m_popSizeMaxVal = 35;
-		sf::Text m_popSizeLabel;
-		UI::Button m_popSizePlusBtn;
-		UI::Button m_popSizeMinusBtn;
-		UI::TextField m_popSizeTF;
+		// MUTATE SIZE
+		const double m_mutSizeMinVal = 0.0;
+		const double m_mutSizeMaxVal = 1.0;
+		sf::Text m_mutSizeLabel;
+		UI::Button m_mutSizePlusBtn;
+		UI::Button m_mutSizeMinusBtn;
+		UI::TextField m_mutSizeTF;
 
 		// ENGINE POWER
 		const double m_enginePowMinVal = 5.0;

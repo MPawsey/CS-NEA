@@ -25,8 +25,25 @@ namespace Menu
 		UI::CheckBox m_onlyPairOnceCB;
 		sf::Text m_onlyPairOnceText;
 
-		// Save/kill count
-		UI::TextField m_saveTF, m_killTF;
+		// Population size
+		const int m_popSizeMinVal = 15;
+		const int m_popSizeMaxVal = 35;
+		sf::Text m_popSizeLabel;
+		UI::Button m_popSizePlusBtn;
+		UI::Button m_popSizeMinusBtn;
+		UI::TextField m_popSizeTF;
+
+		// Save count
+		sf::Text m_saveLabel;
+		UI::Button m_savePlusBtn;
+		UI::Button m_saveMinusBtn;
+		UI::TextField m_saveTF;
+
+		// Kill count
+		sf::Text m_killLabel;
+		UI::Button m_killPlusBtn;
+		UI::Button m_killMinusBtn;
+		UI::TextField m_killTF;
 
 		// Stuff for custom NN
 		sf::Text m_layersText;
