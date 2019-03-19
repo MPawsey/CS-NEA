@@ -8,4 +8,5 @@ namespace Functions
 	std::string DoubleToString(double d);
 	void ClampTextFieldDoubleValue(UI::TextField& text, double boundLower, double boundUpper);
 	void ClampTextFieldIntegerValue(UI::TextField& text, int boundLower, int boundUpper);
+	float Distance(const sf::Vector2f& p1, const sf::Vector2f& p2);
 }

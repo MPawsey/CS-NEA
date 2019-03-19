@@ -10,7 +10,8 @@ namespace Window
 	enum WindowStates
 	{
 		Menu,
-		Evolution
+		Evolution,
+		Editor
 	};
 
 	void Init();

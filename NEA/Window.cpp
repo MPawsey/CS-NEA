@@ -4,6 +4,7 @@
 #include "UI.h"
 #include "EvolutionManager.h"
 #include <vector>
+#include "MapEditor.h"
 
 namespace Window
 {
@@ -72,6 +73,7 @@ namespace Window
 			UI::Init();
 			Menu::MenuManager::GetMenuManager().Init();
 			Evolution::EvolutionManager::GetEvolutionManager().Init();
+			Editor::MapEditor::GetMapEditor().Init();
 
 			initComplete = true;
 		}
@@ -98,6 +100,9 @@ namespace Window
 					break;
 				case Evolution:
 					Evolution::EvolutionManager::GetEvolutionManager().Update();
+					break;
+				case Editor:
+					Editor::MapEditor::GetMapEditor().Update();
 					break;
 				}
 

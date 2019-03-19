@@ -137,6 +137,7 @@
     <ClCompile Include="Clickable.cpp" />
     <ClCompile Include="Functions.cpp" />
     <ClCompile Include="LineShape.cpp" />
+    <ClCompile Include="MapEditor.cpp" />
     <ClCompile Include="Popup.cpp" />
     <ClCompile Include="Simulation.cpp" />
     <ClCompile Include="EvolutionManager.cpp" />
@@ -187,6 +188,7 @@
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="LineShape.h" />
     <ClInclude Include="MainMenu.h" />
+    <ClInclude Include="MapEditor.h" />
     <ClInclude Include="MapSelectMenu.h" />
     <ClInclude Include="MenuManager.h" />
     <ClInclude Include="NeuralNetwork.h" />

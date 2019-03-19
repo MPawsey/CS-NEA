@@ -1,6 +1,7 @@
 #include "MainMenu.h"
 #include "Window.h"
 #include "MenuManager.h"
+#include "MapEditor.h"
 
 namespace Menu
 {
@@ -32,7 +33,12 @@ namespace Menu
 		m_mapEditorBtn = UI::Button{ "Launch map editor", m_mainMenuView, { 5.f, 7.f, 2.f, 2.f } };
 		m_mapEditorBtn.setPosition(xPos, yPos);
 		m_mapEditorBtn.SetBackgroundSize(sf::Vector2f{ 500.f, m_mapEditorBtn.GetClickBounds().height });
-		m_mapEditorBtn.GetMouseClickedEvent().AddCallback([]() {  });
+		m_mapEditorBtn.GetMouseClickedEvent().AddCallback([]() 
+		{ 
+			MenuManager::GetMenuManager().GoToState(MenuState::None); 
+			Window::SetWindowState(Window::Editor); 
+			Editor::MapEditor::GetMapEditor().Load();
+		});
 	}
 
 	void MainMenu::Update()

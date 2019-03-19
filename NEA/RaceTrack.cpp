@@ -8,6 +8,7 @@
 #include <fstream>
 #include <numeric>
 #include "EvolutionManager.h"
+#include "Functions.h"
 
 namespace RaceTrack
 {
@@ -121,10 +122,6 @@ namespace RaceTrack
 		return true;
 	}
 
-	float Magnitude(const sf::Vector2f& p1, const sf::Vector2f& p2)
-	{
-		return sqrtf(powf(p2.x - p1.x, 2) + powf(p2.y - p1.y, 2));
-	}
 
 	// Public
 	void LoadFromFile(std::string filename)
@@ -184,7 +181,7 @@ namespace RaceTrack
 			// Accumulate checkpoints
 			m_checkpointDistances.push_back(0.f);
 			for (unsigned int i = 1; i < m_checkpoints.size(); i++)
-				m_checkpointDistances.push_back(Magnitude(m_checkpoints[i].pos, m_checkpoints[i-1].pos));
+				m_checkpointDistances.push_back(Functions::Distance(m_checkpoints[i].pos, m_checkpoints[i-1].pos));
 
 			std::partial_sum(m_checkpointDistances.begin(), m_checkpointDistances.end(), m_checkpointDistances.begin());
 
@@ -274,16 +271,16 @@ namespace RaceTrack
 		{
 			return false;
 		}
-		return Magnitude(pos, m_checkpoints[nextCheckpoint].pos) <= m_checkpoints[nextCheckpoint].radius;
+		return Functions::Distance(pos, m_checkpoints[nextCheckpoint].pos) <= m_checkpoints[nextCheckpoint].radius;
 	}
 
 	float CalcFitness(sf::Vector2f pos, unsigned int nextCheckpoint)
 	{
 		if (nextCheckpoint == m_checkpoints.size())
 		{
-			return m_checkpointDistances.back() + Magnitude(pos, m_checkpoints.back().pos);
+			return m_checkpointDistances.back() + Functions::Distance(pos, m_checkpoints.back().pos);
 		}
-		return m_checkpointDistances[nextCheckpoint] - Magnitude(pos, m_checkpoints[nextCheckpoint].pos);
+		return m_checkpointDistances[nextCheckpoint] - Functions::Distance(pos, m_checkpoints[nextCheckpoint].pos);
 	}
 
 

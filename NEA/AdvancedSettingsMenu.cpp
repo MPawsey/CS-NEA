@@ -108,7 +108,7 @@ namespace Menu
 
 		// Population Size
 		m_popSizeLabel = sf::Text{ "Population size", font };
-		m_popSizeLabel.setPosition(100.f, yPos);
+		m_popSizeLabel.setPosition(50.f, yPos);
 		m_popSizeMinusBtn = UI::Button{ "-", m_advSettingsView };
 		m_popSizeMinusBtn.setPosition(50.f, yPos + topPadding + yLineSpace);
 		m_popSizeMinusBtn.SetBackgroundSize(sf::Vector2f{ buttonWidth, buttonWidth });
@@ -129,17 +129,17 @@ namespace Menu
 		// Multi Reproduce
 		m_onlyPairOnceText.setFont(font);
 		m_onlyPairOnceText.setString("Only Pair Once");
-		m_onlyPairOnceText.setPosition(100.f, yPos);
+		m_onlyPairOnceText.setPosition(50.f, yPos);
 		m_onlyPairOnceCB = UI::CheckBox{ m_advSettingsView };
-		m_onlyPairOnceCB.setPosition(100.f, yPos + yLineSpace);
-		m_onlyPairOnceCB.SetTooltipText("If checked, the reproduction stage will\nonly allow each car to create 1 offspring\neach (two per pair).\nThis will prevent the ability to choose the\nnumber of saved and killed cars.");
+		m_onlyPairOnceCB.setPosition(125.f, yPos + yLineSpace);
+		m_onlyPairOnceCB.SetTooltipText("If checked, the reproduction stage will\nonly allow each car to create 1 offspring\neach (two per pair).\nThis will prevent the ability to choose the\na different number of saved and\nkilled cars.");
 		m_onlyPairOnceCB.GetCheckBoxUpdateEvent().AddCallback(&AdvancedSettingsMenu::OnPairCBUpdate, *this);
 
 		yPos += yGap;
 
 		// Save Size
 		m_saveLabel = sf::Text{ "Save size", font };
-		m_saveLabel.setPosition(100.f, yPos);
+		m_saveLabel.setPosition(50.f, yPos);
 		m_saveMinusBtn = UI::Button{ "-", m_advSettingsView };
 		m_saveMinusBtn.setPosition(50.f, yPos + topPadding + yLineSpace);
 		m_saveMinusBtn.SetBackgroundSize(sf::Vector2f{ buttonWidth, buttonWidth });
@@ -159,7 +159,7 @@ namespace Menu
 
 		// Kill Size
 		m_killLabel = sf::Text{ "Kill size", font };
-		m_killLabel.setPosition(100.f, yPos);
+		m_killLabel.setPosition(50.f, yPos);
 		m_killMinusBtn = UI::Button{ "-", m_advSettingsView };
 		m_killMinusBtn.setPosition(50.f, yPos + topPadding + yLineSpace);
 		m_killMinusBtn.SetBackgroundSize(sf::Vector2f{ buttonWidth, buttonWidth });
