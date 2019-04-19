@@ -52,5 +52,7 @@ namespace Evolution
 
 		std::mt19937& GetRandomEngine();
 
+		// Only to be used on gen 0
+		void LoadInitialSimulation();
 	};
 }

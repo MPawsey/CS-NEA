@@ -21,6 +21,6 @@ namespace RaceTrack
 
 	std::string GetTrackName();
 
-
+	void SetCheckpointsVisible(bool isVisible);
 
 }

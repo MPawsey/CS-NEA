@@ -34,7 +34,17 @@ namespace Evolution
 		m_iterationText.setOutlineThickness(2.f);
 		m_iterationText.setFont(font);
 		m_iterationText.setPosition(10.f, 10.f + font.getLineSpacing(32));
-		
+
+		m_showCheckpointsText = sf::Text{ "   Show\nCheckpoints:", font };
+		m_showCheckpointsText.setFillColor(sf::Color::White);
+		m_showCheckpointsText.setOutlineColor(sf::Color::Black);
+		m_showCheckpointsText.setOutlineThickness(2.f);
+		m_showCheckpointsText.setPosition(10.f, 10.f + (font.getLineSpacing(32) * 2));
+
+		m_showCheckpointsCB = UI::CheckBox{ m_uiView };
+		m_showCheckpointsCB.SetChecked(true);
+		m_showCheckpointsCB.GetCheckBoxUpdateEvent().AddCallback([&](bool checked) { RaceTrack::SetCheckpointsVisible(checked); });
+		m_showCheckpointsCB.setPosition(m_showCheckpointsText.getGlobalBounds().left + (m_showCheckpointsText.getGlobalBounds().width / 3.f), 10.f + (font.getLineSpacing(32) * 4));
 
 		Window::GetWindowResizedEvent().AddCallback(&Simulation::OnWindowResized, *this);
 	}
@@ -77,11 +87,23 @@ namespace Evolution
 			window.setView(m_uiView);
 			window.draw(m_seedText);
 			window.draw(m_iterationText);
+			window.draw(m_showCheckpointsText);
+			window.draw(m_showCheckpointsCB);
 
 			window.setView(m_networkView);
 			window.draw(bestCar->GetNeuralNetwork());
 		}
 
+	}
+
+	void Simulation::Load()
+	{
+		m_showCheckpointsCB.SetActive(true);
+	}
+
+	void Simulation::Unload()
+	{
+		m_showCheckpointsCB.SetActive(false);
 	}
 
 

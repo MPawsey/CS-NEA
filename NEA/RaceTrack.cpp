@@ -27,6 +27,7 @@ namespace RaceTrack
 	std::vector<Checkpoint> m_checkpoints;
 	std::vector<float> m_checkpointDistances;
 	std::vector<sf::CircleShape> m_checkpointCircles;
+	bool m_showCheckpoints = true;
 
 	// Finds collision between two segments
 	// out = point of collision
@@ -213,9 +214,12 @@ namespace RaceTrack
 			window.draw(wall.data(), 2, sf::LinesStrip);
 		}
 
-		for (auto cp : m_checkpointCircles)
+		if (m_showCheckpoints)
 		{
-			window.draw(cp);
+			for (auto cp : m_checkpointCircles)
+			{
+				window.draw(cp);
+			}
 		}
 	}
 
@@ -295,5 +299,10 @@ namespace RaceTrack
 	std::string GetTrackName()
 	{
 		return m_trackName;
+	}
+
+	void SetCheckpointsVisible(bool isVisible)
+	{
+		m_showCheckpoints = isVisible;
 	}
 }

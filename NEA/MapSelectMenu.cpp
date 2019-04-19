@@ -6,6 +6,7 @@
 #include "RaceTrack.h"
 #include "Simulation.h"
 #include "MenuManager.h"
+#include "EvolutionManager.h"
 
 namespace Menu
 {
@@ -22,6 +23,7 @@ namespace Menu
 		MenuManager::GetMenuManager().GoToState(MenuState::None); // Unloads map select menu
 		Window::GetWindow().setFramerateLimit(Evolution::Simulation::SIMULATION_FRAMERATE);
 		Window::SetWindowState(Window::Evolution);
+		Evolution::EvolutionManager::GetEvolutionManager().LoadInitialSimulation();
 	}
 
 	void MapSelectMenu::LoadMenu()

@@ -123,6 +123,7 @@ namespace Evolution
 
 				if (--m_cycleCount == 0)
 				{
+					m_simulationScreen.Unload();
 					m_analysisScreen.Load();
 					m_analysis = true;
 				}
@@ -366,6 +367,7 @@ namespace Evolution
 		if (m_display = draw)
 		{
 			Window::GetWindow().setFramerateLimit(m_simulationScreen.SIMULATION_FRAMERATE);
+			m_simulationScreen.Load();
 		}
 		else
 		{
@@ -404,5 +406,10 @@ namespace Evolution
 	std::mt19937& EvolutionManager::GetRandomEngine()
 	{
 		return m_randomEngine;
+	}
+
+	void EvolutionManager::LoadInitialSimulation()
+	{
+		m_simulationScreen.Load();
 	}
 }
