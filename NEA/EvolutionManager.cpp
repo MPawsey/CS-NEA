@@ -6,8 +6,7 @@
 #include "RaceTrack.h"
 #include "Analysis.h"
 #include <sstream>
-#include <fstream>
-
+#include "Functions.h"
 
 namespace Evolution
 {
@@ -376,14 +375,6 @@ namespace Evolution
 		m_analysis = false;
 		m_analysisScreen.Unload();
 	}
-
-	// Fold expression to write a line to a file
-	template <typename... Args>
-	void WriteLineToFile(std::ofstream& file, Args&&... args)
-	{
-		// Folds over the first comma seperated expression resulting in a trailing space (should not matter)
-		((file << args << " "), ...) << std::endl;
-	}
 	
 	void EvolutionManager::SaveGeneration(std::string filename)
 	{
@@ -393,19 +384,19 @@ namespace Evolution
 		std::ofstream file = std::ofstream{ filepath };
 
 		// Saving the settings of the cars
-		WriteLineToFile(file, 't', RaceTrack::GetTrackName(), m_randomEngine.GetSeed(), m_randomEngine.GetCalls(), m_iteration);
-		WriteLineToFile(file, 'd', m_carWidth, m_carHeight);
+		Functions::WriteLineToFile(file, 't', RaceTrack::GetTrackName(), m_randomEngine.GetSeed(), m_randomEngine.GetCalls(), m_iteration);
+		Functions::WriteLineToFile(file, 'd', m_carWidth, m_carHeight);
 		std::string sizeStr = std::accumulate(m_carSizes.begin(), m_carSizes.end(), std::string{ "" }, [](std::string val, unsigned int cur) { return val.append(std::to_string(cur) + " "); });
-		WriteLineToFile(file, 's', (sizeStr.erase(sizeStr.end() - 1), sizeStr));
-		WriteLineToFile(file, 'r', m_carRaySize);
-		WriteLineToFile(file, 'p', m_cars.size(), m_saveSize, m_killSize, m_canMultiReproduce);
-		WriteLineToFile(file, 'e', Machine::Car::enginePower, Machine::Car::rotationPower);
-		WriteLineToFile(file, 'o', Machine::Neuron::mutatePC, Machine::Neuron::splicePC);
+		Functions::WriteLineToFile(file, 's', (sizeStr.erase(sizeStr.end() - 1), sizeStr));
+		Functions::WriteLineToFile(file, 'r', m_carRaySize);
+		Functions::WriteLineToFile(file, 'p', m_cars.size(), m_saveSize, m_killSize, m_canMultiReproduce);
+		Functions::WriteLineToFile(file, 'e', Machine::Car::enginePower, Machine::Car::rotationPower);
+		Functions::WriteLineToFile(file, 'o', Machine::Neuron::mutatePC, Machine::Neuron::splicePC);
 		m_analysisScreen.SaveGraph(file);
 
 		for (Machine::Car* car : m_cars)
 		{
-			WriteLineToFile(file, *car);
+			Functions::WriteLineToFile(file, *car);
 		}
 
 	}

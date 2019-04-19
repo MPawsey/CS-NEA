@@ -192,10 +192,12 @@ namespace Menu
 		UI::TextField* layerTF = new UI::TextField{ 100.f, UI::TextField::Integer, m_layerView };
 		layerTF->setPosition(25.f, 25.f);
 		layerTF->SetRawText("4");
+		layerTF->GetLostFocusEvent().AddCallback([=]() { if (layerTF->GetUIntegerValue() > 25) layerTF->SetRawText("25"); });
 		m_layerSizes.push_back(layerTF);
 		UI::TextField* layer2TF = new UI::TextField{ 100.f, UI::TextField::Integer, m_layerView };
 		layer2TF->setPosition(25.f, 25.f + yLineSpace + 15.f);
 		layer2TF->SetRawText("3");
+		layer2TF->GetLostFocusEvent().AddCallback([=]() { if (layer2TF->GetUIntegerValue() > 25) layer2TF->SetRawText("25"); });
 		m_layerSizes.push_back(layer2TF);
 
 		InputManager::GetMouseScrolledEvent().AddCallback(&AdvancedSettingsMenu::OnMouseScrolled, *this);
@@ -212,10 +214,14 @@ namespace Menu
 		m_addLayer.SetCentreText(true);
 		m_addLayer.GetMouseClickedEvent().AddCallback([&]() 
 		{
+			if (m_layerSizes.size() > 15)
+				return;
+
 			UI::TextField* layerTF = new UI::TextField{ 100.f, UI::TextField::Integer, m_layerView };
 			layerTF->setPosition(25.f, 25.f + ((UI::GetFont().getLineSpacing(30) + 20.f) * m_layerSizes.size()));
 			layerTF->SetRawText("4");
 			layerTF->SetActive(true);
+			layerTF->GetLostFocusEvent().AddCallback([=]() { if (layerTF->GetUIntegerValue() > 25) layerTF->SetRawText("25"); });
 			m_layerSizes.push_back(layerTF);
 
 			m_layerSliderMax = (25.f + ((m_layerSizes.size()) * (UI::GetFont().getLineSpacing(30) + 20.f))) - m_layerView.getSize().y;
@@ -321,7 +327,7 @@ namespace Menu
 		}
 		layerSizes.push_back(2);
 		
-		Evolution::EvolutionManager::GetEvolutionManager().SetAdvancedSettings(25, m_saveTF.GetUIntegerValue(), m_killTF.GetUIntegerValue(), !m_onlyPairOnceCB.IsChecked(), layerSizes);
+		Evolution::EvolutionManager::GetEvolutionManager().SetAdvancedSettings(m_popSizeTF.GetUIntegerValue(), m_saveTF.GetUIntegerValue(), m_killTF.GetUIntegerValue(), !m_onlyPairOnceCB.IsChecked(), layerSizes);
 
 		m_popSizePlusBtn.SetActive(false);
 		m_popSizeTF.SetActive(false);

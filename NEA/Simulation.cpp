@@ -64,7 +64,8 @@ namespace Evolution
 		{
 			if (m_prevBestCar)
 				m_prevBestCar->SetBestCar(false);
-			bestCar->SetBestCar(true);
+			if (bestCar->IsAlive())
+				bestCar->SetBestCar(true);
 			m_prevBestCar = bestCar;
 		}
 		

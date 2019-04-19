@@ -267,6 +267,6 @@ namespace UI
 	{
 		if ((m_type == FieldType::Decimal || m_type == FieldType::Integer) && m_rawText.getSize() == 0)
 			SetRawText("0");
-		return (unsigned int)std::stoul(m_rawText.toAnsiString());
+		return (unsigned int)(std::stoull(m_rawText.toAnsiString()) % UINT16_MAX);
 	}
 }

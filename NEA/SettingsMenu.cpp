@@ -212,6 +212,7 @@ namespace Menu
 		m_seedTF = UI::TextField{ textFieldWidth, UI::TextField::Integer, m_settingsView };
 		m_seedTF.setPosition(xPos2 + buttonWidth + xGap, yPos + yLineSpace);
 		m_seedTF.SetTooltipText("The seed to use for the\nrandom number generator in the\nsimulation. Leave blank if a random\nseed is wanted.");
+		m_seedTF.GetLostFocusEvent().AddCallback([&]() { if (m_seedTF.GetRawText().getSize() > 18) m_seedTF.SetRawText(m_seedTF.GetRawText().substring(0, 18)); });
 
 
 		m_backBtn = UI::Button{ "Back", m_settingsView, { 5.f, 5.f, 0.f, 0.f } };

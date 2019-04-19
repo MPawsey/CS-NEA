@@ -20,12 +20,13 @@ namespace RaceTrack
 	};
 
 	std::vector<std::array<sf::Vertex, 2>> m_walls;
-	std::vector<Checkpoint> m_checkpoints;
-	std::vector<float> m_checkpointDistances;
 	std::string m_trackName;
 	sf::Vector2f m_startPos;
 	float m_startRot;
 
+	std::vector<Checkpoint> m_checkpoints;
+	std::vector<float> m_checkpointDistances;
+	std::vector<sf::CircleShape> m_checkpointCircles;
 
 	// Finds collision between two segments
 	// out = point of collision
@@ -137,6 +138,11 @@ namespace RaceTrack
 
 		if (file.is_open())
 		{
+			sf::CircleShape cpCircle;
+			cpCircle.setFillColor(sf::Color::Transparent);
+			cpCircle.setOutlineColor(sf::Color::Yellow);
+			cpCircle.setOutlineThickness(1.f);
+
 			// Parse file
 			while (!file.eof())
 			{
@@ -175,6 +181,11 @@ namespace RaceTrack
 					float r;
 					ss >> junk >> x >> y >> r;
 					m_checkpoints.push_back({ sf::Vector2f{x, y}, r });
+
+					cpCircle.setRadius(r);
+					cpCircle.setOrigin(r, r);
+					cpCircle.setPosition(x, y);
+					m_checkpointCircles.push_back(cpCircle);
 				}
 			}
 
@@ -184,6 +195,9 @@ namespace RaceTrack
 				m_checkpointDistances.push_back(Functions::Distance(m_checkpoints[i].pos, m_checkpoints[i-1].pos));
 
 			std::partial_sum(m_checkpointDistances.begin(), m_checkpointDistances.end(), m_checkpointDistances.begin());
+
+			// Sets the final checkpoint colour to green
+			m_checkpointCircles.back().setOutlineColor(sf::Color::Green);
 
 			Evolution::EvolutionManager::GetEvolutionManager().ResetCars();
 		}
@@ -198,16 +212,9 @@ namespace RaceTrack
 			window.draw(wall.data(), 2, sf::LinesStrip);
 		}
 
-		sf::CircleShape s;
-		s.setFillColor(sf::Color::Transparent);
-		s.setOutlineColor(sf::Color::White);
-		s.setOutlineThickness(1.f);
-		for (auto cp : m_checkpoints)
+		for (auto cp : m_checkpointCircles)
 		{
-			s.setRadius(cp.radius);
-			s.setOrigin(cp.radius, cp.radius);
-			s.setPosition(cp.pos);
-			window.draw(s);
+			window.draw(cp);
 		}
 	}
 

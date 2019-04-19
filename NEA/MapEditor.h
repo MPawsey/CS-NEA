@@ -4,7 +4,10 @@
 #include <vector>
 #include <array>
 #include "LineShape.h"
-#include <set>
+#include "CheckBox.h"
+#include "Button.h"
+#include "Popup.h"
+#include "TextField.h"
 
 namespace Editor
 {
@@ -17,6 +20,12 @@ namespace Editor
 		Spawn,
 		Checkpoint,
 		Delete
+	};
+
+	struct MapCheckpoint
+	{
+		sf::CircleShape m_outline, m_centre;
+		sf::Text m_idText;
 	};
 
 	struct Connection
@@ -41,30 +50,61 @@ namespace Editor
 	{
 	private:
 
+
+		// Views
+		sf::View m_gridView, m_editorView, m_UIView;
+
+		// General stuff
 		bool m_isActive = false;
 		MouseType m_mouseType = MouseType::Point;
 		int m_selectedPoint = -1;
 
-		sf::View m_gridView, m_editorView, m_UIView;
-
+		sf::CircleShape m_ghost;
 		std::vector<sf::CircleShape> m_points;
-		std::set<Connection> m_connections;
-		std::vector<sf::CircleShape> m_checkPoints;
+		std::vector<Connection> m_connections;
+		std::vector<MapCheckpoint> m_checkPoints;
+		bool m_isDrawingCheckpoint = false;
 		sf::RectangleShape m_spawnPos;
+		LineShape m_spawnDir;
+		bool m_spawnRotPressed = false;
 		bool m_editorGrabbed = false;
 		sf::Vector2i m_lastMousePos;
 
+		// Grid
+		bool m_gridVisible = true;
 		bool m_gridLock = true;
 		float m_gridSize = 50.f;
 		std::vector<std::array<sf::Vertex, 2>> m_gridLines;
 
+		// UI
+
+		// Mouse types
+		UI::CheckBox m_mtPointCB, m_mtWallCB, m_mtInstWallCB, m_mtSpawnCB, m_mtCheckpoint, m_mtDeleteCB;
+		sf::Text m_mtPointText, m_mtWallText, m_mtInstWallText, m_mtSpawnText, m_mtCheckpointText, m_mtDeleteText;
+
+		// Grid size
+		UI::TextField m_gridSizeTF;
+		UI::CheckBox m_gridVisibleCB, m_gridLockCB;
+		sf::Text m_gridSizeText, m_gridVisibleText, m_gridLockText;
+
+		// Save & Menu
+		UI::Button m_saveBtn, m_menuBtn;
+		UI::Popup m_savePop;
+
+		void SaveMap(std::string filename);
+
 		void RecalculateGrid();
 		sf::Vector2f GetMousePointOnGrid();
 
+		int FindLastPotentialConnection(unsigned int point);
+
+		// Events
 		void OnMousePressed(sf::Mouse::Button btn);
 		void OnMouseReleased(sf::Mouse::Button btn);
 		void OnMouseMoved(sf::Vector2i mousePos);
 		void OnKeyPressed(sf::Keyboard::Key key);
+
+		void ChangeMouseType(MouseType type);
 
 	public:
 

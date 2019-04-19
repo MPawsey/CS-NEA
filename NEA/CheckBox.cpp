@@ -51,6 +51,11 @@ namespace UI
 	}
 
 
+	void CheckBox::SetChecked(bool isChecked)
+	{
+		m_isChecked = isChecked;
+	}
+
 	void CheckBox::SetTooltipText(sf::Text content)
 	{
 		m_tooltip.SetText(content);

@@ -64,7 +64,6 @@ namespace Machine
 		raysEnds.reserve(rayCount);
 		Car::raySize = raySize;
 
-		// TODO actually check this
 		sf::Vector2f rayOrigin = sf::Vector2f{width / 2.f, 0.f};
 
 		float angle = 90.f / (rayCount - 1);
@@ -128,6 +127,7 @@ namespace Machine
 			{
 				m_body.setOutlineColor(sf::Color::Green);
 				m_alive = false;
+				m_complete = true;
 			}
 			m_frameCount = 0;
 		}
@@ -199,6 +199,8 @@ namespace Machine
 			m_body.setOutlineColor(sf::Color::Cyan);
 		else if (m_alive)
 			m_body.setOutlineColor(sf::Color::White);
+		else if (m_complete)
+			m_body.setOutlineColor(sf::Color::Green);
 		else
 			m_body.setOutlineColor(sf::Color::Red);
 	}

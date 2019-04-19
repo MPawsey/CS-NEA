@@ -10,17 +10,6 @@ namespace Evolution
 {
 	// Private
 
-	/*void OnWindowClose()
-	{
-		m_nextBtn.~Button();
-		m_next10Btn.~Button();
-		m_nextQuickBtn.~Button();
-		m_next10QuickBtn.~Button();
-		m_saveBtn.~Button();
-		m_menuBtn.~Button();
-		m_savePopup.~Popup();
-	}*/
-
 	void Analysis::SetAnalysisActive(bool isActive)
 	{
 		m_nextBtn.SetActive(isActive);
@@ -48,7 +37,6 @@ namespace Evolution
 
 	void Analysis::Init()
 	{
-		//Window::GetWindowClosedEvent().AddCallback(OnWindowClose);
 
 		InputManager::GetMousePressedEvent(sf::Mouse::Left).AddCallback(&Analysis::OnMousePressed, *this);
 		InputManager::GetMouseReleasedEvent(sf::Mouse::Left).AddCallback(&Analysis::OnMouseReleased, *this);
@@ -277,8 +265,8 @@ namespace Evolution
 		}
 
 
-		m_graphView.setSize(sf::Vector2f{ (float)m_size, -abs(m_graphMax) - abs(m_graphMin) });
-		m_graphView.setCenter(sf::Vector2f{ (float)m_size / 2.f, (m_graphMax + m_graphMin) / 2.f });
+		m_graphView.setSize(sf::Vector2f{ (float)m_size, -abs(m_graphMax) - abs(m_graphMin) - 2.f });
+		m_graphView.setCenter(sf::Vector2f{ (float)m_size / 2.f, ((m_graphMax + m_graphMin) / 2.f) });
 
 		m_iterText.setString("Gen: " + std::to_string(m_size - 1));
 		m_scaleText.setString("Y Scale: " + std::to_string((int)std::round(m_graphGuideSeperation)));
@@ -348,7 +336,7 @@ namespace Evolution
 		m_fitnessMin.push_back(sf::Vertex{ sf::Vector2f{ (float)m_size - 1, fitnessMin }, sf::Color::Red });
 
 
-		m_graphView.setSize(sf::Vector2f{ (float)m_size, -abs(m_graphMax) - abs(m_graphMin) });
+		m_graphView.setSize(sf::Vector2f{ (float)m_size, -abs(m_graphMax) - abs(m_graphMin) - 1.f });
 		m_graphView.setCenter(sf::Vector2f{ (float)m_size / 2.f, (m_graphMax + m_graphMin) / 2.f });
 
 		m_iterText.setString("Gen: " + std::to_string(m_size - 1));
