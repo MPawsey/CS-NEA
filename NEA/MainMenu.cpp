@@ -36,7 +36,8 @@ namespace Menu
 		m_mapEditorBtn.GetMouseClickedEvent().AddCallback([]() 
 		{ 
 			MenuManager::GetMenuManager().GoToState(MenuState::None); 
-			Window::SetWindowState(Window::Editor); 
+			Window::SetWindowState(Window::Editor);
+			Editor::MapEditor::GetMapEditor().Reset();
 			Editor::MapEditor::GetMapEditor().Load();
 		});
 	}

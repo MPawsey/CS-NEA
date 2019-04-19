@@ -111,6 +111,8 @@ namespace Editor
 
 		static MapEditor& GetMapEditor();
 
+		void Reset();
+
 		void Init();
 		void Update();
 		void Load();

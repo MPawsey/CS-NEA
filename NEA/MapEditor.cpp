@@ -321,6 +321,7 @@ namespace Editor
 				t.setCharacterSize(12);
 
 				m_checkPoints.push_back({cp, p, t});
+				m_saveBtn.SetActive(true);
 				break;
 			}
 			case Delete:
@@ -373,6 +374,9 @@ namespace Editor
 						{
 							m_checkPoints[j].m_idText.setString(std::to_string(j + 1));
 						}
+
+						if (m_checkPoints.size() == 0)
+							m_saveBtn.SetActive(false);
 
 						break;
 					}
@@ -549,6 +553,37 @@ namespace Editor
 
 	}
 
+	void MapEditor::Reset()
+	{
+		ChangeMouseType(Point);
+
+		m_checkPoints.clear();
+		m_gridLines.clear();
+		m_points.clear();
+		m_connections.clear();
+
+		m_gridSize = 50.f;
+		m_gridSizeTF.SetRawText("50.0");
+
+		m_gridVisible = true;
+		m_gridLock = true;
+		m_gridVisibleCB.SetChecked(true);
+		m_gridLockCB.SetChecked(true);
+
+		m_spawnPos.setPosition(0.f, 0.f);
+		m_spawnPos.setRotation(180);
+
+		m_spawnDir = LineShape{ m_spawnPos.getPosition(), m_spawnPos.getPosition() + sf::Vector2f{0.f, 12.5f} };
+		m_spawnDir.SetLineColour(sf::Color::Red);
+		m_spawnDir.SetLineThickness(2.f);
+
+
+		m_editorView.setCenter(0.f, 0.f);
+		m_gridView.setCenter(0.f, 0.f);
+		RecalculateGrid();
+
+	}
+
 	void MapEditor::Init()
 	{
 		sf::RenderWindow& window = Window::GetWindow();
@@ -697,7 +732,14 @@ namespace Editor
 		m_saveBtn = UI::Button{ "Save Map", m_UIView, {2.5f, 5.f, 0.f, 0.f} };
 		m_saveBtn.SetCentreText(true);
 		m_saveBtn.setPosition((window.getSize().x * 1.5f) - m_saveBtn.GetClickBounds().width - 5.f, 5.f);
-		m_saveBtn.GetMouseClickedEvent().AddCallback([&]() { Unload(); m_savePop.SetActive(true); });
+		m_saveBtn.GetMouseClickedEvent().AddCallback([&]() 
+		{
+			if (m_checkPoints.size() > 0)
+			{
+				Unload();
+				m_savePop.SetActive(true);
+			}
+		});
 
 		// Menu
 		m_menuBtn = UI::Button{ "Menu", m_UIView, {2.5f, 5.f, 0.f, 0.f} };
@@ -842,7 +884,8 @@ namespace Editor
 		m_gridVisibleCB.SetActive(true);
 		m_gridLockCB.SetActive(true);
 
-		m_saveBtn.SetActive(true);
+		if (m_checkPoints.size() > 0)
+			m_saveBtn.SetActive(true);
 		m_menuBtn.SetActive(true);
 	}
 
