@@ -139,7 +139,7 @@ namespace Evolution
 		sf::RenderWindow& window = Window::GetWindow();
 
 
-		if (m_isMouseDown)
+		if (m_isMouseDown && m_size > 0)
 		{
 			int generation = (int)std::round(std::clamp(std::round(InputManager::GetMousePosInView(m_graphView).x), 0.f, (float)m_size - 1));
 			if (generation != m_viewLine[0].position.x)
@@ -178,14 +178,17 @@ namespace Evolution
 		window.draw(m_worstText);
 
 		window.setView(m_graphView);
-		window.draw(m_fitnessMin.data(), m_size, sf::LineStrip);
-		window.draw(m_fitnessAvg.data(), m_size, sf::LineStrip);
-		window.draw(m_fitnessMax.data(), m_size, sf::LineStrip);
 
 		for (auto& line : m_graphGuideLines)
 		{
 			window.draw(line.data(), 2, sf::LinesStrip);
 		}
+
+		window.draw(m_graphFinishLine.data(), 2, sf::LinesStrip);
+
+		window.draw(m_fitnessMin.data(), m_size, sf::LineStrip);
+		window.draw(m_fitnessAvg.data(), m_size, sf::LineStrip);
+		window.draw(m_fitnessMax.data(), m_size, sf::LineStrip);
 
 		window.draw(m_viewLine);
 
@@ -216,10 +219,17 @@ namespace Evolution
 		m_graphGuideSeperation = 100.f;
 	}
 
+	void Analysis::SetFinishLine(float distance)
+	{
+		m_graphFinishLine[0] = sf::Vertex{ sf::Vector2f{0, distance}, sf::Color::Green };
+		m_graphFinishLine[1] = sf::Vertex{ sf::Vector2f{(float)m_size, distance}, sf::Color::Green };
+	}
+
 	void Analysis::SetGraph(std::vector<float> positions)
 	{
 		Reset();
 		m_size = positions.size() / 3;
+		m_graphFinishLine[1].position.x = (float)m_size;
 
 		for (unsigned int i = 0; i < m_size; i++)
 		{
@@ -268,12 +278,22 @@ namespace Evolution
 		m_graphView.setSize(sf::Vector2f{ (float)m_size, -abs(m_graphMax) - abs(m_graphMin) - 2.f });
 		m_graphView.setCenter(sf::Vector2f{ (float)m_size / 2.f, ((m_graphMax + m_graphMin) / 2.f) });
 
-		m_iterText.setString("Gen: " + std::to_string(m_size - 1));
+		if (m_size > 0)
+		{
+			m_iterText.setString("Gen: " + std::to_string(m_size - 1));
+			m_bestText.setString("Best: " + std::to_string((int)std::roundf(m_fitnessMax.back().position.y)));
+			m_avgText.setString("Avg: " + std::to_string((int)std::roundf(m_fitnessAvg.back().position.y)));
+			m_worstText.setString("Worst: " + std::to_string((int)std::roundf(m_fitnessMin.back().position.y)));
+		}
+		else
+		{
+			m_iterText.setString("Gen: ");
+			m_bestText.setString("Best: ");
+			m_avgText.setString("Avg: ");
+			m_worstText.setString("Worst: ");
+		}
 		m_scaleText.setString("Y Scale: " + std::to_string((int)std::round(m_graphGuideSeperation)));
 
-		m_bestText.setString("Best: " + std::to_string((int)std::roundf(m_fitnessMax.back().position.y)));
-		m_avgText.setString("Avg: " + std::to_string((int)std::roundf(m_fitnessAvg.back().position.y)));
-		m_worstText.setString("Worst: " + std::to_string((int)std::roundf(m_fitnessMin.back().position.y)));
 
 		m_viewLine[0].position = sf::Vector2f{ (float)m_size - 1, m_graphMax };
 		m_viewLine[1].position = sf::Vector2f{ (float)m_size - 1, m_graphMin };
@@ -283,6 +303,7 @@ namespace Evolution
 	{
 		bool updateGuideLines = false;
 		m_graphGuideLines[0][1].position.x = (float)++m_size;
+		m_graphFinishLine[1].position.x = (float)m_size;
 
 		if (fitnessMin < m_graphMin)
 		{

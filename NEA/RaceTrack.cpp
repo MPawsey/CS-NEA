@@ -9,6 +9,7 @@
 #include <numeric>
 #include "EvolutionManager.h"
 #include "Functions.h"
+#include <algorithm>
 
 namespace RaceTrack
 {
@@ -134,6 +135,7 @@ namespace RaceTrack
 		m_checkpointCircles.clear();
 
 		m_trackName = filename;
+		std::replace(m_trackName.begin(), m_trackName.end(), ' ', '_');
 		m_trackName = m_trackName.substr(m_trackName.find_first_of('\\')+1, m_trackName.find_last_of('.') - (m_trackName.find_first_of('\\') + 1));
 		std::ifstream file{ filename };
 		std::vector<sf::Vector2f> points;
@@ -221,6 +223,10 @@ namespace RaceTrack
 				window.draw(cp);
 			}
 		}
+		else
+		{
+			window.draw(m_checkpointCircles.back());
+		}
 	}
 
 	const unsigned int GetCheckpointCount()
@@ -236,6 +242,16 @@ namespace RaceTrack
 	const float GetStartRot()
 	{
 		return m_startRot;
+	}
+
+	const float GetTrackDistance()
+	{
+		return m_checkpointDistances.back();
+	}
+
+	const std::string GetTrackName()
+	{
+		return m_trackName;
 	}
 
 	bool CheckCollisions(sf::Vector2f p1, sf::Vector2f p2, sf::Vector2f& out)
@@ -290,15 +306,9 @@ namespace RaceTrack
 	{
 		if (nextCheckpoint == m_checkpoints.size())
 		{
-			return m_checkpointDistances.back() + Functions::Distance(pos, m_checkpoints.back().pos);
+			return m_checkpointDistances.back();
 		}
 		return m_checkpointDistances[nextCheckpoint] - Functions::Distance(pos, m_checkpoints[nextCheckpoint].pos);
-	}
-
-
-	std::string GetTrackName()
-	{
-		return m_trackName;
 	}
 
 	void SetCheckpointsVisible(bool isVisible)

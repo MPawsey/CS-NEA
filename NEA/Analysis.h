@@ -16,6 +16,7 @@ namespace Evolution
 
 		std::vector<sf::Vertex> m_fitnessMax, m_fitnessAvg, m_fitnessMin;
 		std::vector<std::array<sf::Vertex, 2>> m_graphGuideLines;
+		std::array<sf::Vertex, 2> m_graphFinishLine;
 		sf::VertexArray m_viewLine;
 		UI::Button m_nextBtn, m_next10Btn, m_nextQuickBtn, m_next10QuickBtn, m_saveBtn, m_menuBtn;
 		UI::Popup m_savePopup;
@@ -37,6 +38,7 @@ namespace Evolution
 		void Unload();
 		void Reset();
 
+		void SetFinishLine(float distance);
 		void SetGraph(std::vector<float> positions);
 		void UpdateGraph(float fitnessMax, float fitnessAvg, float fitnessMin);
 		void SaveGraph(std::ofstream& file);

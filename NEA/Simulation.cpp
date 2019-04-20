@@ -35,16 +35,16 @@ namespace Evolution
 		m_iterationText.setFont(font);
 		m_iterationText.setPosition(10.f, 10.f + font.getLineSpacing(32));
 
-		m_showCheckpointsText = sf::Text{ "   Show\nCheckpoints:", font };
+		m_showCheckpointsText = sf::Text{ "    Show\nCheckpoints:", font };
 		m_showCheckpointsText.setFillColor(sf::Color::White);
 		m_showCheckpointsText.setOutlineColor(sf::Color::Black);
 		m_showCheckpointsText.setOutlineThickness(2.f);
-		m_showCheckpointsText.setPosition(10.f, 10.f + (font.getLineSpacing(32) * 2));
+		m_showCheckpointsText.setPosition(10.f, 10.f + (font.getLineSpacing(32) * 3));
 
 		m_showCheckpointsCB = UI::CheckBox{ m_uiView };
 		m_showCheckpointsCB.SetChecked(true);
 		m_showCheckpointsCB.GetCheckBoxUpdateEvent().AddCallback([&](bool checked) { RaceTrack::SetCheckpointsVisible(checked); });
-		m_showCheckpointsCB.setPosition(m_showCheckpointsText.getGlobalBounds().left + (m_showCheckpointsText.getGlobalBounds().width / 3.f), 10.f + (font.getLineSpacing(32) * 4));
+		m_showCheckpointsCB.setPosition(m_showCheckpointsText.getGlobalBounds().left + (m_showCheckpointsText.getGlobalBounds().width / 3.f), 10.f + (font.getLineSpacing(32) * 5));
 
 		Window::GetWindowResizedEvent().AddCallback(&Simulation::OnWindowResized, *this);
 	}

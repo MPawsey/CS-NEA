@@ -79,6 +79,7 @@ namespace Machine
 	{
 		if (m_frameCount++ > IDLETIME * 500)
 		{
+			m_body.setOutlineColor(sf::Color::Red);
 			m_alive = false;
 			return true;
 		}

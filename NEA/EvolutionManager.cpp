@@ -25,6 +25,7 @@ namespace Evolution
 		m_analysisScreen.Reset();
 		m_cycleCount = 1;
 		m_display = true;
+		m_track = "";
 	}
 
 	EvolutionManager::~EvolutionManager()
@@ -190,7 +191,6 @@ namespace Evolution
 
 		std::ifstream file{ filename };
 
-		std::string track;
 		unsigned int seed;
 		std::vector<std::vector<std::vector<std::vector<double>>>> networkWeights;
 		std::vector<std::vector<std::vector<double>>> networkBiases;
@@ -211,8 +211,8 @@ namespace Evolution
 
 				if (s[0] == 't') // Track & Seed & iteration
 				{
-					unsigned int count;
-					ss >> junk >> track >> seed >> count >> m_iteration;
+					unsigned long long count;
+					ss >> junk >> m_track >> seed >> count >> m_iteration;
 					m_randomEngine.SetSeed(seed);
 					m_randomEngine.discard(count);
 				}
@@ -411,5 +411,11 @@ namespace Evolution
 	void EvolutionManager::LoadInitialSimulation()
 	{
 		m_simulationScreen.Load();
+		m_analysisScreen.SetFinishLine(RaceTrack::GetTrackDistance());
+		if (RaceTrack::GetTrackName() != m_track)
+		{
+			m_analysisScreen.SetGraph({});
+			m_simulationScreen.SetIteration(m_iteration = 0);
+		}
 	}
 }
