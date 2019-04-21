@@ -420,6 +420,14 @@ namespace Editor
 		m_lastMousePos = mousePos;
 	}
 
+	void MapEditor::OnWindowResized(sf::Vector2u size)
+	{
+		// Resizes the editor so that it isn't stretched
+		m_editorView.setSize(sf::Vector2f{ size.x * m_editorView.getViewport().width, size.y * m_editorView.getViewport().height });
+		m_gridView.setSize(sf::Vector2f{ size.x * m_gridView.getViewport().width, size.y * m_gridView.getViewport().height });
+		RecalculateGrid();
+	}
+
 	sf::Vector2f MapEditor::GetMousePointOnGrid()
 	{
 		sf::Vector2f mousePos = InputManager::GetMousePosInView(m_editorView);
@@ -593,6 +601,7 @@ namespace Editor
 		InputManager::GetGenericMouseReleasedEvent().AddCallback(&MapEditor::OnMouseReleased, *this);
 		InputManager::GetMouseMovedEvent().AddCallback(&MapEditor::OnMouseMoved, *this);
 		InputManager::GetGenericKeyPressedEvent().AddCallback(&MapEditor::OnKeyPressed, *this);
+		Window::GetWindowResizedEvent().AddCallback(&MapEditor::OnWindowResized, *this);
 
 		// Setup the views
 		m_gridView.setViewport(sf::FloatRect{ 0.f, 0.f, 1.f, 0.9f });

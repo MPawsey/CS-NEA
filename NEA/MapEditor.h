@@ -103,6 +103,7 @@ namespace Editor
 		void OnMouseReleased(sf::Mouse::Button btn);
 		void OnMouseMoved(sf::Vector2i mousePos);
 		void OnKeyPressed(sf::Keyboard::Key key);
+		void OnWindowResized(sf::Vector2u size);
 
 		void ChangeMouseType(MouseType type);
 

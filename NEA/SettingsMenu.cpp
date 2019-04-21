@@ -161,7 +161,7 @@ namespace Menu
 		m_mutSizeTF = UI::TextField{ textFieldWidth, UI::TextField::Decimal, m_settingsView };
 		m_mutSizeTF.setPosition(xPos1 + buttonWidth + xGap, yPos + yLineSpace);
 		m_mutSizeTF.GetLostFocusEvent().AddCallback([&]() { Functions::ClampTextFieldDoubleValue(m_mutSizeTF, m_mutSizeMinVal, m_mutSizeMaxVal); });
-		m_mutSizeTF.SetTooltipText("[0.0-1.0] Default=0.3\nThe variation in weights/biases\ndue to mutation.");
+		m_mutSizeTF.SetTooltipText("[0.1-2.5] Default=1.0\nThe variation in weights/biases\ndue to mutation.");
 		m_mutSizePlusBtn = UI::Button{ "+", m_settingsView };
 		m_mutSizePlusBtn.setPosition(xPos1 + buttonWidth + xGap + textFieldWidth + xGap + hzPadding, yPos + topPadding + yLineSpace);
 		m_mutSizePlusBtn.SetBackgroundSize(sf::Vector2f{ buttonWidth, buttonWidth });
@@ -236,7 +236,7 @@ namespace Menu
 		m_heightTF.SetRawText("25");
 		m_rayCountTF.SetRawText("5");
 		m_raySizeTF.SetRawText("150");
-		m_mutSizeTF.SetRawText("0.3");
+		m_mutSizeTF.SetRawText("1.0");
 		m_enginePowTF.SetRawText("10");
 		m_rotPowTF.SetRawText("1");
 		m_mutPCTF.SetRawText("25");

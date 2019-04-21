@@ -46,8 +46,8 @@ namespace Menu
 
 
 		// MUTATE SIZE
-		const double m_mutSizeMinVal = 0.0;
-		const double m_mutSizeMaxVal = 1.0;
+		const double m_mutSizeMinVal = 0.1;
+		const double m_mutSizeMaxVal = 2.5;
 		sf::Text m_mutSizeLabel;
 		UI::Button m_mutSizePlusBtn;
 		UI::Button m_mutSizeMinusBtn;
