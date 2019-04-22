@@ -6,7 +6,7 @@ namespace UI
 {
 
 
-	class CheckBox : public Clickable
+	class UICheckBox : public UIClickable
 	{
 	private:
 
@@ -14,29 +14,42 @@ namespace UI
 		sf::RectangleShape m_background;
 		sf::Text m_checkedText;
 		Event<bool> m_checkBoxUpdateEvent;
-		Tooltip m_tooltip;
+		UITooltip m_tooltip;
 
-		virtual void OnMouseHover();
-		virtual void OnMouseUnhover();
-		virtual void OnMouseClick();
+		// Inherited events
+		void OnMouseHover() override;
+		void OnMouseUnhover() override;
+		void OnMouseClick() override;
 
-		virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+		// Draws the checkbox to the target
+		void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
 	public:
 
-		CheckBox();
-		CheckBox(const CheckBox& checkBox);
-		CheckBox(sf::View& view);
+		// Constructors
 
-		CheckBox& operator=(const CheckBox& checkBox);
+		// Creates and initialises a blank checkbox (default constructor)
+		UICheckBox();
+		// Creates and initialises a checkbox
+		UICheckBox(sf::View& view);
+		// Creates and initialses a checkbox from another checkbox (copy constructor)
+		UICheckBox(const UICheckBox& checkBox);
 
+		// Sets the values of the current checkbox from another checkbox
+		UICheckBox& operator=(const UICheckBox& checkBox);
+
+		// Sets the text of the tooltip
 		void SetTooltipText(sf::Text content);
 		void SetTooltipText(std::string content);
 
+		// Sets whether the checkbox is checked or not
+		// Does not call the checked event
 		void SetChecked(bool isChecked);
 
-		bool IsChecked() const;
+		// Returns whether the checkbox is checked
+		const bool IsChecked() const;
 
+		// Returns the event for when the checkbox is updated (through clicking)
 		Event<bool>& GetCheckBoxUpdateEvent();
 	};
 

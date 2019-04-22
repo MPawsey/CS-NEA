@@ -4,27 +4,35 @@
 
 namespace Menu
 {
+	// Returns a static instance of MenuManager to be used by the program
 	MenuManager& MenuManager::GetMenuManager()
 	{
+		// Gets the static instance
 		static MenuManager menuManager{};
 		return menuManager;
 	}
 
+	// Initialises the menu manager
 	void MenuManager::Init()
 	{
+		// Sets the starting state of the menu
 		m_menuState = MenuState::MainMenu;
 
+		// Initialises each of the menu screens
 		m_mainMenu.Init();
 		m_settingsMenu.Init();
 		m_mapSelectMenu.Init();
 		m_carSelectMenu.Init();
 		m_advSettingsMenu.Init();
 
+		// Loads the main menu screen
 		m_mainMenu.Load();
 	}
 
+	// Updates the current menu screen
 	void MenuManager::Update()
 	{
+		// Determines the current menu and updates it
 		switch (m_menuState)
 		{
 		case MenuState::MainMenu:
@@ -45,6 +53,7 @@ namespace Menu
 		}
 	}
 
+	// Changes the state of the menu
 	void MenuManager::GoToState(MenuState newState)
 	{
 		// Unload previous state
@@ -67,7 +76,6 @@ namespace Menu
 			break;
 		}
 
-
 		// Load new state
 		switch (newState)
 		{
@@ -88,6 +96,7 @@ namespace Menu
 			break;
 		}
 
+		// Updates the menu state to the new state
 		m_menuState = newState;
 	}
 

@@ -10,27 +10,39 @@ namespace Evolution
 	class Simulation
 	{
 	private:
-		sf::View m_uiView;
-		sf::View m_networkView;
-		sf::View m_simulationView;
-		sf::Text m_seedText;
-		sf::Text m_iterationText;
+		// Views
+		sf::View m_uiView, m_networkView, m_simulationView;
+
+		// UI
+		sf::Text m_seedText, m_iterationText, m_showCheckpointsText;
+		UI::UICheckBox m_showCheckpointsCB;
+
+		// Other
 		Machine::Car* m_prevBestCar;
 
-		UI::CheckBox m_showCheckpointsCB;
-		sf::Text m_showCheckpointsText;
-
+		// Events
 		void OnWindowResized(sf::Vector2u size);
 
 	public:
+		// The max framerate for when displaying the simulation
 		static const unsigned int SIMULATION_FRAMERATE = 500u;
 
+		// Initialises all variables
 		void Init();
+
+		// Updates the simulation
 		void Update(std::vector<Machine::Car*>& cars, unsigned int& aliveCount, bool draw);
+
+		// Loads the simulation
 		void Load();
+
+		// Unloads the simulation
 		void Unload();
 
+		// Sets the seed being displayed during the simulation phase
 		void SetSeedText(unsigned int seed);
+		
+		// Sets the iteration being displayed during the simulation phase
 		void SetIteration(unsigned int iteration);
 	};
 }

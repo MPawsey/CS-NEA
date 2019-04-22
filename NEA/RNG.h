@@ -13,24 +13,30 @@ namespace RNG
 
 	public:
 
+		// Process called when the variable is used like a function
 		unsigned int operator()()
 		{
+			// Increments m_calls and returns the operator() for this as an STL random class
 			++m_calls;
 			return static_cast<std::mt19937*>(this)->operator()();
 		}
 
-		const unsigned long long GetCalls()
+		// Returns the number of times the RNG was called
+		const unsigned long long GetCalls() const
 		{
 			return m_calls;
 		}
 
-		const unsigned int GetSeed()
+		// Returns the seed of the RNG
+		const unsigned int GetSeed() const
 		{
 			return m_seed;
 		}
 
+		// Sets the seed of the RNG
 		void SetSeed(unsigned int s)
 		{
+			// Sets the values to their initial state
 			m_calls = 0;
 			m_seed = s;
 			seed(s);

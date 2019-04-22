@@ -3,84 +3,103 @@
 #include "InputManager.h"
 #include "UI.h"
 #include "Window.h"
+#include "Colours.h"
 
 namespace UI
 {
-
-
-
-
-	void Tooltip::Create()
+	// Creates the tooltip
+	void UITooltip::Create()
 	{
-		m_background.setFillColor(sf::Color{20, 40, 86});
+		// Initialises the background of the tooltip
+		m_background.setFillColor(Colours::TT_BACK_COLOUR);
 		m_background.setOutlineColor(sf::Color::Blue);
 		m_background.setOutlineThickness(2.f);
 
-		m_onMouseMoveID = InputManager::GetMouseMovedEvent().AddCallback(&Tooltip::OnMouseMoved, *this);
+		// Initialises the text of the tooltip
+		m_text.setFont(GetFont());
+		m_text.setCharacterSize(24);
+		m_text.setFillColor(sf::Color::White);
+		m_text.setPosition(sf::Vector2f{ 0, 0 });
+
+		// Initialises the mouse moved event if needed
+		if (!m_onMouseMoveID.m_valid)
+			m_onMouseMoveID = InputManager::GetMouseMovedEvent().AddCallback(&UITooltip::OnMouseMoved, *this);
 	}
 
-	Tooltip::Tooltip()
-		: m_defaultView{ &Window::GetDefaultWindowView() }
+	// Initialises the tooltip
+	UITooltip::UITooltip()
+		: defaultView{ &Window::GetDefaultWindowView() }
 	{
 		Create();
 	}
 
-	Tooltip::Tooltip(std::string content)
-		: m_defaultView{ &Window::GetDefaultWindowView() }
+	// Initialises the tooltip with text
+	UITooltip::UITooltip(std::string content)
+		: defaultView{ &Window::GetDefaultWindowView() }
 	{
 		Create();
 		SetText(content);
 	}
 
-	Tooltip::Tooltip(sf::Text content)
-		: m_defaultView{ &Window::GetDefaultWindowView() }
+	// Initialises the tooltip with text
+	UITooltip::UITooltip(sf::Text content)
+		: defaultView{ &Window::GetDefaultWindowView() }
 	{
 		Create();
 		SetText(content);
 	}
 
-	Tooltip::Tooltip(const Tooltip& tooltip)
+	// Initialises the tooltip from another tooltip
+	UITooltip::UITooltip(const UITooltip& tooltip)
 	{
 		m_background = tooltip.m_background;
 		m_text = tooltip.m_text;
-		m_defaultView = tooltip.m_defaultView;
+		defaultView = tooltip.defaultView;
 	}
 
-	Tooltip::~Tooltip()
+	// Deconstructor
+	// Removes the callback from the mouse moved event
+	UITooltip::~UITooltip()
 	{
 		InputManager::GetMouseMovedEvent().RemoveCallback(m_onMouseMoveID);
 	}
 
-	Tooltip& Tooltip::operator=(const Tooltip& tooltip)
+	// Copies values from another tooltip to this tooltip
+	UITooltip& UITooltip::operator=(const UITooltip& tooltip)
 	{
+		// Copies the UIElement from the other tooltip to this tooltip
 		UIElement::operator=(tooltip);
 
 		m_background = tooltip.m_background;
 		m_text = tooltip.m_text;
-		m_defaultView = tooltip.m_defaultView;
+		defaultView = tooltip.defaultView;
 
+		// Initialises the tooltip event if needed
+		if (!m_onMouseMoveID.m_valid)
+			m_onMouseMoveID = InputManager::GetMouseMovedEvent().AddCallback(&UITooltip::OnMouseMoved, *this);
 
-		InputManager::GetMouseMovedEvent().RemoveCallback(m_onMouseMoveID);
-		m_onMouseMoveID = InputManager::GetMouseMovedEvent().AddCallback(&Tooltip::OnMouseMoved, *this);
-
+		// Returns this so that calls can be chained
 		return *this;
 	}
 
-	void Tooltip::OnMouseMoved(sf::Vector2i mousePos)
+	// Updates the tooltip when the mouse is moved
+	void UITooltip::OnMouseMoved(sf::Vector2i mousePos)
 	{
+		// Only works of the tooltip is active
 		if (m_isActive)
 		{
-			sf::Vector2f transformedPos = InputManager::GetMousePosInView(*m_defaultView, mousePos);
+			// Gets the mouse position in the default window view
+			sf::Vector2f transformedPos = InputManager::GetMousePosInView(*defaultView, mousePos);
 
-			// Need to bound tooltip to screen
+			// Bounds the tooltip to the window dimensions
 			// LEFT-RIGHT
 			if (transformedPos.x < 0)
 			{
 				transformedPos.x = 0;
 			}
-			else if (transformedPos.x + m_background.getGlobalBounds().width > m_defaultView->getSize().x)
+			else if (transformedPos.x + m_background.getGlobalBounds().width > defaultView->getSize().x)
 			{
-				transformedPos.x = m_defaultView->getSize().x - m_background.getGlobalBounds().width;
+				transformedPos.x = defaultView->getSize().x - m_background.getGlobalBounds().width;
 			}
 
 			// TOP-BOTTOM
@@ -88,17 +107,21 @@ namespace UI
 			{
 				transformedPos.y = m_background.getGlobalBounds().height;
 			}
-			else if (transformedPos.y > m_defaultView->getSize().y)
+			else if (transformedPos.y > defaultView->getSize().y)
 			{
-				transformedPos.y = m_defaultView->getSize().y;
+				transformedPos.y = defaultView->getSize().y;
 			}
 
+			// Updates the position of the tooltip
 			setPosition(transformedPos);
 		}
 	}
 
-	void Tooltip::SetActive(bool isActive)
+	// Sets whether the tooltip is active or not
+	void UITooltip::SetActive(bool isActive)
 	{
+		// Updates and checks whether the tooltip is active or not
+		// Adds/removes the tooltip from the windows late draw list depending on this
 		if (m_isActive = isActive)
 		{
 			Window::AddToLateDraw(*this);
@@ -109,33 +132,39 @@ namespace UI
 		}
 	}
 
-	void Tooltip::SetText(sf::Text text)
+	// Sets the text of the tooltip
+	void UITooltip::SetText(sf::Text text)
 	{
 		m_text = text;
+
+		// Updates the background of the tooltip
 		m_background.setSize(sf::Vector2f{ m_text.getGlobalBounds().left + m_text.getGlobalBounds().width, m_text.getGlobalBounds().top + m_text.getGlobalBounds().height });
 		setOrigin(sf::Vector2f{ 0, m_background.getGlobalBounds().height });
 	}
-	
-	void Tooltip::SetText(std::string text)
+
+	// Sets the text of the tooltip
+	void UITooltip::SetText(std::string text)
 	{
-		m_text.setFont(GetFont());
-		m_text.setCharacterSize(24);
-		m_text.setFillColor(sf::Color::White);
-		m_text.setPosition(sf::Vector2f{0, 0});
 		m_text.setString(text);
+
+		// Updates the background of the tooltip
 		m_background.setSize(sf::Vector2f{ m_text.getGlobalBounds().width + 5.f, m_text.getGlobalBounds().height + 10.f });
 		setOrigin(sf::Vector2f{0, m_background.getGlobalBounds().height});
 	}
 
-
-	void Tooltip::draw(sf::RenderTarget& target, sf::RenderStates states) const
+	// Draws the tooltip to the target
+	void UITooltip::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	{
+		// Only works if the tooltip is active
 		if (m_isActive)
 		{
-			target.setView(*m_defaultView);
+			// Sets the view to the default window view
+			target.setView(*defaultView);
 
+			// Applies the tooltips transform to the target 
 			states.transform *= getTransform();
 
+			// Draws the tooltip
 			target.draw(m_background, states);
 			target.draw(m_text, states);
 		}

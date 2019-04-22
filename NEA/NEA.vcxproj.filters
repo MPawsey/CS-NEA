@@ -264,5 +264,8 @@
     <ClInclude Include="MapEditor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Colours.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

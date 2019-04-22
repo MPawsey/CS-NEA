@@ -8,76 +8,18 @@
 
 namespace Editor
 {
-	
-
-
+	// Returns a static instance of MapEditor to be used by the program
 	MapEditor& MapEditor::GetMapEditor()
 	{
+		// Gets the static instance
 		static MapEditor mapEditor;
 		return mapEditor;
 	}
 
-	int MapEditor::FindLastPotentialConnection(unsigned int point)
-	{
-		// Binary Search
-		// If pos1 is found, the pointer is moved left until it finds pos1 that isn't 
-
-		// If no connections exist, a first connection cannot exist
-		if (m_connections.size() == 0)
-		{
-			return -1;
-		}
-
-		// Initialise the id to the centre and find the respective pos1
-		unsigned int size = m_connections.size() / 2;
-		unsigned int id = size; 
-		unsigned int lastId = m_connections.size() + 1;
-		unsigned int pos = (*std::next(m_connections.begin(), id)).pos1;
-
-		// Keep looping until the pos is the one we are looking for
-		while (pos != point)
-		{
-			// A solution does not exist
-			if ((size = (size + 1) / 2) == 0)
-			{
-				if (pos < point)
-					return id;
-				return -1;
-			}
-
-			// Changes id to new value
-			if (pos > point)
-			{
-				id -= size;
-			}
-			else
-			{
-				id += size;
-			}
-
-			lastId = id;
-
-			// Finds the new pos
-			pos = (*std::next(m_connections.begin(), id)).pos1;
-		}
-
-		// Keeps cycling left until we get to the start of the chain
-		while (pos == point)
-		{
-			id += 1;
-			// Just in case we are at the first value in the list
-			if (id == m_connections.size())
-				break;
-			pos = (*std::next(m_connections.begin(), id)).pos1;
-		}
-
-		// Returns the id of the first element in the list
-		return id - 1;
-	}
-
-	
+	// Updates the map editor when a key is pressed
 	void MapEditor::OnKeyPressed(sf::Keyboard::Key key)
 	{
+		// Only works if the map editor is active
 		if (!m_isActive)
 			return;
 
@@ -85,49 +27,53 @@ namespace Editor
 		bool reset = false;
 		switch (key)
 		{
-		case sf::Keyboard::P:
+		case sf::Keyboard::P:			// Point
 			ChangeMouseType(Point);
 			reset = true;
 			break;
-		case sf::Keyboard::W:
+		case sf::Keyboard::W:			// Wall
 			ChangeMouseType(Wall);
 			break;
-		case sf::Keyboard::I:
+		case sf::Keyboard::I:			// Instant Wall
 			ChangeMouseType(InstantWall);
 			break;
-		case sf::Keyboard::S:
+		case sf::Keyboard::S:			// Spawn
 			ChangeMouseType(Spawn);
 			reset = true;
 			break;
-		case sf::Keyboard::C:
+		case sf::Keyboard::C:			// Checkpoint
 			ChangeMouseType(Checkpoint);
 			reset = true;
 			break;
-		case sf::Keyboard::D:
+		case sf::Keyboard::D:			// Delete
 			ChangeMouseType(Delete);
 			reset = true;
 			break;
-		case sf::Keyboard::G:
+		case sf::Keyboard::G:			// Toggle grid visibility
 			m_gridVisible = !m_gridVisible;
 			m_gridVisibleCB.SetChecked(m_gridVisible);
 			break;
-		case sf::Keyboard::L:
+		case sf::Keyboard::L:			// Toggle grid lock
 			m_gridLock = !m_gridLock;
 			m_gridLockCB.SetChecked(m_gridLock);
 			break;
-		case sf::Keyboard::Add:
+		case sf::Keyboard::Add:			// Increase grid size
 			m_gridSize += 25.f;
 			m_gridSizeTF.SetRawText(Functions::DoubleToString((double)m_gridSize));
+			// Updates the grid
 			RecalculateGrid();
 			break;
-		case sf::Keyboard::Subtract:
+		case sf::Keyboard::Subtract:	// Decrease grid size
+			// Only decrease if the grid can go lower
 			if ((m_gridSize -= 25.f) < 25.f)
 				m_gridSize = 25.f;
 			m_gridSizeTF.SetRawText(Functions::DoubleToString((double)m_gridSize));
+			// Updates the grid
 			RecalculateGrid();
 			break;
 		}
 
+		// Resets the selected point if necessary
 		if (reset && m_selectedPoint != -1)
 		{
 			m_points[m_selectedPoint].setFillColor(sf::Color::White);
@@ -135,18 +81,23 @@ namespace Editor
 		}
 	}
 
+	// Updates the map editor when the mouse is pressed
 	void MapEditor::OnMousePressed(sf::Mouse::Button btn)
 	{
+		// Only works if the map editor is active
 		if (!m_isActive)
 			return;
 
+		// Determines what button is pressed and if it is in the correct view
 		if (btn == sf::Mouse::Middle && InputManager::IsMouseInView(m_editorView))
 		{
+			// Sets up the editor for moving the map
 			m_editorGrabbed = true;
 			m_lastMousePos = sf::Mouse::getPosition(Window::GetWindow());
 		}
 		else if (btn == sf::Mouse::Right && InputManager::IsMouseInView(m_editorView))
 		{
+			// Clears the selected point
 			if (m_selectedPoint != -1)
 			{
 				m_points[m_selectedPoint].setFillColor(sf::Color::White);
@@ -179,6 +130,7 @@ namespace Editor
 				p.setOrigin(5.f, 5.f);
 				p.setPosition(pos);
 
+				// Adds the new point
 				m_points.push_back(p);
 				break;
 			}
@@ -195,8 +147,10 @@ namespace Editor
 						// If there is already a point selected, creates a line
 						if (m_selectedPoint != -1)
 						{
+							// Only create a line if the selected point is not the new point
 							if (m_selectedPoint != i)
 							{
+								// Set pos1 to the lower id point
 								unsigned int pos1 = (m_selectedPoint < i ? m_selectedPoint : i), pos2 = i + m_selectedPoint - pos1;
 								
 								// Checks to see if this connection exists
@@ -205,6 +159,7 @@ namespace Editor
 									if (c.pos1 == pos1 && c.pos2 == pos2)
 									{
 										// Connection exists so no need to create it
+										// Swaps the selected point
 										m_points[m_selectedPoint].setFillColor(sf::Color::White);
 										m_selectedPoint = i;
 										m_points[m_selectedPoint].setFillColor(sf::Color::Green);
@@ -212,7 +167,10 @@ namespace Editor
 									}
 								}
 
+								// Connection does not exist so creates one
 								m_connections.push_back(Connection{ sf::Vertex{ m_points[m_selectedPoint].getPosition(), sf::Color::White}, sf::Vertex{ m_points[i].getPosition(), sf::Color::White }, pos1, pos2 });
+
+								// Swaps the selected point
 								m_points[m_selectedPoint].setFillColor(sf::Color::White);
 								m_selectedPoint = i;
 								m_points[m_selectedPoint].setFillColor(sf::Color::Green);
@@ -220,12 +178,15 @@ namespace Editor
 						}
 						else
 						{
+							// Sets the new point the selected point
 							m_selectedPoint = i;
 							m_points[m_selectedPoint].setFillColor(sf::Color::Green);
 						}
 						return;
 					}
 				}
+
+				// Deselects the selected point it no point was clicked
 				if (m_selectedPoint != -1)
 				{
 					m_points[m_selectedPoint].setFillColor(sf::Color::White);
@@ -264,12 +225,14 @@ namespace Editor
 					index = m_points.size() - 1;
 				}
 
+				// Updates the selected point
 				if (m_selectedPoint == -1)
 				{
 					m_selectedPoint = index;
 				}
 				else
 				{
+					// Sets pos1 to the point with the lower id
 					unsigned int pos1 = (m_selectedPoint < index ? m_selectedPoint : index), pos2 = index + m_selectedPoint - pos1;
 
 					// Checks to see if this connection exists
@@ -278,6 +241,7 @@ namespace Editor
 						if (c.pos1 == pos1 && c.pos2 == pos2)
 						{
 							// Connection exists so no need to create it
+							// Swaps the selected point
 							m_points[m_selectedPoint].setFillColor(sf::Color::White);
 							m_selectedPoint = index;
 							m_points[m_selectedPoint].setFillColor(sf::Color::Green);
@@ -285,7 +249,10 @@ namespace Editor
 						}
 					}
 
+					// Connection does not exist so creates one
 					m_connections.push_back(Connection{ sf::Vertex{ m_points[m_selectedPoint].getPosition(), sf::Color::White}, sf::Vertex{ m_points[index].getPosition(), sf::Color::White }, pos1, pos2 });
+
+					// Swaps the selected point
 					m_points[m_selectedPoint].setFillColor(sf::Color::White);
 					m_selectedPoint = index;
 				}
@@ -296,30 +263,36 @@ namespace Editor
 				// Gets the position of the point
 				sf::Vector2f pos = m_ghost.getPosition();
 
-
+				// Sets the spawn position and sets the spawnRotPressed flag to true
 				m_spawnPos.setPosition(pos);
 				m_spawnRotPressed = true;
 				break;
 			}
 			case Checkpoint:
 			{
+				// Sets the drawing checkpoint flag to true
 				m_isDrawingCheckpoint = true;
+
+				// Creates checkpoint outline
 				sf::CircleShape cp;
 				cp.setFillColor(sf::Color::Transparent);
 				cp.setOutlineColor(sf::Color::Cyan);
 				cp.setPosition(m_ghost.getPosition());
 				cp.setOutlineThickness(1.f);
 
+				// Creates a checkpoint centre
 				sf::CircleShape p{ 5.f };
 				p.setFillColor(sf::Color::Cyan);
 				p.setOrigin(5.f, 5.f);
 				p.setPosition(m_ghost.getPosition());
 
+				// Creates text to indicate the checkpoint position
 				sf::Text t{std::to_string(m_checkPoints.size() + 1), UI::GetFont()};
 				t.setPosition(m_ghost.getPosition() + sf::Vector2f{5.f, -2.5f});
 				t.setFillColor(sf::Color::Cyan);
 				t.setCharacterSize(12);
 
+				// Adds the checkpoint to the list of checkpoints and allows the map to be saved
 				m_checkPoints.push_back({cp, p, t});
 				m_saveBtn.SetActive(true);
 				break;
@@ -336,20 +309,23 @@ namespace Editor
 					{
 						// The position lies within a point, so the point can be deleted
 
+						// Removes any connections the point has
 						for (int j = 0; j < m_connections.size(); ++j)
 						{
+							// Checks to see if the current connection exists
 							if (m_connections[j].pos1 == i || m_connections[j].pos2 == i)
 							{
+								// Removes the checkpoint
 								m_connections.erase(m_connections.begin() + j);
 								--j;
 								continue;
 							}
 							
+							// Updates the connections not connected to the deleted point
 							if (m_connections[j].pos1 > i)
 							{
 								m_connections[j].pos1--;
 							}
-
 							if (m_connections[j].pos2 > i)
 							{
 								m_connections[j].pos2--;
@@ -357,6 +333,7 @@ namespace Editor
 
 						}
 
+						// Removes the point from the list of points
 						m_points.erase(m_points.begin() + i);
 						break;
 					}
@@ -370,11 +347,13 @@ namespace Editor
 						// The position lies within a point, so the point can be deleted
 						m_checkPoints.erase(m_checkPoints.begin() + i);
 
+						// Decrements the position of all checkpoints after this one
 						for (unsigned int j = i; j < m_checkPoints.size(); ++j)
 						{
 							m_checkPoints[j].m_idText.setString(std::to_string(j + 1));
 						}
 
+						// Disables the save button if no checkpoints exist
 						if (m_checkPoints.size() == 0)
 							m_saveBtn.SetActive(false);
 
@@ -387,11 +366,14 @@ namespace Editor
 		}
 	}
 
+	// Updates the map editor when the mouse is released
 	void MapEditor::OnMouseReleased(sf::Mouse::Button btn)
 	{
+		// Only works when the map editor is active
 		if (!m_isActive)
 			return;
 
+		// Determines the type of mouse button and set the respective flags to false
 		if (btn == sf::Mouse::Left)
 		{
 			m_spawnRotPressed = false;
@@ -403,11 +385,14 @@ namespace Editor
 		}
 	}
 
+	// Updates the map editor when the mouse is moved
 	void MapEditor::OnMouseMoved(sf::Vector2i mousePos)
 	{
+		// Only works when the map editor is active
 		if (!m_isActive)
 			return;
 
+		// Only works if the map editor is currently grabbed
 		if (m_editorGrabbed)
 		{
 			// Calculates the vector change of mouse position between the last event and now
@@ -417,27 +402,39 @@ namespace Editor
 			m_editorView.setCenter(m_editorView.getCenter().x - deltaPos.x, m_editorView.getCenter().y - deltaPos.y);
 		}
 
+		// Updates the last mouse position
 		m_lastMousePos = mousePos;
 	}
 
+	// Updates the map editor when the window is resized
 	void MapEditor::OnWindowResized(sf::Vector2u size)
 	{
 		// Resizes the editor so that it isn't stretched
 		m_editorView.setSize(sf::Vector2f{ size.x * m_editorView.getViewport().width, size.y * m_editorView.getViewport().height });
 		m_gridView.setSize(sf::Vector2f{ size.x * m_gridView.getViewport().width, size.y * m_gridView.getViewport().height });
+
+		// Recalculates the grid to fit the new size
 		RecalculateGrid();
 	}
 
+	// Returns the mouse point on the grid
 	sf::Vector2f MapEditor::GetMousePointOnGrid()
 	{
+		// Gets the mouse position in the editor
 		sf::Vector2f mousePos = InputManager::GetMousePosInView(m_editorView);
+
+		// Locks the mouse position to the grid
 		mousePos.x = std::roundf(mousePos.x / m_gridSize) * m_gridSize;
 		mousePos.y = std::roundf(mousePos.y / m_gridSize) * m_gridSize;
+
+		// Returns the locked mouse position
 		return mousePos;
 	}
 
+	// Recalculates the grid lines
 	void MapEditor::RecalculateGrid()
 	{
+		// Clears the grid lines
 		m_gridLines.clear();
 
 		// Ensures the grid is always centred correctly
@@ -484,13 +481,14 @@ namespace Editor
 
 	}
 
-
+	// Changes the mouse tool type
 	void MapEditor::ChangeMouseType(MouseType type)
 	{
 		// No need to do anything if already checked
 		if (m_mouseType == type)
 			return;
 
+		// Updates the mouse type
 		m_mouseType = type;
 
 		// Resets the checkboxes
@@ -561,39 +559,44 @@ namespace Editor
 
 	}
 
+	// Resets the map editor
 	void MapEditor::Reset()
 	{
+		// Resets the mouse type
 		ChangeMouseType(Point);
 
+		// Clears all of the map features
 		m_checkPoints.clear();
 		m_gridLines.clear();
 		m_points.clear();
 		m_connections.clear();
 
+		// Resets the grid
 		m_gridSize = 50.f;
 		m_gridSizeTF.SetRawText("50.0");
-
 		m_gridVisible = true;
 		m_gridLock = true;
 		m_gridVisibleCB.SetChecked(true);
 		m_gridLockCB.SetChecked(true);
 
+		// Resets the spawn
 		m_spawnPos.setPosition(0.f, 0.f);
 		m_spawnPos.setRotation(180);
-
 		m_spawnDir = LineShape{ m_spawnPos.getPosition(), m_spawnPos.getPosition() + sf::Vector2f{0.f, 12.5f} };
 		m_spawnDir.SetLineColour(sf::Color::Red);
 		m_spawnDir.SetLineThickness(2.f);
 
-
+		// Resets the editor position and grid
 		m_editorView.setCenter(0.f, 0.f);
 		m_gridView.setCenter(0.f, 0.f);
 		RecalculateGrid();
 
 	}
 
+	// Initialises the map editor
 	void MapEditor::Init()
 	{
+		// Gets the window instance for the program
 		sf::RenderWindow& window = Window::GetWindow();
 
 		// Setup Input Events
@@ -637,7 +640,7 @@ namespace Editor
 		// Setup the UI
 
 		// Mouse types
-		m_mtPointCB = UI::CheckBox{ m_UIView };
+		m_mtPointCB = UI::UICheckBox{ m_UIView };
 		m_mtPointCB.setPosition(5.f, 5.f);
 		m_mtPointCB.GetCheckBoxUpdateEvent().AddCallback([&](bool checked) { if (checked) ChangeMouseType(Point); else ChangeMouseType(None); });
 		m_mtPointCB.SetTooltipText("Point");
@@ -645,44 +648,44 @@ namespace Editor
 		m_mtPointText = sf::Text{ "P", UI::GetFont() };
 		m_mtPointText.setPosition(5.f, 35.f);
 
-		m_mtWallCB = UI::CheckBox{ m_UIView };
+		m_mtWallCB = UI::UICheckBox{ m_UIView };
 		m_mtWallCB.setPosition(50.f, 5.f);
 		m_mtWallCB.GetCheckBoxUpdateEvent().AddCallback([&](bool checked) { if (checked) ChangeMouseType(Wall); else ChangeMouseType(None); });
 		m_mtWallCB.SetTooltipText("Wall");
 		m_mtWallText = sf::Text{ "W", UI::GetFont() };
 		m_mtWallText.setPosition(50.f, 35.f);
 
-		m_mtInstWallCB = UI::CheckBox{ m_UIView };
+		m_mtInstWallCB = UI::UICheckBox{ m_UIView };
 		m_mtInstWallCB.setPosition(100.f, 5.f);
 		m_mtInstWallCB.GetCheckBoxUpdateEvent().AddCallback([&](bool checked) { if (checked) ChangeMouseType(InstantWall); else ChangeMouseType(None); });
 		m_mtInstWallCB.SetTooltipText("Instant Wall");
 		m_mtInstWallText = sf::Text{ "I", UI::GetFont() };
 		m_mtInstWallText.setPosition(100.f, 35.f);
 
-		m_mtCheckpoint = UI::CheckBox{ m_UIView };
+		m_mtCheckpoint = UI::UICheckBox{ m_UIView };
 		m_mtCheckpoint.setPosition(150.f, 5.f);
 		m_mtCheckpoint.GetCheckBoxUpdateEvent().AddCallback([&](bool checked) { if (checked) ChangeMouseType(Checkpoint); else ChangeMouseType(None); });
 		m_mtCheckpoint.SetTooltipText("Checkpoint");
 		m_mtCheckpointText = sf::Text{ "C", UI::GetFont() };
 		m_mtCheckpointText.setPosition(150.f, 35.f);
 
-		m_mtSpawnCB = UI::CheckBox{ m_UIView };
+		m_mtSpawnCB = UI::UICheckBox{ m_UIView };
 		m_mtSpawnCB.setPosition(200.f, 5.f);
 		m_mtSpawnCB.GetCheckBoxUpdateEvent().AddCallback([&](bool checked) { if (checked) ChangeMouseType(Spawn); else ChangeMouseType(None); });
 		m_mtSpawnCB.SetTooltipText("Spawn");
 		m_mtSpawnText = sf::Text{ "S", UI::GetFont() };
 		m_mtSpawnText.setPosition(200.f, 35.f);
 
-		m_mtDeleteCB = UI::CheckBox{ m_UIView };
+		m_mtDeleteCB = UI::UICheckBox{ m_UIView };
 		m_mtDeleteCB.setPosition(250.f, 5.f);
 		m_mtDeleteCB.GetCheckBoxUpdateEvent().AddCallback([&](bool checked) { if (checked) ChangeMouseType(Delete); else ChangeMouseType(None); });
 		m_mtDeleteCB.SetTooltipText("Delete");
 		m_mtDeleteText = sf::Text{ "D", UI::GetFont() };
 		m_mtDeleteText.setPosition(250.f, 35.f);
 
-		// Grid settings
+		// Initialising of the grid settings
 		// Grid size
-		m_gridSizeTF = UI::TextField{ 200.f, UI::TextField::Decimal, m_UIView, {2.5f, 5.f, 0.f, 0.f} };
+		m_gridSizeTF = UI::UITextField{ 200.f, UI::UITextField::Decimal, m_UIView, {2.5f, 5.f, 0.f, 0.f} };
 		m_gridSizeTF.setPosition(350.f, 5.f);
 		m_gridSizeTF.SetRawText("50.0");
 		m_gridSizeTF.SetTooltipText("[>0.0] Default = 50.0\nSets the grid size");
@@ -697,7 +700,7 @@ namespace Editor
 		m_gridSizeText.setPosition(350.f, 35.f);
 
 		// Grid visible
-		m_gridVisibleCB = UI::CheckBox{ m_UIView };
+		m_gridVisibleCB = UI::UICheckBox{ m_UIView };
 		m_gridVisibleCB.setPosition(600.f, 5.f);
 		m_gridVisibleCB.GetCheckBoxUpdateEvent().AddCallback([&](bool checked) { m_gridVisible = checked; });
 		m_gridVisibleCB.SetTooltipText("Grid Visible");
@@ -706,7 +709,7 @@ namespace Editor
 		m_gridVisibleText.setPosition(600.f, 35.f);
 
 		// Grid lock
-		m_gridLockCB = UI::CheckBox{ m_UIView };
+		m_gridLockCB = UI::UICheckBox{ m_UIView };
 		m_gridLockCB.setPosition(650.f, 5.f);
 		m_gridLockCB.GetCheckBoxUpdateEvent().AddCallback([&](bool checked) { m_gridLock = checked; });
 		m_gridLockCB.SetTooltipText("Grid Lock");
@@ -714,52 +717,60 @@ namespace Editor
 		m_gridLockText = sf::Text{ "L", UI::GetFont() };
 		m_gridLockText.setPosition(650.f, 35.f);
 
-
-		// Save UI
-		m_savePop = UI::Popup{ m_UIView };
+		// Initialising the save UI
+		// Save popup
+		m_savePop = UI::UIPopup{ m_UIView };
 		m_savePop.SetViewportTransform({ 0.25f, 0.25f, 0.5f, 0.5f });
 		m_savePop.SetViewSize((sf::Vector2f)Window::GetWindowSize() * 0.5f);
 
-		UI::TextField* nameTF = new UI::TextField{ 300, UI::TextField::FieldType::Text, m_savePop.GetView() };
+		// Creates the text field for the name of the track and adds it to the save poppup
+		UI::UITextField* nameTF = new UI::UITextField{ 300, UI::UITextField::FieldType::Text, m_savePop.GetView() };
 		nameTF->SetTooltipText("The name of the save file.");
 		nameTF->SetRawText("Track");
 		nameTF->setPosition((m_savePop.GetView().getSize().x - nameTF->GetBounds().width) / 2.f, 50.f);
 		m_savePop.AddElement(nameTF); // No deleting of retBtn as m_savePopup destructor deletes it
 
-		UI::Button* retBtn = new UI::Button{ "Cancel", m_savePop.GetView(), UI::Padding{2.5f, 5.f, 0.f, 0.f} };
+		// Creates return button and adds it to the save poppup
+		UI::UIButton* retBtn = new UI::UIButton{ "Cancel", m_savePop.GetView(), UI::Padding{2.5f, 5.f, 0.f, 0.f} };
 		retBtn->setPosition(5.f, m_savePop.GetView().getSize().y - retBtn->GetBounds().height - 5.f);
 		retBtn->GetMouseClickedEvent().AddCallback([&]() { m_savePop.SetActive(false); Load(); });
 		retBtn->SetCentreText(true);
 		m_savePop.AddElement(retBtn);
 
-		UI::Button* saveBtn = new UI::Button{ "Save", m_savePop.GetView(), UI::Padding{2.5f, 5.f, 0.f, 0.f} };
+		// Creates save button and adds it to the save poppup
+		UI::UIButton* saveBtn = new UI::UIButton{ "Save", m_savePop.GetView(), UI::Padding{2.5f, 5.f, 0.f, 0.f} };
 		saveBtn->setPosition(m_savePop.GetView().getSize().x - retBtn->GetBounds().width - 5.f, m_savePop.GetView().getSize().y - retBtn->GetBounds().height - 5.f);
 		saveBtn->GetMouseClickedEvent().AddCallback([&, nameTF]() { SaveMap(nameTF->GetRawText()); m_savePop.SetActive(false); Load(); });
 		saveBtn->SetCentreText(true);
 		m_savePop.AddElement(saveBtn);
 
-		m_saveBtn = UI::Button{ "Save Map", m_UIView, {2.5f, 5.f, 0.f, 0.f} };
+		// Initialises the save button
+		m_saveBtn = UI::UIButton{ "Save Map", m_UIView, {2.5f, 5.f, 0.f, 0.f} };
 		m_saveBtn.SetCentreText(true);
 		m_saveBtn.setPosition((window.getSize().x * 1.5f) - m_saveBtn.GetClickBounds().width - 5.f, 5.f);
 		m_saveBtn.GetMouseClickedEvent().AddCallback([&]() 
 		{
+			// Checks to see if the map is valid
 			if (m_checkPoints.size() > 0)
 			{
+				// Unloads the map editor and loads the popup
 				Unload();
 				m_savePop.SetActive(true);
 			}
 		});
 
-		// Menu
-		m_menuBtn = UI::Button{ "Menu", m_UIView, {2.5f, 5.f, 0.f, 0.f} };
+		// Initialises the menu button
+		m_menuBtn = UI::UIButton{ "Menu", m_UIView, {2.5f, 5.f, 0.f, 0.f} };
 		m_menuBtn.SetBackgroundSize(sf::Vector2f{ m_saveBtn.GetClickBounds().width, m_saveBtn.GetClickBounds().height });
 		m_menuBtn.SetCentreText(true);
 		m_menuBtn.setPosition((window.getSize().x * 1.5f) - m_saveBtn.GetClickBounds().width - 5.f, 50.f);
 		m_menuBtn.GetMouseClickedEvent().AddCallback([&]() { Unload(); Window::SetWindowState(Window::Menu); Menu::MenuManager::GetMenuManager().GoToState(Menu::MenuState::MainMenu); });
 	}
 
+	// Updates the map editor (includes the drawing to window)
 	void MapEditor::Update()
 	{
+		// Gets the window instance for the program
 		sf::RenderWindow& window = Window::GetWindow();
 
 		// Updates ghost point
@@ -789,7 +800,7 @@ namespace Editor
 				m_spawnPos.setRotation(angle);
 			}
 
-
+			// Updates the spawn direction line
 			m_spawnDir = LineShape{ m_spawnPos.getPosition(), m_spawnPos.getPosition() + sf::Vector2f{sinf(m_spawnPos.getRotation() * PI / 180.f), -cosf(m_spawnPos.getRotation() * PI / 180.f)} * 12.5f };
 			m_spawnDir.SetLineColour(sf::Color::Red);
 			m_spawnDir.SetLineThickness(2.f);
@@ -847,9 +858,7 @@ namespace Editor
 			window.draw(m_ghost);
 		}
 
-
-
-		// UI
+		// Sets the window view to the UI view and draws the UI
 		window.setView(m_UIView);
 
 		window.draw(m_mtCheckpoint);
@@ -878,10 +887,13 @@ namespace Editor
 		window.draw(m_menuBtn);
 	}
 
+	// Loads the map editor
 	void MapEditor::Load()
 	{
+		// Activates the map editor
 		m_isActive = true;
 
+		// Set all of the UI elements activity states to true
 		m_mtCheckpoint.SetActive(true);
 		m_mtDeleteCB.SetActive(true);
 		m_mtInstWallCB.SetActive(true);
@@ -898,10 +910,13 @@ namespace Editor
 		m_menuBtn.SetActive(true);
 	}
 
+	// Unloads the map editor
 	void MapEditor::Unload()
 	{
+		// Deactivates the map editor
 		m_isActive = false;
 
+		// Set all of the UI elements activity states to false
 		m_mtCheckpoint.SetActive(false);
 		m_mtDeleteCB.SetActive(false);
 		m_mtInstWallCB.SetActive(false);
@@ -916,10 +931,4 @@ namespace Editor
 		m_saveBtn.SetActive(false);
 		m_menuBtn.SetActive(false);
 	}
-
-
-
-
-
-
 }

@@ -7,7 +7,7 @@
 namespace UI
 {
 
-	class Clickable : public UIElement
+	class UIClickable : public UIElement
 	{
 	private:
 
@@ -22,41 +22,54 @@ namespace UI
 		// Clickable isn't active by default
 		bool m_initialised = false;
 
+		// Initialises/uninitialies events
 		void InitialiseEvents();
 		void UninitialiseEvents();
 
+		// Events
 		void OnMouseMoved(sf::Vector2i mousePos);
 		void OnMousePressed();
 		void OnMouseReleased();
 
-
+		// Events to be overridden by inherited members
 		virtual void OnMouseHover() {}
 		virtual void OnMouseUnhover() {}
 		virtual void OnMouseHoverPress() {}
 		virtual void OnMouseRelease() {} // Triggered if pressed but not clicked
-		virtual void OnMouseClick() {};
+		virtual void OnMouseClick() {}
 
 		virtual void OnActivated() {}
 		virtual void OnDeactivated() {}
 
 	protected:
 
+		// The clickbounds of the clickable
 		sf::FloatRect m_clickBounds;
 
 	public:
+		// Constructors
 
-		Clickable(bool initialise = false);
-		Clickable(const Clickable& clickable);
-		Clickable(sf::FloatRect bounds, sf::View* view);
-		Clickable(sf::FloatRect bounds, sf::View& view);
-		~Clickable();
+		// Creates an uninitialised clickable (default constructor)
+		UIClickable(bool initialise = false);
+		// Creates and initialises a clickable
+		UIClickable(sf::FloatRect bounds, sf::View* view);
+		UIClickable(sf::FloatRect bounds, sf::View& view);
+		// Creates a clickable from another clickable (copy constructor)
+		UIClickable(const UIClickable& clickable);
 
-		Clickable& operator=(const Clickable& clickable);
+		// Destructor
+		~UIClickable();
 
+		// Sets the values of the current clickable from another clickable
+		UIClickable& operator=(const UIClickable& clickable);
+
+		// Returns the clickbounds of the clickable
 		const sf::FloatRect GetClickBounds() const;
+		// Returns the view containing the clickable
 		const sf::View& GetContainerView() const;
 
-		virtual void SetActive(bool isActive);
+		// Sets whether the clickable is active or not
+		void SetActive(bool isActive) override;
 
 	};
 

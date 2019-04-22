@@ -8,29 +8,39 @@ namespace Menu
 	class CarSelectMenu
 	{
 	private:
-		// Private
-		sf::View m_carSelectView;
-		sf::View m_carButtonView;
+		// Views
+		sf::View m_carSelectView, m_carButtonView;
 
+		// Slider
+		UI::UISlider m_slider;
+		float m_sliderMax;
+
+		// Buttons
+		float m_yGap;
+		sf::RectangleShape m_buttonBackground;
+		std::vector<UI::UIButton*> m_buttons;
+
+		// Other
+		UI::UIButton m_backBtn;
 		bool m_isActive = false;
 
-		UI::Slider m_slider;
-		float m_sliderMax;
-		float yGap;
-
-		UI::Button m_backBtn;
-
-		sf::RectangleShape m_buttonBackground;
-		std::vector<UI::Button*> m_buttons;
-
-		void OnMouseScrolled(int delta);
+		// Loads a car from a given file
 		void LoadCar(std::string filename);
+
+		// Loads the buttons for the cars
 		void LoadMenu();
 
+		// Events
+		void OnMouseScrolled(int delta);
+
 	public:
+		// Initialises the car select menu
 		void Init();
+		// Updates the car select menu (includes drawing to the window)
 		void Update();
+		// Loads the car select menu
 		void Load();
+		// Unloads the car select menu
 		void Unload();
 	};
 }

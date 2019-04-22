@@ -7,9 +7,10 @@
 namespace UI
 {
 
-	class TextField : public Clickable
+	class UITextField : public UIClickable
 	{
 	public:
+		// The different types of text fields
 		enum FieldType
 		{
 			None,
@@ -27,47 +28,63 @@ namespace UI
 		sf::Text m_text;
 		sf::String m_rawText;
 		Event<> m_lostFocusEvent;
-		Tooltip m_tooltip;
+		UITooltip m_tooltip;
 
+		// Event ids
 		EventID m_leftClickedID, m_textEnteredID;
 
+		// Events
 		void OnMouseLeftClick();
 		void OnTextEntered(char input);
 
-		virtual void OnMouseHover();
-		virtual void OnMouseUnhover();
-		virtual void OnMouseHoverPress();
+		// Inherited events
+		void OnMouseHover() override;
+		void OnMouseUnhover() override;
+		void OnMouseHoverPress() override;
 
-		virtual void OnActivated();
-		virtual void OnDeactivated();
+		void OnActivated() override;
+		void OnDeactivated() override;
 
-		virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+		// Draws the text field to the target
+		void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
 	public:
-		const static inline sf::Color DISABLED_COLOUR{ 33, 32, 32, 255 };
-		const static inline sf::Color UNACTIVE_COLOUR{ 50, 50, 50, 255 };
-		const static inline sf::Color ACTIVE_COLOUR{ 40, 46, 71, 255 };
+		// Constructors
 
-		TextField() {}
-		TextField(const TextField& textField);
-		TextField(float width, FieldType type, sf::View& view, UI::Padding padding = { 2.f, 2.f, 2.f, 2.f });
-		~TextField();
+		// Creates a blank text field (default constructor)
+		UITextField() {}
+		// Creates and initialises a text field
+		UITextField(float width, FieldType type, sf::View& view, UI::Padding padding = { 2.f, 2.f, 2.f, 2.f });
+		// Creates and initialises a text field from another text field (copy constructor)
+		UITextField(const UITextField& textField);
 
-		TextField& operator=(const TextField& textField);
+		// Destructor
+		~UITextField();
 
+		// Sets the values of the current text field from another text field
+		UITextField& operator=(const UITextField& textField);
+
+		// Returns the event for when the text field loses focus
 		Event<>& GetLostFocusEvent();
-		sf::FloatRect GetBounds() const;
 
-		const sf::String& GetRawText() const;
+		// Sets the raw text of the text field
 		void SetRawText(sf::String s);
 
+		// Returns the bounds of the text field
+		const sf::FloatRect GetBounds() const;
+
+		// Returns the raw text of the text field
+		const sf::String& GetRawText() const;
+
+		// Sets the tooltip for the text field
 		void SetTooltipText(sf::Text content);
 		void SetTooltipText(std::string content);
 
-		float GetFloatValue();
-		double GetDoubleValue();
-		int GetIntegerValue();
-		unsigned int GetUIntegerValue();
+		// Gets the value of the text field in different types
+		const float GetFloatValue();
+		const double GetDoubleValue();
+		const int GetIntegerValue();
+		const unsigned int GetUIntegerValue();
 
 	};
 

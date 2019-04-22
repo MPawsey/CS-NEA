@@ -8,27 +8,31 @@
 
 namespace Window
 {
-	// Private
-	sf::RenderWindow m_window;
-	WindowStates m_state;
-	std::vector<sf::Drawable*> m_lateDraws;
-	sf::View m_defaultView;
+	// Window variables
+	sf::RenderWindow window;
+	WindowStates state;
+	std::vector<sf::Drawable*> lateDraws;
+	sf::View defaultView;
 	
-	Event m_windowClosedEvent;
-	Event<sf::Vector2u> m_windowResizedEvent;
+	// Window events
+	Event windowClosedEvent;
+	Event<sf::Vector2u> windowResizedEvent;
 
+	// Polls the events for the window gained this frame
 	void PollWindowEvents()
 	{
+		// Stores the current event being polled
 		sf::Event e;
-		while (m_window.pollEvent(e))
+		while (window.pollEvent(e))
 		{
+			// Determines what the event is and acts accordingly
 			switch (e.type)
 			{
 			case sf::Event::Closed:
-				m_window.close();
+				window.close();
 				break;
 			case sf::Event::Resized:
-				m_windowResizedEvent.Call(m_window.getSize());
+				windowResizedEvent.Call(window.getSize());
 				break;
 			case sf::Event::KeyPressed:
 				InputManager::KeyPressed(e.key.code);
@@ -55,45 +59,58 @@ namespace Window
 		}
 	}
 
-	// Public
-
+	// Initialises the window
 	void Init()
 	{
+		// Gets the static variable for whether the window is initialised
 		static bool initComplete = false;
-
+		
+		// Checks to see if the window has already been initialised
 		if (!initComplete)
 		{
-			m_window.create(sf::VideoMode{ 800, 600 }, "Matthew Pawsey NEA Project");
-			m_window.setFramerateLimit(MENU_FRAMERATE);
-			m_window.setKeyRepeatEnabled(false);
-			m_defaultView = m_window.getDefaultView();
+			// Initialises the window
+			window.create(sf::VideoMode{ 800, 600 }, "Matthew Pawsey NEA Project");
+			window.setFramerateLimit(MENU_FRAMERATE);
+			window.setKeyRepeatEnabled(false);
+			defaultView = window.getDefaultView();
 
-			m_state = Menu;
+			// Sets the state of the window
+			state = Menu;
 
+			// Initialises the states for the program
 			UI::Init();
 			Menu::MenuManager::GetMenuManager().Init();
 			Evolution::EvolutionManager::GetEvolutionManager().Init();
 			Editor::MapEditor::GetMapEditor().Init();
 
+			// Sets the initComplete flag to true
 			initComplete = true;
 		}
 	}
 
+	// Starts to run the program
 	void Run()
 	{
+		// Gets the static variable for whether the window is running
 		static bool running = false;
 
+		// Checks to see if the window is already running
 		if (!running)
 		{
+			// Sets the running flag to true
 			running = true;
 
-			while (m_window.isOpen())
+			// Runs until the window is closed
+			while (window.isOpen())
 			{
+				// Polls the windows events
 				PollWindowEvents();
 
-				m_window.clear();
+				// Clears thw window
+				window.clear();
 
-				switch (m_state)
+				// Updates the program depending on the programs state
+				switch (state)
 				{
 				case Menu:
 					Menu::MenuManager::GetMenuManager().Update();
@@ -106,60 +123,74 @@ namespace Window
 					break;
 				}
 
-				for (sf::Drawable* drawable : m_lateDraws)
-					m_window.draw(*drawable);
+				// Draws anything in the late draws list
+				for (sf::Drawable* drawable : lateDraws)
+					window.draw(*drawable);
 
-				m_window.display();
+				// Display the window
+				window.display();
 			}
 
-			m_windowClosedEvent.Call();
+			// Calls the window closed event
+			windowClosedEvent.Call();
 		}
 	}
 
+	// Sets the windows state
 	void SetWindowState(WindowStates state)
 	{
-		m_state = state;
+		state = state;
 	}
 
+	// Returns the instance of the window
 	sf::RenderWindow& GetWindow()
 	{
-		return m_window;
+		return window;
 	}
 
+	// Returns the state of the window
 	const WindowStates GetWindowState()
 	{
-		return m_state;
+		return state;
 	}
 
+	// Returns the size of the window
 	const sf::Vector2u GetWindowSize()
 	{
-		return m_window.getSize();
+		return window.getSize();
 	}
 
+	// Returns the default view of the window
 	const sf::View& GetDefaultWindowView()
 	{
-		return m_defaultView;
+		return defaultView;
 	}
 
+	// Returns the event for when the window is closed
 	Event<>& GetWindowClosedEvent()
 	{
-		return m_windowClosedEvent;
+		return windowClosedEvent;
 	}
 
+	// Returns the event for when the window is resized
 	Event<sf::Vector2u>& GetWindowResizedEvent()
 	{
-		return m_windowResizedEvent;
+		return windowResizedEvent;
 	}
 
+	// Adds a drawable to the late draws list
 	void AddToLateDraw(sf::Drawable& drawable)
 	{
-		if (auto i = std::find(m_lateDraws.begin(), m_lateDraws.end(), &drawable); i == m_lateDraws.end())
-			m_lateDraws.push_back(&drawable);
+		// Only adds it if it currently does not exist in the list
+		if (auto i = std::find(lateDraws.begin(), lateDraws.end(), &drawable); i == lateDraws.end())
+			lateDraws.push_back(&drawable);
 	}
 
+	// Removes a drawable from the late draws list
 	void RemoveFromLateDraw(sf::Drawable& drawable)
 	{
-		if (auto i = std::find(m_lateDraws.begin(), m_lateDraws.end(), &drawable); i != m_lateDraws.end())
-			m_lateDraws.erase(i);
+		// Only attempts to remove it if it currently exists in the list
+		if (auto i = std::find(lateDraws.begin(), lateDraws.end(), &drawable); i != lateDraws.end())
+			lateDraws.erase(i);
 	}
 }

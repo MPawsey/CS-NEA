@@ -8,6 +8,7 @@
 
 namespace Menu
 {
+	// The possible states for the menu
 	enum class MenuState
 	{
 		MainMenu,
@@ -21,8 +22,10 @@ namespace Menu
 	class MenuManager
 	{
 	private:
-
+		// The current menu state
 		MenuState m_menuState;
+
+		// The menu screens
 		MainMenu m_mainMenu;
 		SettingsMenu m_settingsMenu;
 		MapSelectMenu m_mapSelectMenu;
@@ -30,11 +33,16 @@ namespace Menu
 		AdvancedSettingsMenu m_advSettingsMenu;
 
 	public:
+		// Returns the MenuManager used throughout the program
 		static MenuManager& GetMenuManager();
 
+		// Initialises the values for the menu manager
 		void Init();
+
+		// Updates the menu manager (includes drawing to window)
 		void Update();
 
+		// Changes the state of the menu
 		void GoToState(MenuState newState);
 	};
 }

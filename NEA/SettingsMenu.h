@@ -9,92 +9,98 @@ namespace Menu
 	{
 	private:
 
-		// Private
+		// View
 		sf::View m_settingsView;
+
+		// The different buttons and what goes with them
 
 		// WIDTH
 		const double m_widthMinVal = 15.0;
 		const double m_widthMaxVal = 25.0;
-		sf::Text m_widthLabel;
-		UI::Button m_widthPlusBtn;
-		UI::Button m_widthMinusBtn;
-		UI::TextField m_widthTF;
+		sf::Text m_widthText;
+		UI::UIButton m_widthPlusBtn;
+		UI::UIButton m_widthMinusBtn;
+		UI::UITextField m_widthTF;
 
 		// HEIGHT
 		const double m_heightMinVal = 15.0;
 		const double m_heightMaxVal = 25.0;
-		sf::Text m_heightLabel;
-		UI::Button m_heightPlusBtn;
-		UI::Button m_heightMinusBtn;
-		UI::TextField m_heightTF;
+		sf::Text m_heightText;
+		UI::UIButton m_heightPlusBtn;
+		UI::UIButton m_heightMinusBtn;
+		UI::UITextField m_heightTF;
 
 		// RAY COUNT
 		const int m_rayCountMinVal = 3;
 		const int m_rayCountMaxVal = 7;
-		sf::Text m_rayCountLabel;
-		UI::Button m_rayCountPlusBtn;
-		UI::Button m_rayCountMinusBtn;
-		UI::TextField m_rayCountTF;
+		sf::Text m_rayCountText;
+		UI::UIButton m_rayCountPlusBtn;
+		UI::UIButton m_rayCountMinusBtn;
+		UI::UITextField m_rayCountTF;
 
 		// RAY SIZE
 		const double m_raySizeMinVal = 100.0;
 		const double m_raySizeMaxVal = 250.0;
-		sf::Text m_raySizeLabel;
-		UI::Button m_raySizePlusBtn;
-		UI::Button m_raySizeMinusBtn;
-		UI::TextField m_raySizeTF;
-
+		sf::Text m_raySizeText;
+		UI::UIButton m_raySizePlusBtn;
+		UI::UIButton m_raySizeMinusBtn;
+		UI::UITextField m_raySizeTF;
 
 		// MUTATE SIZE
 		const double m_mutSizeMinVal = 0.1;
 		const double m_mutSizeMaxVal = 2.5;
-		sf::Text m_mutSizeLabel;
-		UI::Button m_mutSizePlusBtn;
-		UI::Button m_mutSizeMinusBtn;
-		UI::TextField m_mutSizeTF;
+		sf::Text m_mutSizeText;
+		UI::UIButton m_mutSizePlusBtn;
+		UI::UIButton m_mutSizeMinusBtn;
+		UI::UITextField m_mutSizeTF;
 
 		// ENGINE POWER
 		const double m_enginePowMinVal = 5.0;
 		const double m_enginePowMaxVal = 15.0;
-		sf::Text m_enginePowLabel;
-		UI::Button m_enginePowPlusBtn;
-		UI::Button m_enginePowMinusBtn;
-		UI::TextField m_enginePowTF;
+		sf::Text m_enginePowText;
+		UI::UIButton m_enginePowPlusBtn;
+		UI::UIButton m_enginePowMinusBtn;
+		UI::UITextField m_enginePowTF;
 
 		// ROTATION POWER
 		const double m_rotPowMinVal = 0.5;
 		const double m_rotPowMaxVal = 2.5;
-		sf::Text m_rotPowLabel;
-		UI::Button m_rotPowPlusBtn;
-		UI::Button m_rotPowMinusBtn;
-		UI::TextField m_rotPowTF;
+		sf::Text m_rotPowText;
+		UI::UIButton m_rotPowPlusBtn;
+		UI::UIButton m_rotPowMinusBtn;
+		UI::UITextField m_rotPowTF;
 
 		// MUTATE PERCENTAGE
 		const double m_mutPCMinVal = 0.0;
 		const double m_mutPCMaxVal = 100.0;
-		sf::Text m_mutPCLabel;
-		UI::Button m_mutPCPlusBtn;
-		UI::Button m_mutPCMinusBtn;
-		UI::TextField m_mutPCTF;
+		sf::Text m_mutPCText;
+		UI::UIButton m_mutPCPlusBtn;
+		UI::UIButton m_mutPCMinusBtn;
+		UI::UITextField m_mutPCTF;
 
 		// SPLICE PERCENTAGE
 		const double m_splicePCMinVal = 0.0;
 		const double m_splicePCMaxVal = 100.0;
-		sf::Text m_splicePCLabel;
-		UI::Button m_splicePCPlusBtn;
-		UI::Button m_splicePCMinusBtn;
-		UI::TextField m_splicePCTF;
+		sf::Text m_splicePCText;
+		UI::UIButton m_splicePCPlusBtn;
+		UI::UIButton m_splicePCMinusBtn;
+		UI::UITextField m_splicePCTF;
 
 		// SPLICE PERCENTAGE
-		sf::Text m_seedLabel;
-		UI::TextField m_seedTF;
+		sf::Text m_seedText;
+		UI::UITextField m_seedTF;
 
-		UI::Button m_backBtn, m_nextBtn, m_advSettingsBtn;
+		// Other buttons
+		UI::UIButton m_backBtn, m_nextBtn, m_advSettingsBtn;
 
 	public:
+		// Initialises the settings menu screen
 		void Init();
+		// Updates the settings menu screen (includes drawing to the window)
 		void Update();
+		// Loads the settings menu screen
 		void Load();
+		// Unloads the settings menu screen
 		void Unload();
 	};
 }
