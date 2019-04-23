@@ -167,11 +167,14 @@
     <None Include="openal32.dll">
       <Filter>Libraries</Filter>
     </None>
-    <None Include="Tracks\Track1.track">
+    <None Include="Cars\Cars A.cars">
+      <Filter>Resource Files\Cars</Filter>
+    </None>
+    <None Include="Tracks\Track B.track">
       <Filter>Resource Files\Tracks</Filter>
     </None>
-    <None Include="Cars\Generation3Win.cars">
-      <Filter>Resource Files\Cars</Filter>
+    <None Include="Tracks\Track A.track">
+      <Filter>Resource Files\Tracks</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

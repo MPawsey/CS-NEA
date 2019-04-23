@@ -123,7 +123,8 @@ public:
 			// Fixes the iterator if any callbacks were removed
 			for (auto i : m_removedPos)
 			{
-				if (i > it - m_callbacks.begin())
+				size_t tmp = it - m_callbacks.begin();
+				if (i < tmp)
 				{
 					--it;
 				}

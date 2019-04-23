@@ -62,9 +62,9 @@ namespace UI
 		m_tooltip = textField.m_tooltip;
 
 		// Initialises the events if needed
-		if (m_leftClickedID.m_valid)
+		if (!m_leftClickedID.m_valid)
 			m_leftClickedID = InputManager::GetMousePressedEvent(sf::Mouse::Left).AddCallback(&UITextField::OnMouseLeftClick, *this);
-		if (m_textEnteredID.m_valid)
+		if (!m_textEnteredID.m_valid)
 			m_textEnteredID = InputManager::GetTextEnteredEvent().AddCallback(&UITextField::OnTextEntered, *this);
 
 		// Returns this so calls can be chained

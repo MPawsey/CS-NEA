@@ -22,7 +22,7 @@ namespace RaceTrack
 
 	// Track variables
 	std::vector<std::array<sf::Vertex, 2>> walls;
-	std::string trackName;
+	std::string m_trackName;
 	sf::Vector2f startPos;
 	float startRot;
 
@@ -148,9 +148,9 @@ namespace RaceTrack
 		checkpointCircles.clear();
 
 		// Opens the track file
-		trackName = filename;
-		std::replace(trackName.begin(), trackName.end(), ' ', '_');
-		trackName = trackName.substr(trackName.find_first_of('\\')+1, trackName.find_last_of('.') - (trackName.find_first_of('\\') + 1));
+		m_trackName = filename;
+		std::replace(m_trackName.begin(), m_trackName.end(), ' ', '_');
+		m_trackName = m_trackName.substr(m_trackName.find_first_of('\\')+1, m_trackName.find_last_of('.') - (m_trackName.find_first_of('\\') + 1));
 		std::ifstream file{ filename };
 
 		// Vector to store the points of the track
@@ -292,7 +292,7 @@ namespace RaceTrack
 	// Returns the name of the track
 	const std::string GetTrackName()
 	{
-		return trackName;
+		return m_trackName;
 	}
 
 	// Checks whether a collision occured between a line segment and a wall

@@ -137,9 +137,9 @@ namespace Window
 	}
 
 	// Sets the windows state
-	void SetWindowState(WindowStates state)
+	void SetWindowState(WindowStates newState)
 	{
-		state = state;
+		state = newState;
 	}
 
 	// Returns the instance of the window

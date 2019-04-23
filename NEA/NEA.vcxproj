@@ -158,7 +158,7 @@
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Cars\Generation3Win.cars" />
+    <None Include="Cars\Cars A.cars" />
     <None Include="openal32.dll" />
     <None Include="sfml-audio-2.dll" />
     <None Include="sfml-audio-d-2.dll" />
@@ -170,7 +170,8 @@
     <None Include="sfml-system-d-2.dll" />
     <None Include="sfml-window-2.dll" />
     <None Include="sfml-window-d-2.dll" />
-    <None Include="Tracks\Track1.track" />
+    <None Include="Tracks\Track B.track" />
+    <None Include="Tracks\Track A.track" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="arial.ttf" />

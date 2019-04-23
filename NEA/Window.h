@@ -22,7 +22,7 @@ namespace Window
 	void Run();
 
 	// Sets the state of the window
-	void SetWindowState(WindowStates state);
+	void SetWindowState(WindowStates newState);
 
 	// Gets the window instance
 	sf::RenderWindow& GetWindow();

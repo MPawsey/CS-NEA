@@ -70,7 +70,7 @@ namespace Evolution
 		m_analysisScreen.Reset();
 		m_cycleCount = 1;
 		m_display = true;
-		trackName = "";
+		m_trackName = "";
 	}
 
 	// Creates the next generation of cars to be simulated
@@ -272,10 +272,6 @@ namespace Evolution
 		// Resets the values of the evolution manager
 		Reset();
 
-		// Loads the analysis screen
-		m_analysis = true;
-		m_analysisScreen.Load();
-
 		// Gets the file
 		std::ifstream file{ filename };
 
@@ -303,7 +299,7 @@ namespace Evolution
 				if (s[0] == 't') // Track & Seed & iteration
 				{
 					unsigned long long count;
-					ss >> junk >> trackName >> seed >> count >> m_iteration;
+					ss >> junk >> m_trackName >> seed >> count >> m_iteration;
 					m_randomEngine.SetSeed(seed);
 					m_randomEngine.discard(count);
 				}
@@ -361,7 +357,7 @@ namespace Evolution
 				}
 				else if (s[0] == 'o') // Offspring settings
 				{
-					ss >> junk >> Machine::Neuron::mutatePC >> Machine::Neuron::splicePC;
+					ss >> junk >> Machine::Neuron::mutatePC >> Machine::Neuron::mutateSize >> Machine::Neuron::splicePC;
 				}
 				else if (s[0] == 'g') // Graph
 				{
@@ -540,7 +536,7 @@ namespace Evolution
 		Functions::WriteLineToFile(file, 'r', m_carRaySize);
 		Functions::WriteLineToFile(file, 'p', m_cars.size(), m_saveSize, m_killSize, m_canMultiReproduce);
 		Functions::WriteLineToFile(file, 'e', Machine::Car::enginePower, Machine::Car::rotationPower);
-		Functions::WriteLineToFile(file, 'o', Machine::Neuron::mutatePC, Machine::Neuron::splicePC);
+		Functions::WriteLineToFile(file, 'o', Machine::Neuron::mutatePC, Machine::Neuron::mutateSize, Machine::Neuron::splicePC);
 		// Saves the graph
 		m_analysisScreen.SaveGraph(file);
 
@@ -561,17 +557,24 @@ namespace Evolution
 	// Loads the initial simulation (for gen 0)
 	void EvolutionManager::LoadInitialSimulation()
 	{
-		// Loads the simulation screen
-		m_simulationScreen.Load();
 
 		// Sets the finish line of the track for the graph
 		m_analysisScreen.SetFinishLine(RaceTrack::GetTrackDistance());
 
 		// Checks whether the graph should be carried through from a file
-		if (RaceTrack::GetTrackName() != trackName)
+		if (RaceTrack::GetTrackName() != m_trackName)
 		{
+			// Loads the simulation screen
+			m_simulationScreen.Load();
+
 			m_analysisScreen.SetGraph({});
 			m_simulationScreen.SetIteration(m_iteration = 0);
+		}
+		else
+		{
+			// Loads the analysis screen
+			m_analysis = true;
+			m_analysisScreen.Load();
 		}
 	}
 }

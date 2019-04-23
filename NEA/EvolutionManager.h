@@ -14,7 +14,7 @@ namespace Evolution
 	private:
 		// Other
 		RNG::Random m_randomEngine;
-		std::string trackName;
+		std::string m_trackName;
 
 		// The cars (and other information)
 		bool m_canMultiReproduce = true;
