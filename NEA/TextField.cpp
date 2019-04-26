@@ -84,7 +84,7 @@ namespace UI
 			{
 			case Text:
 				// Allows alphabetical characters (and spaces)
-				if ((input >= 'a' && input < 'z') || (input >= 'A' && input <= 'Z') || input == ' ')
+				if ((input >= 'a' && input <= 'z') || (input >= 'A' && input <= 'Z') || input == ' ')
 				{
 					m_rawText.insert(m_rawText.getSize() - 1, input);
 					break;
@@ -252,7 +252,7 @@ namespace UI
 			{
 			case Text:
 				// Allows alphabetical characters (and spaces)
-				if ((input >= 'a' && input < 'z') || (input >= 'A' && input <= 'Z') || input == ' ')
+				if ((input >= 'a' && input <= 'z') || (input >= 'A' && input <= 'Z') || input == ' ')
 				{
 					m_rawText.insert(m_rawText.getSize(), input);
 					break;
