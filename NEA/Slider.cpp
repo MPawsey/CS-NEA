@@ -166,4 +166,15 @@ namespace UI
 		m_sliderUpdateEvent.Call(m_sliderVal);
 	}
 
+
+	// Moves the slider grab to a given percentage of the slider height and updates the slider
+	void UISlider::MoveTo(float percentage)
+	{
+		m_sliderGrab.setPosition(m_sliderGrab.getPosition().x, m_sliderLine.getPosition().y + std::clamp(percentage, 0.f, 1.f) * m_sliderLine.getGlobalBounds().height);
+		m_sliderVal = percentage;
+
+		// Calls the slider update event
+		m_sliderUpdateEvent.Call(m_sliderVal);
+	}
+
 }

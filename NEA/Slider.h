@@ -52,9 +52,13 @@ namespace UI
 		// Sets whether the slider is active
 		void SetActive(bool isActive) override;
 		
-		// Moves the slider to a specific position
+		// Moves the slider by a specific percentage
 		// percentage must be between [0-1]
 		void Move(float percentage);
+
+		// Moves the slider to a specific position
+		// percentage must be between [0-1]
+		void MoveTo(float percentage);
 	};
 
 

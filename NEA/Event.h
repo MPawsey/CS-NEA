@@ -111,22 +111,24 @@ public:
 		m_inUse = true;
 
 		// Iterates through all of the functions in the callback list
-		// Using this method so if a callback is removed during the calling of callbacks an error doesn't arise
-		for (auto it = m_callbacks.begin(); it != m_callbacks.end(); ++it)
+		// Using this method so if a callback is removed during the calling we
+		// can decrement the counter to compensate
+		for (unsigned int i = 0; i < m_callbacks.size(); ++i)
 		{
 			// Clears the removed pos list
 			m_removedPos.clear();
 
 			// Calls the function
-			(*it)(t...);
+			m_callbacks[i](t...);
 
 			// Fixes the iterator if any callbacks were removed
-			for (auto i : m_removedPos)
+			for (unsigned int j : m_removedPos)
 			{
-				size_t tmp = it - m_callbacks.begin();
-				if (i < tmp)
+				// Only need to decrement if the removed callback
+				// came before the current callback
+				if (j < i)
 				{
-					--it;
+					--i;
 				}
 			}
 		}

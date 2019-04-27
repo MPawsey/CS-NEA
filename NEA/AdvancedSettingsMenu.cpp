@@ -91,9 +91,15 @@ namespace Menu
 	// Event for when the scroll wheel is used
 	void AdvancedSettingsMenu::OnMouseScrolled(int delta)
 	{
-		// Updates the layer slider position if its active and can be used
-		if (m_layerSlider.IsActive() && m_layerSliderMax > 0)
-			m_layerSlider.Move(-delta * ((UI::GetFont().getLineSpacing(30) + 20.f) / m_layerSliderMax));
+		// Updates the layer slider position if its active
+		if (m_layerSlider.IsActive())
+		{
+			// Updates the position of the slider (setting it to 0 if the slider should not be used)
+			if (m_layerSliderMax > 0)
+				m_layerSlider.Move(-delta * ((UI::GetFont().getLineSpacing(30) + 20.f) / m_layerSliderMax));
+			else
+				m_layerSlider.MoveTo(0);
+		}
 	}
 
 	// Initialises the advanced settings menu
@@ -226,6 +232,8 @@ namespace Menu
 			// Updates the layer view position when the slider is updated
 			if (m_layerSliderMax > 0)
 				m_layerView.setCenter(m_layerView.getSize().x / 2.f, (m_layerView.getSize().y / 2.f) + (m_layerSliderMax * val));
+			else
+				m_layerView.setCenter(m_layerView.getSize() / 2.f);
 		});
 
 		// Initialises the add layer button
@@ -247,8 +255,9 @@ namespace Menu
 			layerTF->GetLostFocusEvent().AddCallback([=]() { if (layerTF->GetUIntegerValue() > 25) layerTF->SetRawText("25"); });
 			m_layerSizes.push_back(layerTF);
 
-			// Updates the slider size
+			// Updates the slider size and position
 			m_layerSliderMax = (25.f + ((m_layerSizes.size()) * (UI::GetFont().getLineSpacing(30) + 20.f))) - m_layerView.getSize().y;
+			m_layerSlider.MoveTo(m_layerSlider.GetSliderVal());
 		});
 
 		// Initialises the remove layer button
@@ -264,8 +273,9 @@ namespace Menu
 				delete m_layerSizes.back(); 
 				m_layerSizes.pop_back();
 				
-				// Updates the slider size
+				// Updates the slider size and position
 				m_layerSliderMax = (25.f + ((m_layerSizes.size()) * (UI::GetFont().getLineSpacing(30) + 20.f))) - m_layerView.getSize().y;
+				m_layerSlider.MoveTo(m_layerSlider.GetSliderVal());
 			}
 		});
 
