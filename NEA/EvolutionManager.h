@@ -30,9 +30,6 @@ namespace Evolution
 		bool m_analysis = false;
 		bool m_display = true;
 
-		
-		// Resets the values in the evolution state to their initial values
-		void Reset();
 
 		// Creates the next generation of cars
 		void CreateNextGeneration();
@@ -48,6 +45,9 @@ namespace Evolution
 
 		// Updates the evolution, including the drawing to the window
 		void Update();
+
+		// Resets the values in the evolution state to their initial values
+		void Reset();
 
 		// Applies the advanced settings to the cars (done before CreateGenerationFromSettings)
 		void SetAdvancedSettings(unsigned int popSize, unsigned int saveSize, unsigned int killSize, bool canMultiReproduce, std::vector<unsigned int> nnSizes);

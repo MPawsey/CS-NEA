@@ -72,6 +72,7 @@ namespace Evolution
 		m_display = true;
 		m_analysis = false;
 		m_trackName = "";
+		m_carSizes.erase(m_carSizes.begin());
 	}
 
 	// Creates the next generation of cars to be simulated
@@ -187,7 +188,7 @@ namespace Evolution
 				MergeSortCars(m_cars);
 
 				// Calculates the average fitness and updates the graph in the analysis screen
-				float avgFitness = std::accumulate(m_cars.begin(), m_cars.end(), 0, [](float val, Machine::Car* car) { return val + car->GetFitness(); }) / m_aliveSize;
+				float avgFitness = std::accumulate(m_cars.begin(), m_cars.end(), 0.f, [](float val, Machine::Car* car) { return val + car->GetFitness(); }) / m_aliveSize;
 				m_analysisScreen.UpdateGraph(m_cars.front()->GetFitness(), avgFitness, m_cars.back()->GetFitness());
 
 				// Checks whether the analysis phase should be skipped
@@ -233,9 +234,8 @@ namespace Evolution
 	void EvolutionManager::CreateGenerationFromSettings(float width, float height, unsigned int rayCount, float raySize, double mutateSize, float enginePow, float rotPow,
 		double mutPC, double splicePC, unsigned int seed)
 	{
-		// Resets the values of the evolution manager
-		Reset();
-		m_analysis = false;
+		// Sets the track name for the current car to a blank string
+		m_trackName = "";
 
 		// Sets the car values
 		m_carWidth = width;
@@ -270,9 +270,6 @@ namespace Evolution
 	// Creates a generation of cars from a file
 	void EvolutionManager::CreateGenerationFromFile(std::string filename)
 	{
-		// Resets the values of the evolution manager
-		Reset();
-
 		// Gets the file
 		std::ifstream file{ filename };
 

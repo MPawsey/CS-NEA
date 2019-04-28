@@ -147,7 +147,7 @@ namespace Evolution
 		m_saveBtn.setPosition(xPos, yPos1);
 		m_menuBtn = UI::UIButton{ "Menu", m_analysisView, UI::Padding{2.5f, 5.f, 0.f, 0.f} };
 		m_menuBtn.SetCentreText(true);
-		m_menuBtn.GetMouseClickedEvent().AddCallback([]() { Window::SetWindowState(Window::Menu); Menu::MenuManager::GetMenuManager().GoToState(Menu::MenuState::MainMenu); });
+		m_menuBtn.GetMouseClickedEvent().AddCallback([this]() { SetAnalysisActive(false); EvolutionManager::GetEvolutionManager().Reset(); Window::SetWindowState(Window::Menu); Menu::MenuManager::GetMenuManager().GoToState(Menu::MenuState::MainMenu); });
 		m_menuBtn.setPosition(xPos, yPos2);
 	}
 
@@ -446,7 +446,7 @@ namespace Evolution
 
 		// Updates the graph info text
 		m_iterText.setString("Gen: " + std::to_string(m_size - 1));
-		m_scaleText.setString("Y Scale: " + std::to_string((int)std::round(m_graphGuideSeperation)));
+		m_scaleText.setString("Y Scale: " + std::to_string((int)std::roundf(m_graphGuideSeperation)));
 
 		m_bestText.setString("Best: " + std::to_string((int)std::roundf(m_fitnessMax.back().position.y)));
 		m_avgText.setString("Avg: " + std::to_string((int)std::roundf(m_fitnessAvg.back().position.y)));
