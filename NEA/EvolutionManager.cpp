@@ -70,6 +70,7 @@ namespace Evolution
 		m_analysisScreen.Reset();
 		m_cycleCount = 1;
 		m_display = true;
+		m_analysis = false;
 		m_trackName = "";
 	}
 
