@@ -56,8 +56,12 @@ namespace Menu
 	// Changes the state of the menu
 	void MenuManager::GoToState(MenuState newState)
 	{
+		// Updates the menu state to the new state
+		MenuState oldState = m_menuState;
+		m_menuState = newState;
+
 		// Unload previous state
-		switch (m_menuState)
+		switch (oldState)
 		{
 		case MenuState::MainMenu:
 			m_mainMenu.Unload();
@@ -86,7 +90,7 @@ namespace Menu
 			m_settingsMenu.Load();
 			break;
 		case MenuState::StartMap:
-			m_mapSelectMenu.Load(m_menuState);
+			m_mapSelectMenu.Load(oldState);
 			break;
 		case MenuState::StartCar:
 			m_carSelectMenu.Load();
@@ -95,9 +99,11 @@ namespace Menu
 			m_advSettingsMenu.Load();
 			break;
 		}
-
-		// Updates the menu state to the new state
-		m_menuState = newState;
 	}
 
+	// Returns the current state the menu manager is in
+	const MenuState MenuManager::GetMenuState() const
+	{
+		return m_menuState;
+	}
 }

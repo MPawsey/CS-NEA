@@ -223,8 +223,8 @@ namespace Menu
 		m_backBtn = UI::UIButton{ "Back", m_settingsView, { 5.f, 5.f, 0.f, 0.f } };
 		m_backBtn.setPosition(xPos1, window.getSize().y - yLineSpace);
 		m_backBtn.SetCentreText(true);
-		m_backBtn.GetMouseClickedEvent().AddCallback([&]() { MenuManager::GetMenuManager().GoToState(MenuState::MainMenu); });
-
+		m_backBtn.GetMouseClickedEvent().AddCallback([&]() { Evolution::EvolutionManager::GetEvolutionManager().Reset(false); MenuManager::GetMenuManager().GoToState(MenuState::MainMenu); });
+		
 		// Initialises the next button
 		m_nextBtn = UI::UIButton{ "Next", m_settingsView, { 5.f, 5.f, 0.f, 0.f } };
 		m_nextBtn.setPosition(675.f, window.getSize().y - yLineSpace);
@@ -375,9 +375,10 @@ namespace Menu
 	// Unloads the settings menu
 	void SettingsMenu::Unload()
 	{
-		// Saves the current settings for the generation
-		Evolution::EvolutionManager::GetEvolutionManager().CreateGenerationFromSettings(m_widthTF.GetFloatValue(), m_heightTF.GetFloatValue(), m_rayCountTF.GetUIntegerValue(), m_raySizeTF.GetFloatValue(),
-			m_mutSizeTF.GetDoubleValue(), m_enginePowTF.GetFloatValue(), m_rotPowTF.GetFloatValue(), m_mutPCTF.GetDoubleValue() / 100.0, m_splicePCTF.GetDoubleValue() / 100.0, m_seedTF.GetRawText() == "" ? std::random_device{}() : m_seedTF.GetUIntegerValue());
+		// Saves the current settings for the generation if the menu is currently on the map select menu
+		if (Menu::MenuManager::GetMenuManager().GetMenuState() == Menu::MenuState::StartMap)
+			Evolution::EvolutionManager::GetEvolutionManager().CreateGenerationFromSettings(m_widthTF.GetFloatValue(), m_heightTF.GetFloatValue(), m_rayCountTF.GetUIntegerValue(), m_raySizeTF.GetFloatValue(),
+				m_mutSizeTF.GetDoubleValue(), m_enginePowTF.GetFloatValue(), m_rotPowTF.GetFloatValue(), m_mutPCTF.GetDoubleValue() / 100.0, m_splicePCTF.GetDoubleValue() / 100.0, m_seedTF.GetRawText() == "" ? std::random_device{}() : m_seedTF.GetUIntegerValue());
 
 		// Sets all of the UI elements activity states to false
 		m_widthPlusBtn.SetActive(false);

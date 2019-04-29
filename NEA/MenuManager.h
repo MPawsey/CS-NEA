@@ -44,5 +44,8 @@ namespace Menu
 
 		// Changes the state of the menu
 		void GoToState(MenuState newState);
+
+		// Gets the current state of the menu
+		const MenuState GetMenuState() const;
 	};
 }

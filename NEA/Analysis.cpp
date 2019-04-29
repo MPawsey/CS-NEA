@@ -147,7 +147,7 @@ namespace Evolution
 		m_saveBtn.setPosition(xPos, yPos1);
 		m_menuBtn = UI::UIButton{ "Menu", m_analysisView, UI::Padding{2.5f, 5.f, 0.f, 0.f} };
 		m_menuBtn.SetCentreText(true);
-		m_menuBtn.GetMouseClickedEvent().AddCallback([this]() { SetAnalysisActive(false); EvolutionManager::GetEvolutionManager().Reset(); Window::SetWindowState(Window::Menu); Menu::MenuManager::GetMenuManager().GoToState(Menu::MenuState::MainMenu); });
+		m_menuBtn.GetMouseClickedEvent().AddCallback([this]() { SetAnalysisActive(false); EvolutionManager::GetEvolutionManager().Reset(true); Window::SetWindowState(Window::Menu); Menu::MenuManager::GetMenuManager().GoToState(Menu::MenuState::MainMenu); });
 		m_menuBtn.setPosition(xPos, yPos2);
 	}
 

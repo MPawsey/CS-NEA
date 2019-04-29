@@ -68,6 +68,7 @@ namespace Menu
 	// Reverts the menu state to the previous state
 	void MapSelectMenu::BackPressed()
 	{
+		Evolution::EvolutionManager::GetEvolutionManager().Reset(true);
 		MenuManager::GetMenuManager().GoToState(m_prevState);
 	}
 

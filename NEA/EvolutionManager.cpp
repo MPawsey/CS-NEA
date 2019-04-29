@@ -64,15 +64,20 @@ namespace Evolution
 	}
 	
 	// Resets the values of the evolution manager to their initial states
-	void EvolutionManager::Reset()
+	void EvolutionManager::Reset(bool removeRayCount)
 	{
+		// Deletes the cars created to free up memory
+		std::for_each(m_cars.begin(), m_cars.end(), [](Machine::Car* car) { delete car; });
 		m_cars.clear();
 		m_analysisScreen.Reset();
 		m_cycleCount = 1;
 		m_display = true;
 		m_analysis = false;
 		m_trackName = "";
-		m_carSizes.erase(m_carSizes.begin());
+		
+		// Fixes an issue with 
+		if (removeRayCount)
+			m_carSizes.erase(m_carSizes.begin());
 	}
 
 	// Creates the next generation of cars to be simulated

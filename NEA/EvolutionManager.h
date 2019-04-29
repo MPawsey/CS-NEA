@@ -47,7 +47,7 @@ namespace Evolution
 		void Update();
 
 		// Resets the values in the evolution state to their initial values
-		void Reset();
+		void Reset(bool removeRayCount);
 
 		// Applies the advanced settings to the cars (done before CreateGenerationFromSettings)
 		void SetAdvancedSettings(unsigned int popSize, unsigned int saveSize, unsigned int killSize, bool canMultiReproduce, std::vector<unsigned int> nnSizes);
